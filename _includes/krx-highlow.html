@@ -20,10 +20,10 @@
   <div class="hl-chart"><canvas id="hl-chart" aria-label="52주 신고가·신저가 종목 수 추이" data-i18n-aria="hl.aria"></canvas></div>
   <div class="movers-grid hl-names">
     <div class="movers-col"><p class="krx-name"><span data-i18n="hl.today_hi">오늘 신고가</span> <span class="krx-sub">{{ hl.high_total }}</span></p>
-      <ol class="movers-list">{% for r in hl.high %}<li><span class="mv-name">{{ r.name }} <span class="cx-mkt" data-i18n="mkt.{{ r.mkt }}">{% if r.mkt == "kospi" %}코스피{% else %}코스닥{% endif %}</span></span></li>{% endfor %}</ol>
+      <ol class="movers-list">{% for r in hl.high %}<li><span class="mv-name">{% if r.code %}<a href="{{ '/stock/' | relative_url }}?s={{ r.code }}">{{ r.name }}</a>{% else %}{{ r.name }}{% endif %} <span class="cx-mkt" data-i18n="mkt.{{ r.mkt }}">{% if r.mkt == "kospi" %}코스피{% else %}코스닥{% endif %}</span></span></li>{% endfor %}</ol>
       {% if hl.high.size == 0 %}<p class="note" data-i18n="hl.none">없어요.</p>{% endif %}</div>
     <div class="movers-col"><p class="krx-name"><span data-i18n="hl.today_lo">오늘 신저가</span> <span class="krx-sub">{{ hl.low_total }}</span></p>
-      <ol class="movers-list">{% for r in hl.low %}<li><span class="mv-name">{{ r.name }} <span class="cx-mkt" data-i18n="mkt.{{ r.mkt }}">{% if r.mkt == "kospi" %}코스피{% else %}코스닥{% endif %}</span></span></li>{% endfor %}</ol>
+      <ol class="movers-list">{% for r in hl.low %}<li><span class="mv-name">{% if r.code %}<a href="{{ '/stock/' | relative_url }}?s={{ r.code }}">{{ r.name }}</a>{% else %}{{ r.name }}{% endif %} <span class="cx-mkt" data-i18n="mkt.{{ r.mkt }}">{% if r.mkt == "kospi" %}코스피{% else %}코스닥{% endif %}</span></span></li>{% endfor %}</ol>
       {% if hl.low.size == 0 %}<p class="note" data-i18n="hl.none">없어요.</p>{% endif %}</div>
   </div>
   <p class="note" data-i18n="hl.note" data-w="{{ hl.window }}" data-a="{{ hl.eligible.kospi }}" data-b="{{ hl.eligible.kosdaq }}">종가 기준: 그날 종가가 직전 {{ hl.window }}거래일(약 52주) 종가 최고치보다 높으면 신고가, 최저치보다 낮으면 신저가(액면분할 등 보정). 장중 고가·저가 기준인 증권사 집계와 다를 수 있어요. 보통주만, 상장 1년 미만 제외(대상 코스피 {{ hl.eligible.kospi }}·코스닥 {{ hl.eligible.kosdaq }}종목). 종목 목록은 시가총액 상위 10 · 자료: 한국거래소(KRX) Open API</p>

@@ -1,0 +1,399 @@
+{
+ "source": "SEC EDGAR",
+ "ticker": "EQIX",
+ "cik": 1101239,
+ "name": "EQUINIX INC",
+ "insider": [
+  {
+   "d": "2026-11-16",
+   "filed": "2026-11-16",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 135.0,
+   "px": 1041.36,
+   "after": 3743.705
+  },
+  {
+   "d": "2026-11-06",
+   "filed": "2026-11-09",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 198.0,
+   "px": 1014.18,
+   "after": 3878.705
+  },
+  {
+   "d": "2026-09-04",
+   "filed": "2026-09-08",
+   "name": "Paladin Michael Shane",
+   "title": "Chief Customer & Rev Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 307.0,
+   "px": 1035.01,
+   "after": 2450.485
+  },
+  {
+   "d": "2026-09-02",
+   "filed": "2026-09-03",
+   "name": "Paladin Michael Shane",
+   "title": "Chief Customer & Rev Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 53.0,
+   "px": 1008.0191,
+   "after": 2907.485
+  },
+  {
+   "d": "2026-09-02",
+   "filed": "2026-09-03",
+   "name": "Paladin Michael Shane",
+   "title": "Chief Customer & Rev Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 150.0,
+   "px": 1018.43,
+   "after": 2757.485
+  },
+  {
+   "d": "2026-09-01",
+   "filed": "2026-09-03",
+   "name": "Paladin Michael Shane",
+   "title": "Chief Customer & Rev Officer",
+   "code": "M",
+   "ad": "A",
+   "sh": 510.0,
+   "px": 0.0,
+   "after": 2960.485
+  },
+  {
+   "d": "2026-08-20",
+   "filed": "2026-08-20",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 135.0,
+   "px": 1075.5,
+   "after": 4076.705
+  },
+  {
+   "d": "2026-08-18",
+   "filed": "2026-08-18",
+   "name": "PAISLEY CHRISTOPHER B",
+   "title": "Director",
+   "code": "S",
+   "ad": "D",
+   "sh": 125.0,
+   "px": 1103.58,
+   "after": 13734.0
+  },
+  {
+   "d": "2026-08-03",
+   "filed": "2026-08-03",
+   "name": "PAISLEY CHRISTOPHER B",
+   "title": "Director",
+   "code": "S",
+   "ad": "D",
+   "sh": 4000.0,
+   "px": 1019.28,
+   "after": 13859.0
+  },
+  {
+   "d": "2026-06-08",
+   "filed": "2026-06-08",
+   "name": "MORANDI BRANDI GALVIN",
+   "title": "Chief People Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 3726.0,
+   "px": 1076.36,
+   "after": 6132.456
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 0.25,
+   "px": 1049.285,
+   "after": 4290.705
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 4.0,
+   "px": 1052.4582,
+   "after": 4286.705
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 6.0,
+   "px": 1053.6426,
+   "after": 4280.705
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 3.0,
+   "px": 1054.6921,
+   "after": 4277.705
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 8.0,
+   "px": 1056.0056,
+   "after": 4269.705
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 10.0,
+   "px": 1056.9625,
+   "after": 4259.705
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 4.0,
+   "px": 1058.0457,
+   "after": 4255.705
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 7.0,
+   "px": 1058.9619,
+   "after": 4248.705
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 8.0,
+   "px": 1060.0029,
+   "after": 4240.705
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 5.75,
+   "px": 1062.1582,
+   "after": 4234.955
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 6.0,
+   "px": 1063.2345,
+   "after": 4228.955
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 1.0,
+   "px": 1064.9006,
+   "after": 4227.955
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 1.0,
+   "px": 1066.5465,
+   "after": 4226.955
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 15.0,
+   "px": 1069.199,
+   "after": 4211.955
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Pletcher Kurt",
+   "title": "Chief Legal Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 0.25,
+   "px": 1070.47,
+   "after": 4211.705
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Lin Jonathan",
+   "title": "Chief Business Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 0.5,
+   "px": 1049.285,
+   "after": 11060.347
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Lin Jonathan",
+   "title": "Chief Business Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 8.0,
+   "px": 1052.4582,
+   "after": 11052.347
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Lin Jonathan",
+   "title": "Chief Business Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 11.0,
+   "px": 1053.6426,
+   "after": 11041.347
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Lin Jonathan",
+   "title": "Chief Business Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 5.0,
+   "px": 1054.6921,
+   "after": 11036.347
+  },
+  {
+   "d": "2026-06-02",
+   "filed": "2026-06-03",
+   "name": "Lin Jonathan",
+   "title": "Chief Business Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 14.25,
+   "px": 1056.0056,
+   "after": 11022.097
+  }
+ ],
+ "inst": {
+  "period": "2026-06-30",
+  "prev_period": "2026-03-31",
+  "holders": 1353,
+  "prev_holders": 1271,
+  "shares": 97190659.0,
+  "prev_shares": 91677186.0,
+  "top": [
+   {
+    "name": "BlackRock, Inc.",
+    "sh": 11444924.0,
+    "chg": 313356.0
+   },
+   {
+    "name": "VANGUARD CAPITAL MANAGEMENT LLC",
+    "sh": 6444422.0,
+    "chg": 57102.0
+   },
+   {
+    "name": "VANGUARD PORTFOLIO MANAGEMENT LLC",
+    "sh": 6102138.0,
+    "chg": 98047.0
+   },
+   {
+    "name": "STATE STREET CORP",
+    "sh": 6026104.0,
+    "chg": -52292.0
+   },
+   {
+    "name": "FMR LLC",
+    "sh": 2874355.0,
+    "chg": 55781.0
+   },
+   {
+    "name": "GEODE CAPITAL MANAGEMENT, LLC",
+    "sh": 2547307.0,
+    "chg": 68353.0
+   },
+   {
+    "name": "COHEN & STEERS, INC.",
+    "sh": 2191196.0,
+    "chg": -640214.0
+   },
+   {
+    "name": "PRINCIPAL FINANCIAL GROUP INC",
+    "sh": 1902047.0,
+    "chg": -78450.0
+   },
+   {
+    "name": "JPMORGAN CHASE & CO",
+    "sh": 1758552.0,
+    "chg": null
+   },
+   {
+    "name": "NORTHERN TRUST CORP",
+    "sh": 1546438.0,
+    "chg": 45879.0
+   }
+  ]
+ },
+ "updated_at": "2026-11-24 18:08 KST"
+}

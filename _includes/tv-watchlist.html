@@ -8,7 +8,7 @@
       <thead><tr><th data-i18n="wl.th_name">종목</th><th data-i18n="wl.th_ticker">티커</th><th data-i18n="wl.th_weight">비중</th><th data-i18n="wl.th_base" data-d="{{ wl.base_date | date: '%-m/%-d' }}">기준가 ({{ wl.base_date | date: '%-m/%-d' }} 종가)</th></tr></thead>
       <tbody>
         {%- for s in wl.stocks %}
-        <tr><td data-i18n-name>{{ s.name }}</td><td>{{ s.symbol | split: ":" | last }}</td><td class="num">{{ s.weight | times: 100.0 | divided_by: wl_total | round: 1 }}%</td><td class="num" data-usd="{{ s.base_price }}">${{ s.base_price }}</td></tr>
+        <tr><td><a href="{{ '/stock/' | relative_url }}?s={{ s.symbol | url_encode }}" data-i18n-name>{{ s.name }}</a></td><td>{{ s.symbol | split: ":" | last }}</td><td class="num">{{ s.weight | times: 100.0 | divided_by: wl_total | round: 1 }}%</td><td class="num" data-usd="{{ s.base_price }}">${{ s.base_price }}</td></tr>
         {%- endfor %}
       </tbody>
     </table>

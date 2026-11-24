@@ -41,6 +41,24 @@ jobs:
           KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
         run: python tools/fetch_krx.py
 
+      - name: 종목 상세용 국내 종목 차트 자료 (원본은 tools/state 캐시, 링크되는 종목의 종가·거래량만 공개)
+        continue-on-error: true
+        env:
+          KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
+        run: python tools/fetch_stocks.py
+
+      - name: 종목 상세용 DART 공시 목록 받아오기
+        continue-on-error: true
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: python tools/fetch_dart.py
+
+      - name: 종목 상세용 SEC EDGAR(내부자 매매·13F) 받아오기
+        continue-on-error: true
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+        run: python tools/fetch_edgar.py
+
       - name: KRX 과거 종가 캐시 저장
         if: always() && hashFiles('tools/state/krx_closes/*.json') != ''
         uses: actions/cache/save@v4
@@ -79,7 +97,7 @@ jobs:
       - name: 변경분 커밋
         id: commit
         run: |
-          git add _data/
+          git add _data/ assets/data/
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0

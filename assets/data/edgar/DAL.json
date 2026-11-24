@@ -1,0 +1,399 @@
+{
+ "source": "SEC EDGAR",
+ "ticker": "DAL",
+ "cik": 27904,
+ "name": "DELTA AIR LINES, INC.",
+ "insider": [
+  {
+   "d": "2026-11-12",
+   "filed": "2026-11-13",
+   "name": "Sear Steven M",
+   "title": "EVP - Global Sales & Distrib",
+   "code": "S",
+   "ad": "D",
+   "sh": 17768.0,
+   "px": 88.955,
+   "after": 86636.0
+  },
+  {
+   "d": "2026-11-06",
+   "filed": "2026-11-09",
+   "name": "BELLEMARE ALAIN",
+   "title": "EVP & Pres. - International",
+   "code": "S",
+   "ad": "D",
+   "sh": 15000.0,
+   "px": 85.82,
+   "after": 80025.0
+  },
+  {
+   "d": "2026-11-06",
+   "filed": "2026-11-09",
+   "name": "BELLEMARE ALAIN",
+   "title": "EVP & Pres. - International",
+   "code": "M",
+   "ad": "A",
+   "sh": 13000.0,
+   "px": 39.78,
+   "after": 93025.0
+  },
+  {
+   "d": "2026-11-06",
+   "filed": "2026-11-09",
+   "name": "BELLEMARE ALAIN",
+   "title": "EVP & Pres. - International",
+   "code": "S",
+   "ad": "D",
+   "sh": 13000.0,
+   "px": 86.064,
+   "after": 80025.0
+  },
+  {
+   "d": "2026-11-04",
+   "filed": "2026-11-06",
+   "name": "Carter Peter W",
+   "title": "President",
+   "code": "S",
+   "ad": "D",
+   "sh": 44950.0,
+   "px": 89.287,
+   "after": 379754.0
+  },
+  {
+   "d": "2026-10-29",
+   "filed": "2026-10-30",
+   "name": "Bastian Edward H",
+   "title": "Chief Executive Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 50000.0,
+   "px": 82.0,
+   "after": 1313448.0
+  },
+  {
+   "d": "2026-08-05",
+   "filed": "2026-08-06",
+   "name": "HUERTA MICHAEL P",
+   "title": "Director",
+   "code": "S",
+   "ad": "D",
+   "sh": 3100.0,
+   "px": 94.115,
+   "after": 32525.0
+  },
+  {
+   "d": "2026-08-05",
+   "filed": "2026-08-06",
+   "name": "Sear Steven M",
+   "title": "EVP - Global Sales & Distrib",
+   "code": "M",
+   "ad": "A",
+   "sh": 40460.0,
+   "px": 51.23,
+   "after": 144864.0
+  },
+  {
+   "d": "2026-08-05",
+   "filed": "2026-08-06",
+   "name": "Sear Steven M",
+   "title": "EVP - Global Sales & Distrib",
+   "code": "S",
+   "ad": "D",
+   "sh": 40460.0,
+   "px": 93.553,
+   "after": 104404.0
+  },
+  {
+   "d": "2026-08-04",
+   "filed": "2026-08-05",
+   "name": "Carter Peter W",
+   "title": "President",
+   "code": "M",
+   "ad": "A",
+   "sh": 39900.0,
+   "px": 49.33,
+   "after": 464604.0
+  },
+  {
+   "d": "2026-08-04",
+   "filed": "2026-08-05",
+   "name": "Carter Peter W",
+   "title": "President",
+   "code": "S",
+   "ad": "D",
+   "sh": 39900.0,
+   "px": 92.981,
+   "after": 424704.0
+  },
+  {
+   "d": "2026-08-04",
+   "filed": "2026-08-05",
+   "name": "BELLEMARE ALAIN",
+   "title": "EVP & Pres. - International",
+   "code": "M",
+   "ad": "A",
+   "sh": 35000.0,
+   "px": 39.78,
+   "after": 130025.0
+  },
+  {
+   "d": "2026-08-04",
+   "filed": "2026-08-05",
+   "name": "BELLEMARE ALAIN",
+   "title": "EVP & Pres. - International",
+   "code": "S",
+   "ad": "D",
+   "sh": 35000.0,
+   "px": 92.719,
+   "after": 95025.0
+  },
+  {
+   "d": "2026-08-04",
+   "filed": "2026-08-05",
+   "name": "Bastian Edward H",
+   "title": "Chief Executive Officer",
+   "code": "M",
+   "ad": "A",
+   "sh": 206510.0,
+   "px": 49.33,
+   "after": 1569958.0
+  },
+  {
+   "d": "2026-08-04",
+   "filed": "2026-08-05",
+   "name": "Bastian Edward H",
+   "title": "Chief Executive Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 206510.0,
+   "px": 92.796,
+   "after": 1363448.0
+  },
+  {
+   "d": "2026-08-03",
+   "filed": "2026-08-05",
+   "name": "DEWALT DAVID G",
+   "title": "Director",
+   "code": "S",
+   "ad": "D",
+   "sh": 31756.0,
+   "px": 90.848,
+   "after": 22358.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "Hale Leslie D.",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 21530.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "Beck Christophe",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 6620.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "Taylor David S",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 3810.0,
+   "px": null,
+   "after": 126530.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "Waller Kathy N",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 48500.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "Chiang Willie CW",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 10660.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "McKenna Judith J",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 6630.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "PRABHU VASANT M",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 15100.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "HUERTA MICHAEL P",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 35625.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "Creed Greg",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 6620.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "Black Maria",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 10675.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "Rial Sergio",
+   "title": "Director",
+   "code": "F",
+   "ad": "D",
+   "sh": 1272.0,
+   "px": 84.18,
+   "after": 34797.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "Rial Sergio",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 37177.0
+  },
+  {
+   "d": "2026-06-18",
+   "filed": "2026-06-22",
+   "name": "DEWALT DAVID G",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 2380.0,
+   "px": null,
+   "after": 85870.0
+  },
+  {
+   "d": "2026-05-27",
+   "filed": "2026-05-28",
+   "name": "Ausband Allison C",
+   "title": "EVP & Chief People Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 5000.0,
+   "px": 80.9,
+   "after": 128854.0
+  }
+ ],
+ "inst": {
+  "period": "2026-06-30",
+  "prev_period": "2026-03-31",
+  "holders": 1503,
+  "prev_holders": 1322,
+  "shares": 584118767.0,
+  "prev_shares": 568892919.0,
+  "top": [
+   {
+    "name": "Berkshire Hathaway Inc",
+    "sh": 57320000.0,
+    "chg": 17510544.0
+   },
+   {
+    "name": "BlackRock, Inc.",
+    "sh": 45106139.0,
+    "chg": 981365.0
+   },
+   {
+    "name": "VANGUARD CAPITAL MANAGEMENT LLC",
+    "sh": 41307000.0,
+    "chg": -637003.0
+   },
+   {
+    "name": "FMR LLC",
+    "sh": 33187319.0,
+    "chg": 5683286.0
+   },
+   {
+    "name": "Sanders Capital, LLC",
+    "sh": 29129629.0,
+    "chg": -337526.0
+   },
+   {
+    "name": "VANGUARD PORTFOLIO MANAGEMENT LLC",
+    "sh": 26329259.0,
+    "chg": -1053825.0
+   },
+   {
+    "name": "STATE STREET CORP",
+    "sh": 24129558.0,
+    "chg": 669444.0
+   },
+   {
+    "name": "Capital International Investors",
+    "sh": 20689945.0,
+    "chg": 119654.0
+   },
+   {
+    "name": "GEODE CAPITAL MANAGEMENT, LLC",
+    "sh": 18511900.0,
+    "chg": 541325.0
+   },
+   {
+    "name": "PRIMECAP MANAGEMENT CO/CA/",
+    "sh": 17521167.0,
+    "chg": -27400.0
+   }
+  ]
+ },
+ "updated_at": "2026-11-24 18:08 KST"
+}
