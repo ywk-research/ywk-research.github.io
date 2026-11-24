@@ -2,24 +2,24 @@
 {% if mv and mv.kospi %}
 <div class="movers">
   <div class="krx-head sub">
-    <h3>종목 등락 <span class="krx-sub">{{ mv.d | date: "%m.%d" }} 기준</span></h3>
+    <h3 data-i18n="movers.title" data-d="{{ mv.d | date: '%b %-d' }}">종목 등락 <span class="krx-sub">{{ mv.d | date: "%m.%d" }} 기준</span></h3>
     <div class="krx-range movers-tabs" role="tablist">
-      <button type="button" data-tab="gainers" class="on">상승 상위</button>
-      <button type="button" data-tab="losers">하락 상위</button>
-      <button type="button" data-tab="value">거래대금 상위</button>
+      <button type="button" data-tab="gainers" class="on" data-i18n="movers.gainers">상승 상위</button>
+      <button type="button" data-tab="losers" data-i18n="movers.losers">하락 상위</button>
+      <button type="button" data-tab="value" data-i18n="movers.value">거래대금 상위</button>
     </div>
   </div>
   <div class="movers-grid">
     {% assign list_mkt = "kospi,kosdaq" | split: "," %}{% for mkt in list_mkt %}
     {% assign m = mv[mkt] %}
     <div class="movers-col">
-      <p class="krx-name">{% if mkt == "kospi" %}코스피{% else %}코스닥{% endif %}</p>
+      <p class="krx-name" data-i18n="mkt.{{ mkt }}">{% if mkt == "kospi" %}코스피{% else %}코스닥{% endif %}</p>
       {% assign list_tab = "gainers,losers,value" | split: "," %}{% for tab in list_tab %}
       <ol class="movers-list" data-tab="{{ tab }}"{% unless tab == "gainers" %} hidden{% endunless %}>
         {% for r in m[tab] %}
         <li>
           <span class="mv-name">{{ r.name }}</span>
-          {% if tab == "value" %}<span class="mv-val">{{ r.value_txt }}</span>{% endif %}
+          {% if tab == "value" %}<span class="mv-val" data-en="₩{{ r.value | divided_by: 10000.0 | round: 2 }}tn">{{ r.value_txt }}</span>{% endif %}
           <span class="mv-pct {% if r.pct > 0 %}up{% elsif r.pct < 0 %}down{% else %}flat{% endif %}">{% if r.pct > 0 %}+{% endif %}{{ r.pct | round: 2 }}%</span>
         </li>
         {% endfor %}
@@ -28,7 +28,7 @@
     </div>
     {% endfor %}
   </div>
-  <p class="note">등락률 순위: 코스피 {{ mv.rules.kospi }} · 코스닥 {{ mv.rules.kosdaq }}. 거래대금 순위는 우선주·스팩만 제외.</p>
+  <p class="note" data-i18n="movers.note" data-kospi="{{ mv.rules.kospi }}" data-kosdaq="{{ mv.rules.kosdaq }}">등락률 순위: 코스피 {{ mv.rules.kospi }} · 코스닥 {{ mv.rules.kosdaq }}. 거래대금 순위는 우선주·스팩만 제외.</p>
   <script>
     (function () {
       var root = document.currentScript.parentNode;

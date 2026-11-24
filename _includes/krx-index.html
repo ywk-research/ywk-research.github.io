@@ -1,11 +1,11 @@
 {% assign krx = site.data.krx_index %}
 <section class="krx" id="krx-index">
   <div class="krx-head">
-    <h2>국내 지수</h2>
-    <div class="krx-range" role="group" aria-label="기간">
-      <button type="button" data-days="22">1개월</button>
-      <button type="button" data-days="66" class="on">3개월</button>
-      <button type="button" data-days="260">1년</button>
+    <h2 data-i18n="krx.title">국내 지수</h2>
+    <div class="krx-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-days="22" data-i18n="range.1m">1개월</button>
+      <button type="button" data-days="66" class="on" data-i18n="range.3m">3개월</button>
+      <button type="button" data-days="260" data-i18n="range.1y">1년</button>
     </div>
   </div>
 
@@ -16,7 +16,7 @@
       {% if s == nil or s.size == 0 %}{% continue %}{% endif %}
       {% assign last = s | last %}
       <div class="krx-card" data-series="{{ key }}">
-        <p class="krx-name">{% if key == "kospi" %}코스피{% elsif key == "kosdaq" %}코스닥{% else %}VKOSPI <span class="krx-sub">변동성지수</span>{% endif %}</p>
+        <p class="krx-name">{% if key == "kospi" %}<span data-i18n="mkt.kospi">코스피</span>{% elsif key == "kosdaq" %}<span data-i18n="mkt.kosdaq">코스닥</span>{% else %}VKOSPI <span class="krx-sub" data-i18n="krx.vol">변동성지수</span>{% endif %}</p>
         <p class="krx-close">{{ last.close | round: 2 }}</p>
         <p class="krx-chg {% if last.chg > 0 %}up{% elsif last.chg < 0 %}down{% else %}flat{% endif %}">
           {% if last.chg > 0 %}▲{% elsif last.chg < 0 %}▼{% endif %} {{ last.chg | abs | round: 2 }} ({{ last.pct | round: 2 }}%)
@@ -26,7 +26,7 @@
     {% endfor %}
   </div>
   {% assign lk = krx.kospi | last %}
-  <p class="note">{{ lk.d }} 종가 기준 · 자료: 한국거래소(KRX) Open API · 업데이트 {{ krx.updated_at }}</p>
+  <p class="note" data-i18n="krx.note" data-d="{{ lk.d }}" data-u="{{ krx.updated_at }}">{{ lk.d }} 종가 기준 · 자료: 한국거래소(KRX) Open API · 업데이트 {{ krx.updated_at }}</p>
 
   <script>
     (function () {
@@ -76,6 +76,6 @@
   {% include krx-sectors.html %}
   {% include krx-movers.html %}
   {% else %}
-  <p class="note">지수 데이터를 준비하고 있어요. 첫 업데이트 후 코스피·코스닥 종가와 추이가 표시됩니다.</p>
+  <p class="note" data-i18n="krx.empty">지수 데이터를 준비하고 있어요. 첫 업데이트 후 코스피·코스닥 종가와 추이가 표시됩니다.</p>
   {% endif %}
 </section>

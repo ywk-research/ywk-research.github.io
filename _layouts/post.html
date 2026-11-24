@@ -3,9 +3,10 @@ layout: default
 ---
 <article class="post">
   <header class="post-header">
-    <p class="kicker">{{ page.category_label | default: "개장 전 브리핑" }}</p>
+    <p class="kicker">{% if page.category_label %}<span data-i18n-name>{{ page.category_label }}</span>{% else %}<span data-i18n="post.kicker">개장 전 브리핑</span>{% endif %}</p>
     <h1>{{ page.title }}</h1>
-    <p class="meta">{{ page.date | date: "%Y.%m.%d" }} 발행 · 모든 수치는 전일 마감 기준</p>
+    <p class="meta" data-i18n="post.meta" data-d="{{ page.date | date: '%b %-d, %Y' }}">{{ page.date | date: "%Y.%m.%d" }} 발행 · 모든 수치는 전일 마감 기준</p>
+    <p class="note en-only" data-i18n="brief.korean_only"></p>
   </header>
 
   <div class="post-body">
@@ -13,7 +14,7 @@ layout: default
   </div>
 
   <nav class="post-nav">
-    {% if page.previous %}<a href="{{ page.previous.url | relative_url }}">← {{ page.previous.date | date: "%m.%d" }} 브리핑</a>{% else %}<span></span>{% endif %}
-    {% if page.next %}<a href="{{ page.next.url | relative_url }}">{{ page.next.date | date: "%m.%d" }} 브리핑 →</a>{% endif %}
+    {% if page.previous %}<a href="{{ page.previous.url | relative_url }}" data-i18n="post.prev" data-d="{{ page.previous.date | date: '%b %-d' }}">← {{ page.previous.date | date: "%m.%d" }} 브리핑</a>{% else %}<span></span>{% endif %}
+    {% if page.next %}<a href="{{ page.next.url | relative_url }}" data-i18n="post.next" data-d="{{ page.next.date | date: '%b %-d' }}">{{ page.next.date | date: "%m.%d" }} 브리핑 →</a>{% endif %}
   </nav>
 </article>
