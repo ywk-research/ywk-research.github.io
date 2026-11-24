@@ -507,3 +507,11 @@ section[id] { scroll-margin-top: 56px; }
 .mk-tabs { margin-top: 18px; }
 .mk-tabs button { font-size: 15px; padding: 6px 22px; }
 .mk-pane > .wl-lead { margin: 4px 0 0; font-size: 13px; }
+/* Equity: 넓은 화면은 왼쪽 미국·오른쪽 한국 2단, 좁으면 탭 */
+.mk-pane-title { display: none; }
+@media (min-width: 1200px) {
+  .wrap.xwide { max-width: 1680px; }
+  .mk-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; margin-top: 16px; }
+  #mk-tabs { display: none; }
+  .mk-pane-title { display: block; margin: 0; padding-bottom: 8px; border-bottom: 2px solid var(--text); font-size: 22px; }
+}
