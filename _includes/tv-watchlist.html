@@ -2,7 +2,6 @@
      종목·비중은 _data/watchlist.yml. 수식 심볼(주식 수 × 종목)로 포트폴리오를 그린다 -->
 {%- assign wl = site.data.watchlist -%}
 <section class="tv-wl" id="watchlist">
-  <h2>관심종목 수익률</h2>
   <p class="wl-mix">{% for s in wl.stocks %}{{ s.name }} {{ s.symbol | split: ":" | last }} {{ s.weight }}%{% unless forloop.last %} · {% endunless %}{% endfor %}</p>
   <div class="tv-box tv-wl-box" id="tv-wl-overview"></div>
   <p class="note">{{ wl.base_date | replace: "-", "." }} 종가 기준 비중으로 주식 수를 정해 그 뒤로 그대로 들고 있었다고 가정한 가상 포트폴리오예요(기준일 가치 100). 리밸런싱·배당·환율·수수료는 반영하지 않아요. 위쪽 탭으로 포트폴리오와 비교 지수를 바꿔 볼 수 있어요.</p>
