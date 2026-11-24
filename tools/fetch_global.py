@@ -25,13 +25,8 @@ UA = {"User-Agent": "Mozilla/5.0 (ywk-research.github.io data job)"}
 
 # (키, 표시 이름, 단위, 소스, 소스 식별자, 출처 표기)   단위: pt 지수, pct 금리, usd 달러, krw 원
 SERIES = [
-    ("sp500", "S&P500", "pt", "fred", "SP500", "FRED"),
-    ("nasdaq", "나스닥", "pt", "fred", "NASDAQCOM", "FRED"),
-    ("dow", "다우", "pt", "fred", "DJIA", "FRED"),
     ("vix", "VIX", "pt", "cboe", "VIX", "Cboe"),
-    ("nikkei", "닛케이225", "pt", "fred", "NIKKEI225", "FRED"),
     ("us10y", "美 10년물", "pct", "treasury", "10 Yr", "미 재무부"),
-    ("wti", "WTI", "usd", "fred", "DCOILWTICO", "FRED"),
     ("usdkrw", "원/달러", "krw", "ecos", "731Y001/0000001", "한국은행 ECOS"),
 ]
 

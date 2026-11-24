@@ -1,14 +1,16 @@
 {% assign gi = site.data.global_index %}
 {% if gi and gi.series.size > 0 %}
-<section class="krx gl" id="global-index">
+<section class="krx gl" id="global-rates">
   <div class="krx-head">
-    <h2>해외 지수·금리·유가</h2>
+    <h2>변동성·금리·환율</h2>
   </div>
   <div class="gl-cards" id="gl-cards"></div>
   <p class="note">각 카드의 날짜가 해당 지표의 최근 값 기준일입니다(현지 날짜). '지연'은 다른 지표보다 기준일이 늦은 경우입니다. 금리 변동은 bp, 차트는 최근 3개월 · 자료: {{ gi.source }} · 업데이트 {{ gi.updated_at }}</p>
   <script>
     (function () {
       var GI = {{ gi | jsonify }};
+      var KEEP = ['vix', 'us10y', 'usdkrw'];
+      GI.series = GI.series.filter(function (s) { return KEEP.indexOf(s.key) >= 0 && s.data.length; });
       var css = getComputedStyle(document.documentElement);
       function c(n) { return css.getPropertyValue(n).trim(); }
       var wrap = document.getElementById('gl-cards');
@@ -25,7 +27,7 @@
                 : arrow + ' ' + fmt(Math.abs(last.chg), s.unit === 'krw' ? 1 : 2) + (s.unit === 'krw' ? '원' : '') + ' (' + (last.pct > 0 ? '+' : '') + fmt(last.pct, 2) + '%)';
         var el = document.createElement('div');
         el.className = 'gl-card';
-        el.innerHTML = '<p class="krx-name">' + s.label + ' <span class="krx-sub">' + last.d.slice(5).replace('-', '/') + (last.d < LATEST ? ' · 지연' : '') + '</span></p>' +
+        el.innerHTML = '<p class="krx-name">' + s.label + ' <span class="krx-sub">' + last.d.slice(5).replace('-', '/') + (s.key !== 'usdkrw' && last.d < LATEST ? ' · 지연' : '') + '</span></p>' +
           '<p class="gl-close">' + val + '</p><p class="krx-chg ' + cls + '">' + chg + '</p><div class="gl-spark"><canvas></canvas></div>';
         wrap.appendChild(el);
         var cut = new Date(last.d); cut.setMonth(cut.getMonth() - 3);

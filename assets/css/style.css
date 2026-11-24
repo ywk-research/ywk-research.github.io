@@ -165,3 +165,15 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .gl-card .krx-chg { font-size: 13px; }
 .gl-spark { height: 44px; margin-top: 6px; }
 @media (max-width: 760px) { .gl-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* 해외 지수·섹터: TradingView 위젯 */
+.tv-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.tv-card { display: flex; flex-direction: column; height: 200px; padding: 10px 6px 0; background: var(--soft); border-radius: 12px; min-width: 0; overflow: hidden; }
+.tv-card .krx-name { padding: 0 8px; }
+.tv-w { flex: 1; min-height: 0; }
+.tv-box { height: 560px; padding: 4px 2px; background: var(--soft); border-radius: 12px; overflow: hidden; }
+.tv-heat { height: 480px; margin-bottom: 0; }
+.tv-w .tradingview-widget-container, .tv-box .tradingview-widget-container { height: 100%; }
+@media (max-width: 760px) { .tv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .tv-heat { height: 380px; } }
+@media (max-width: 330px) { .tv-grid { grid-template-columns: 1fr; } }
