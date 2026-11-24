@@ -1,0 +1,26 @@
+name: probe (임시)
+on:
+  push:
+    branches: ['claude/project-thread-jgq9bc']
+    paths: ['.github/workflows/probe.yml']
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: run
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: |
+          python tools/fetch_extra.py
+          python - <<'PY'
+          import json, glob
+          for f in ["us_liquidity","crude_stocks","ust_auctions","cot","reer","kr_flows","dart"]:
+              try: d = json.load(open(f"_data/{f}.json"))
+              except Exception as e: print(f, "없음"); continue
+              s = json.dumps(d, ensure_ascii=False)
+              print("==", f, len(s)); print(s[:1500])
+              if f == "dart": print(s[-1500:])
+          PY
