@@ -6,13 +6,17 @@ benchmark: AMEX:SPY
 stocks:
   - symbol: NYSE:TDG
     name: 트랜스다임
-    weight: 33.3
+    weight: 25
     base_price: 1121.80
   - symbol: NASDAQ:EQIX
     name: 에퀴닉스
-    weight: 33.3
+    weight: 25
     base_price: 968.22
   - symbol: NYSE:DAL
     name: 델타항공
-    weight: 33.3
+    weight: 25
     base_price: 80.01
+  - symbol: NYSE:GE
+    name: GE 에어로스페이스
+    weight: 25
+    base_price: 309.62
