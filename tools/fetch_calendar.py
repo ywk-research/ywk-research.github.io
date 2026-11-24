@@ -1,9 +1,9 @@
 """미국 주요 지표 발표 일정을 공식 캘린더(.ics)에서 받아 _data/econ_calendar.json에 저장한다.
 
-- 미 노동통계국(BLS): 고용보고서, CPI, PPI, JOLTS, 고용비용지수
 - 미 경제분석국(BEA): GDP, 개인소득·지출(PCE)
+미 노동통계국(BLS, CPI·고용 등)은 GitHub Actions 접속을 막아서(403) _data/econ_events.yml에서 손으로 관리한다.
 시간은 한국시간(KST)으로 바꿔 저장한다. 한 소스가 실패하면 그 소스의 기존 일정을 유지한다.
-중앙은행 회의 일정은 _data/econ_events.yml에서 손으로 관리한다.
+중앙은행 회의 일정도 _data/econ_events.yml에서 관리한다.
 """
 import datetime as dt
 import json
@@ -21,18 +21,14 @@ ET = ZoneInfo("America/New_York")
 UA = {"User-Agent": "ywk-research.github.io economic calendar (+https://ywk-research.github.io/data/)", "Accept": "text/calendar,*/*"}
 
 SOURCES = {
-    "bls": "https://www.bls.gov/schedule/news_release/bls.ics",
     "bea": "https://www.bea.gov/news/schedule/ics/online-calendar-subscription.ics",
 }
-# (소스, 제목에 들어 있는 말, 표시 이름, 달력 칸에 쓰는 짧은 이름)
+# (소스, 제목의 시작 부분, 표시 이름, 달력 칸에 쓰는 짧은 이름). 주(state)·카운티 GDP는 빼려고 시작 부분으로 맞춘다
 RULES = [
-    ("bls", "Employment Situation", "고용보고서(비농업 고용·실업률)", "고용"),
-    ("bls", "Consumer Price Index", "소비자물가(CPI)", "CPI"),
-    ("bls", "Producer Price Index", "생산자물가(PPI)", "PPI"),
-    ("bls", "Job Openings and Labor Turnover", "구인·이직 보고서(JOLTS)", "JOLTS"),
-    ("bls", "Employment Cost Index", "고용비용지수(ECI)", "ECI"),
-    ("bea", "GDP", "GDP", "GDP"),
-    ("bea", "Gross Domestic Product", "GDP", "GDP"),
+    ("bea", "GDP (Advance", "GDP 속보치", "GDP"),
+    ("bea", "GDP (Second", "GDP 잠정치", "GDP"),
+    ("bea", "GDP (Third", "GDP 확정치", "GDP"),
+    ("bea", "Gross Domestic Product, ", "GDP", "GDP"),
     ("bea", "Personal Income and Outlays", "개인소득·지출(PCE 물가)", "PCE"),
 ]
 
@@ -99,7 +95,7 @@ def main():
         for ev in items:
             summary = ev.get("SUMMARY", ("", {}))[0].replace("\\,", ",")
             for s, key, label, short in RULES:
-                if s == src and key.lower() in summary.lower():
+                if s == src and summary.startswith(key):
                     date, hm = start_kst(ev)
                     if date >= lo:
                         events.append({"date": date, "time": hm, "c": "us", "t": label, "s": short, "src": src})
