@@ -54,10 +54,10 @@ en:
   gl.nky: Nikkei 225 <span class="krx-sub">Prev. close</span>
   gl.hsi: Hang Seng <span class="krx-sub">Prev. close</span>
   gl.sse: Shanghai Composite <span class="krx-sub">Prev. close</span>
-  gl.note: 'US indices are not available in the widget, so tracking ETFs are shown instead: SPY (S&amp;P 500), QQQ (Nasdaq-100), DIA (Dow), SOXX (semiconductors). Nikkei 225, Hang Seng and Shanghai Composite are the indices themselves; gold and WTI are spot and front-month. Delayed quotes, 3-month charts. Widget colors follow the US convention (green up, red down) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  gl.note: 'US indices are not available in the widget, so tracking ETFs are shown instead: SPY (S&amp;P 500), QQQ (Nasdaq-100), DIA (Dow), SOXX (semiconductors). Nikkei 225, Hang Seng and Shanghai Composite are the indices themselves; gold and WTI are spot and front-month. Delayed quotes, 3-month charts. · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
   sec.title: S&amp;P 500 Sectors
-  sec.heat_note: 'S&amp;P 500 heatmap grouped by sector. Block size is market cap, color is the change from the previous close (delayed quotes, US colors: green up)'
-  sec.note: 'The 11 SPDR sector ETFs, change from the previous close (delayed quotes, US colors: green up) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  sec.heat_note: 'S&amp;P 500 heatmap grouped by sector. Block size is market cap, color is the change from the previous close (delayed quotes)'
+  sec.note: 'The 11 SPDR sector ETFs, change from the previous close (delayed quotes) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
   sec.group: Sector ETFs
 
   # 홈: 변동성·금리·환율 (_includes/global-index.html)

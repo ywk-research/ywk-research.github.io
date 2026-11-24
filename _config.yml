@@ -5,6 +5,12 @@ timezone: Asia/Seoul
 url: https://ywk-research.github.io
 baseurl: ""
 
+plugins:
+  - jekyll-feed
+
+feed:
+  path: feed.xml
+
 permalink: /briefing/:year/:month/:day/
 
 markdown: kramdown

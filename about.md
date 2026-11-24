@@ -24,8 +24,9 @@ permalink: /about/
 
 ## 운영자
 
-<!-- 이름, 관심 분야, 연락처(링크드인 등)를 여기에 적어 주세요. -->
 글로벌 주식과 ETF를 공부하고 기록합니다.
+
+- 연락처: [kyeonwook@yonsei.ac.kr](mailto:kyeonwook@yonsei.ac.kr)
 
 </div>
 
@@ -51,5 +52,7 @@ Briefings are written in Korean for now. An English edition is planned.
 ## Author
 
 I study and write about global equities and ETFs.
+
+- Contact: [kyeonwook@yonsei.ac.kr](mailto:kyeonwook@yonsei.ac.kr)
 
 </div>
