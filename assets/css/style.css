@@ -173,6 +173,7 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .tv-w { flex: 1; min-height: 0; }
 .tv-box { height: 560px; padding: 4px 2px; background: var(--soft); border-radius: 12px; overflow: hidden; }
 .tv-heat { height: 480px; margin-bottom: 0; }
+#tv-sectors { height: 430px; }
 .tv-w .tradingview-widget-container, .tv-box .tradingview-widget-container { height: 100%; }
 @media (max-width: 760px) { .tv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .tv-heat { height: 380px; } }
