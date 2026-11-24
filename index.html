@@ -28,6 +28,8 @@ wide: true
 </section>
 {% endif %}
 
+{% include tv-news.html %}
+
 <section class="archive">
   <h2>지난 브리핑</h2>
   {% assign by_month = site.posts | group_by_exp: "p", "p.date | date: '%Y년 %m월'" %}
