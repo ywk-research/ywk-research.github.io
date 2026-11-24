@@ -1,0 +1,60 @@
+<!-- CFTC 주간 포지셔닝(COT). 데이터: _data/cot.json (tools/fetch_extra.py)
+     include 인자: id, group(fin|cmd), keys(쉼표로 고른 계약), title, title_key -->
+{% assign cot = site.data.cot %}
+{% assign cot_group = cot[include.group] %}
+{% if cot and cot_group %}
+{% include mc-common.html %}
+{% assign cot_keys = include.keys | split: "," %}
+<section class="krx macro cot" id="{{ include.id }}">
+  <div class="krx-head">
+    <h2 data-i18n="{{ include.title_key }}">{{ include.title }}</h2>
+    <div class="krx-range" id="{{ include.id }}-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>
+      <button type="button" data-months="36" data-i18n="range.3y">3년</button>
+    </div>
+  </div>
+  <div class="gl-cards cot-cards" id="{{ include.id }}-cards"></div>
+  <div class="mc-grid">
+    <div class="mc-box mc-wide">
+      <div class="cot-pick krx-range" id="{{ include.id }}-pick" role="tablist"></div>
+      <div class="mc-chart"><canvas id="{{ include.id }}-chart" aria-label="순포지션 추이"></canvas></div>
+    </div>
+  </div>
+  <p class="note" data-i18n="cot.note_{{ include.group }}" data-u="{{ cot.updated_at }}">{% if include.group == 'fin' %}레버리지 펀드(헤지펀드·CTA 등)의 순포지션(매수 − 매도, 계약 수){% else %}머니매니저(헤지펀드·CTA 등)의 순포지션(매수 − 매도, 계약 수){% endif %}. 화요일 기준으로 금요일에 발표돼요. 카드의 %는 미결제약정 대비, 변동은 전주 대비 · 자료: 미 상품선물거래위원회(CFTC) · 업데이트 {{ cot.updated_at }}</p>
+  <script>
+    (function () {
+      var ID = {{ include.id | jsonify }}, KEYS = {{ cot_keys | jsonify }};
+      var ALL = {{ cot_group | jsonify }};
+      var S = KEYS.map(function (k) { return ALL.filter(function (s) { return s.key === k; })[0]; }).filter(function (s) { return s && s.data.length; });
+      function name(s) { return LANG === 'en' ? s.en : s.ko; }
+      function fmt(v) { return Math.round(v).toLocaleString('en-US'); }
+      var wrap = document.getElementById(ID + '-cards');
+      S.forEach(function (s) {
+        var a = s.data[s.data.length - 1], b = s.data.length > 1 ? s.data[s.data.length - 2] : a, d = a[1] - b[1];
+        MC.card(wrap, { label: name(s), date: a[0].slice(5).replace('-', '/'),
+          value: (a[1] > 0 ? '+' : a[1] < 0 ? '−' : '') + fmt(Math.abs(a[1])) + (a[2] ? ' <span class="krx-sub">' + (a[1] / a[2] * 100).toFixed(0) + '%</span>' : ''),
+          chg: (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '') + fmt(Math.abs(d)), dir: d });
+      });
+      var pick = document.getElementById(ID + '-pick'), cur = S[0], months = 12;
+      S.forEach(function (s, i) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.textContent = name(s); if (!i) b.className = 'on';
+        b.addEventListener('click', function () {
+          pick.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); });
+          cur = s; draw();
+        });
+        pick.appendChild(b);
+      });
+      if (S.length < 2) pick.style.display = 'none';
+      var css = getComputedStyle(document.documentElement);
+      function draw() {
+        var up = css.getPropertyValue('--up').trim(), down = css.getPropertyValue('--down').trim();
+        var rows = cur.data.map(function (r) { return [r[0], r[1]]; });
+        MC.line(document.getElementById(ID + '-chart'), [[name(cur), rows, 0, {
+          backgroundColor: function (c) { return c.raw >= 0 ? up : down; }, borderWidth: 0, maxBarThickness: 8 }]], { months: months, type: 'bar', digits: 0, zeroAt: 0 });
+      }
+      MC.range(document.getElementById(ID + '-range'), function (m) { months = m; draw(); });
+    })();
+  </script>
+</section>
+{% endif %}

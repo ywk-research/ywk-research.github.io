@@ -1,0 +1,39 @@
+<!-- 외국인 국내 증권투자(국제수지 기준). 데이터: _data/kr_flows.json (tools/fetch_extra.py, 한국은행 ECOS) -->
+{% assign kf = site.data.kr_flows %}
+{% if kf and kf.series.equity %}
+{% include mc-common.html %}
+<section class="krx macro" id="kr-flows">
+  <div class="krx-head">
+    <h2 data-i18n="kf.title">외국인 국내 증권투자</h2>
+    <div class="krx-range" id="kf-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-months="24" class="on" data-i18n="range.2y">2년</button>
+      <button type="button" data-months="72" data-i18n="range.6y">6년</button>
+    </div>
+  </div>
+  <div class="gl-cards" id="kf-cards"></div>
+  <div class="mc-grid">
+    <div class="mc-box mc-wide"><p class="krx-name" data-i18n="kf.chart">월별 순유입 <span class="krx-sub">억 달러, +는 유입</span></p><div class="mc-chart"><canvas id="kf-chart" aria-label="외국인 주식·채권 투자 월별 순유입"></canvas></div></div>
+  </div>
+  <p class="note" data-i18n="kf.note" data-u="{{ kf.updated_at }}">국제수지 금융계정의 증권투자(부채), 즉 외국인이 국내 주식·채권(부채성증권)에 새로 투자한 금액에서 회수한 금액을 뺀 값이에요. 매월 초 전전월분이 발표돼요 · 자료: 한국은행 ECOS 국제수지 · 업데이트 {{ kf.updated_at }}</p>
+  <script>
+    (function () {
+      var F = {{ kf.series | jsonify }};
+      // 백만 달러 → 억 달러
+      function e8(rows) { return rows.map(function (r) { return [r[0], Math.round(r[1] / 10) / 10]; }); }
+      var eq = e8(F.equity), dt = e8(F.debt);
+      function fmt(v) { return (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toLocaleString('en-US', { maximumFractionDigits: 1 }); }
+      var unit = LANG === 'en' ? ' ($100M)' : '억 달러';
+      var wrap = document.getElementById('kf-cards');
+      [['주식', eq], ['채권', dt]].forEach(function (x) {
+        var s = x[1], a = s[s.length - 1], y12 = s.slice(-12).reduce(function (m, r) { return m + r[1]; }, 0);
+        MC.card(wrap, { label: x[0], date: a[0].slice(2).replace('-', '.'), value: fmt(a[1]) + '<span class="krx-sub"> ' + unit + '</span>',
+          chg: t('kf.ytd12', '최근 12개월') + ' ' + fmt(Math.round(y12 * 10) / 10), dir: y12 });
+      });
+      MC.range(document.getElementById('kf-range'), function (months) {
+        MC.line(document.getElementById('kf-chart'), [['주식', eq, 0], ['채권', dt, 2]],
+          { months: months, type: 'bar', digits: 1, zeroAt: 0, labelFmt: function (d) { return d.slice(2).replace('-', '.'); } });
+      });
+    })();
+  </script>
+</section>
+{% endif %}

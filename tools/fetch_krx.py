@@ -306,6 +306,23 @@ def update_etf(key, day):
     return write_if_changed(ETF_PATH, out)
 
 
+def save_caps(stocks, day):
+    """DART 공시 필터용 시가총액 표(종목코드 → 시장·시총). Actions 캐시(tools/state/)에만 두고 커밋하지 않는다."""
+    try:
+        caps = {"date": day.isoformat(), "rows": {}}
+        for mkt, rows in stocks.items():
+            for r in rows:
+                cap = num(r.get("MKTCAP"))
+                if r.get("ISU_CD") and cap:
+                    caps["rows"][r["ISU_CD"]] = [mkt, cap]
+        path = os.path.join(ROOT, "tools", "state", "caps.json")
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(caps, f, ensure_ascii=False, separators=(",", ":"))
+    except Exception as e:
+        print(f"시가총액 표 저장 실패: {type(e).__name__}: {e}")
+
+
 def main():
     key = os.environ.get("KRX_API_KEY", "").strip()
     if not key:
@@ -324,6 +341,7 @@ def main():
         print(f"건너뜀 — KRX API 인증 실패({e}): 유가증권·코스닥 일별매매정보 이용 승인 여부를 확인하세요.")
     else:
         moved = update_movers(stocks, day)
+        save_caps(stocks, day)
         try:
             cross = update_cross(key, stocks, day)
         except Exception as e:  # 크로스 계산이 실패해도 다른 데이터는 저장한다

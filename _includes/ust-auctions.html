@@ -1,0 +1,58 @@
+<!-- 미 국채 입찰 결과. 데이터: _data/ust_auctions.json (tools/fetch_extra.py, 미 재무부 Fiscal Data) -->
+{% assign ua = site.data.ust_auctions %}
+{% if ua and ua.rows.size > 0 %}
+<section class="krx" id="ust-auctions">
+  <div class="krx-head">
+    <h2 data-i18n="ua.title">美 국채 입찰</h2>
+    <div class="krx-range" id="ua-tabs" role="tablist" aria-label="만기" data-i18n-aria="ua.tabs_aria">
+      <button type="button" data-term="" class="on" data-i18n="ua.all">전체</button>
+      <button type="button" data-term="2-Year">2Y</button>
+      <button type="button" data-term="5-Year">5Y</button>
+      <button type="button" data-term="10-Year">10Y</button>
+      <button type="button" data-term="30-Year">30Y</button>
+    </div>
+  </div>
+  <div class="wl-scroll">
+    <table class="wl-table ua-table">
+      <thead><tr>
+        <th data-i18n="ua.date">입찰일</th><th data-i18n="ua.sec">종목</th>
+        <th data-i18n="ua.yield">낙찰금리</th><th data-i18n="ua.btc">응찰률</th>
+        <th data-i18n="ua.ind">해외(간접)</th><th data-i18n="ua.pd">딜러</th><th data-i18n="ua.amt">발행액</th>
+      </tr></thead>
+      <tbody id="ua-body"></tbody>
+    </table>
+  </div>
+  <p class="note" data-i18n="ua.note" data-u="{{ ua.updated_at }}">Note·Bond·TIPS 입찰 결과(최근 12건). 응찰률(bid-to-cover)은 응찰액 ÷ 낙찰액이고, 화살표는 같은 만기 직전 6회 평균보다 높은지(▲) 낮은지(▼)예요. 해외(간접)·딜러는 경쟁 낙찰액 중 간접 응찰자(해외 중앙은행 등 포함)와 프라이머리 딜러 비중이에요. 딜러 비중이 높으면 수요가 약했다는 뜻으로 읽혀요 · 자료: 미 재무부 Fiscal Data · 업데이트 {{ ua.updated_at }}</p>
+  <script>
+    (function () {
+      var R = {{ ua.rows | jsonify }}; // 최근 입찰이 앞
+      var body = document.getElementById('ua-body');
+      function avgPrev(r) {
+        var same = R.filter(function (x) { return x.term === r.term && x.type === r.type && x.d < r.d; }).slice(0, 6);
+        return same.length ? same.reduce(function (s, x) { return s + x.btc; }, 0) / same.length : null;
+      }
+      function pct(v) { return v == null ? '-' : v.toFixed(1) + '%'; }
+      function render(term) {
+        var rows = R.filter(function (r) { return !term || r.term === term; }).slice(0, 12);
+        body.innerHTML = rows.map(function (r) {
+          var a = avgPrev(r), cmp = a == null ? '' : r.btc > a + 0.005 ? ' <span class="up">▲</span>' : r.btc < a - 0.005 ? ' <span class="down">▼</span>' : '';
+          var name = r.term.replace('-Year', 'Y').replace('-Month', 'M') + (r.type === 'TIPS' ? ' TIPS' : '') +
+            (r.reopen ? ' <span class="krx-sub">' + t('ua.reopen', '재발행') + '</span>' : '');
+          return '<tr><td>' + r.d.slice(2).replace(/-/g, '.') + '</td><td>' + name + '</td>' +
+            '<td class="num">' + r.y.toFixed(3) + '%</td><td class="num">' + r.btc.toFixed(2) + cmp + '</td>' +
+            '<td class="num">' + pct(r.ind) + '</td><td class="num">' + pct(r.pd) + '</td>' +
+            '<td class="num">$' + r.amt.toFixed(0) + 'B</td></tr>';
+        }).join('');
+      }
+      var btns = document.querySelectorAll('#ua-tabs button');
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          btns.forEach(function (x) { x.classList.toggle('on', x === b); });
+          render(b.dataset.term);
+        });
+      });
+      render('');
+    })();
+  </script>
+</section>
+{% endif %}

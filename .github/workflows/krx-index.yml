@@ -94,6 +94,16 @@ jobs:
           pip install -q openpyxl
           python tools/fetch_commodity.py
 
+      - name: 추가 데이터(연준 유동성·국채 입찰·CFTC·EIA 재고·BIS·외국인 증권투자·DART) 받아오기
+        continue-on-error: true
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: |
+          pip install -q xlrd
+          python tools/fetch_extra.py
+
       - name: 변경분 커밋
         id: commit
         run: |
