@@ -209,6 +209,24 @@ def ir_detail(key, rcept_no):
     return day, hhmm, bool(re.search(r"실적|결산", purpose))
 
 
+def kr_filter(prev, skip):
+    """IR 안내는 실적 철에 있고, 직전 35일 안에 그 회사의 잠정실적이나 다른 IR이 없을 때만 남긴다
+    (실적 발표 뒤 NDR·증권사 컨퍼런스 참가 안내를 뺀다)."""
+    seen = {}
+    for e in prev.values():
+        d = dt.date.fromisoformat(e["date"])
+        if e["kind"] == "prelim" and d.month in (1, 4, 7, 10) and d.day <= 10:
+            continue  # 삼성전자·LG전자의 분기 초 잠정 실적(가이던스)은 본 실적 발표가 따로 있다
+        seen.setdefault(e["sym"], []).append(d)
+    for no, e in sorted(prev.items(), key=lambda x: x[1]["date"]):
+        if e["kind"] != "ir":
+            continue
+        d = dt.date.fromisoformat(e["date"])
+        if not in_season(d) or any(0 < (d - p).days <= 35 for p in seen.get(e["sym"], [])):
+            skip.add(no)
+            del prev[no]
+
+
 def kr_events(old):
     key = os.environ.get("DART_API_KEY", "").strip()
     if not key:
@@ -258,18 +276,7 @@ def kr_events(old):
     prev.update(found)
     # 같은 회사·같은 날은 하나로(자회사 실적을 지주사가 여러 건 내는 경우, IR 안내와 잠정실적이 같은 날인 경우).
     # 잠정실적을 남기고, 시각은 IR 안내에서 가져온다
-    # IR 안내는 실적 철에 있고, 직전 20일 안에 그 회사 잠정실적이 없을 때만(실적 뒤 NDR·컨퍼런스는 뺀다)
-    pre_days = {}
-    for e in prev.values():
-        if e["kind"] == "prelim":
-            pre_days.setdefault(e["sym"], []).append(dt.date.fromisoformat(e["date"]))
-    for no, e in list(prev.items()):
-        if e["kind"] != "ir":
-            continue
-        d = dt.date.fromisoformat(e["date"])
-        if not in_season(d) or any(0 < (d - p).days <= 20 for p in pre_days.get(e["sym"], [])):
-            skip.add(no)
-            del prev[no]
+    kr_filter(prev, skip)
     one = {}
     for e in sorted(prev.values(), key=lambda e: (e["kind"] != "prelim", e["no"])):
         k = (e["sym"], e["date"])
