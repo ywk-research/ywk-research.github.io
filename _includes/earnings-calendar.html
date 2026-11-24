@@ -7,9 +7,9 @@
     <h2 data-i18n="earn.title">실적발표 일정</h2>
     <div class="ecal-nav">
       <span class="krx-range earn-pick" role="group" aria-label="국가" data-i18n-aria="earn.pick_aria">
-        <button type="button" data-c="all" class="on" data-i18n="earn.all">전체</button>
-        <button type="button" data-c="us" data-i18n="earn.us">미국</button>
+        <button type="button" data-c="us" class="on" data-i18n="earn.us">미국</button>
         <button type="button" data-c="kr" data-i18n="earn.kr">한국</button>
+        <button type="button" data-c="all" data-i18n="earn.all">전체</button>
       </span>
       <button type="button" data-step="-1" aria-label="이전 달" data-i18n-aria="ecal.prev">‹</button>
       <span class="ecal-title"></span>
@@ -33,7 +33,7 @@
       function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
       var now = new Date(Date.now() + (9 * 60 + new Date().getTimezoneOffset()) * 60000);
       var today = key(now.getFullYear(), now.getMonth(), now.getDate());
-      var cur = { y: now.getFullYear(), m: now.getMonth() }, sel = today, only = 'all';
+      var cur = { y: now.getFullYear(), m: now.getMonth() }, sel = today, only = 'us';  // 개장 전에 미국부터 보므로 기본은 미국
 
       // 미국은 회사 이름이 길어 칸에는 티커, 한국은 회사명(영어 모드는 DART 영문명)
       function short(e) { return e.c === 'us' ? e.sym : (EN && NEN[e.sym]) || e.name; }
@@ -57,7 +57,7 @@
           if (only !== 'all' && e.c !== only) return;
           (byDate[e.date] = byDate[e.date] || []).push(e);
         });
-        Object.keys(byDate).forEach(function (d) { byDate[d].sort(function (a, b) { return (a.est || 0) - (b.est || 0) || a.rank - b.rank; }); });
+        Object.keys(byDate).forEach(function (d) { byDate[d].sort(function (a, b) { return (a.c === b.c ? 0 : a.c === 'us' ? -1 : 1) || (a.est || 0) - (b.est || 0) || a.rank - b.rank; }); });
       }
 
       var root = document.getElementById('earn-month');
@@ -70,7 +70,7 @@
         return '<li class="' + (e.est ? 'minor' : '') + '"><span class="ecal-time">' + (e.time || '—') + '</span><span class="ecal-flag">' + (FLAG[e.c] || '') + '</span>' +
           '<span class="ecal-t"><a href="' + link(e) + '" target="_blank" rel="noopener">' + esc(full(e)) + '</a></span>' + tag(e) + '</li>';
       }
-      function byTime(a, b) { return (a.time || '99').localeCompare(b.time || '99') || a.rank - b.rank; }
+      function byTime(a, b) { return (a.c === b.c ? 0 : a.c === 'us' ? -1 : 1) || (a.time || '99').localeCompare(b.time || '99') || a.rank - b.rank; }
       function showDay(k) {
         sel = k;
         grid.querySelectorAll('.ecal-cell').forEach(function (c) { c.classList.toggle('sel', c.dataset.d === k); });

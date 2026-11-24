@@ -182,7 +182,14 @@ def doc_text(key, rcept_no):
 
 def is_quarterly(text):
     """잠정실적 공시가 분기·반기·연간 실적인지(월별 판매실적 등은 뺀다)."""
-    return bool(re.search(r"분기|반기|연간|사업연도|[1-4]\s*Q|당기", text))
+    return bool(re.search(r"분기|반기|연간|사업연도|[1-4]\s*Q", text))
+
+
+def in_season(d):
+    """한국 분기 실적 발표 철(분기 끝난 뒤 열흘~7주). 연말 결산은 3월 중순까지."""
+    md = (d.month, d.day)
+    return ((1, 10) <= md <= (3, 15) or (4, 10) <= md <= (5, 20)
+            or (7, 10) <= md <= (8, 20) or (10, 10) <= md <= (11, 20))
 
 
 def ir_detail(key, rcept_no):
@@ -251,6 +258,18 @@ def kr_events(old):
     prev.update(found)
     # 같은 회사·같은 날은 하나로(자회사 실적을 지주사가 여러 건 내는 경우, IR 안내와 잠정실적이 같은 날인 경우).
     # 잠정실적을 남기고, 시각은 IR 안내에서 가져온다
+    # IR 안내는 실적 철에 있고, 직전 20일 안에 그 회사 잠정실적이 없을 때만(실적 뒤 NDR·컨퍼런스는 뺀다)
+    pre_days = {}
+    for e in prev.values():
+        if e["kind"] == "prelim":
+            pre_days.setdefault(e["sym"], []).append(dt.date.fromisoformat(e["date"]))
+    for no, e in list(prev.items()):
+        if e["kind"] != "ir":
+            continue
+        d = dt.date.fromisoformat(e["date"])
+        if not in_season(d) or any(0 < (d - p).days <= 20 for p in pre_days.get(e["sym"], [])):
+            skip.add(no)
+            del prev[no]
     one = {}
     for e in sorted(prev.values(), key=lambda e: (e["kind"] != "prelim", e["no"])):
         k = (e["sym"], e["date"])
