@@ -12,7 +12,8 @@
       var css = getComputedStyle(document.documentElement);
       function c(n) { return css.getPropertyValue(n).trim(); }
       var wrap = document.getElementById('gl-cards');
-      var LATEST = GI.series.reduce(function (m, s) { var d = s.data[s.data.length - 1].d; return d > m ? d : m; }, '');
+      // 원/달러(한국 날짜, 당일 아침 고시)는 '지연' 기준일 계산에서 뺀다
+      var LATEST = GI.series.reduce(function (m, s) { if (s.key === 'usdkrw') return m; var d = s.data[s.data.length - 1].d; return d > m ? d : m; }, '');
       function fmt(v, d) { return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
       GI.series.forEach(function (s) {
         var rows = s.data; if (!rows.length) return;
