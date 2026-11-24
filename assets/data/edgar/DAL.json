@@ -24,13 +24,6 @@
  },
  "filings": [
   [
-   "2026-11-16",
-   "SCHEDULE 13G/A",
-   "",
-   "",
-   "https://www.sec.gov/Archives/edgar/data/27904/000119312526464189/xslSCHEDULE_13G_X02/primary_doc.xml"
-  ],
-  [
    "2026-11-13",
    "13F-HR",
    "",
@@ -43,13 +36,6 @@
    "8-K",
    "1.01,8.01,9.01",
    "https://www.sec.gov/Archives/edgar/data/27904/000119312526451940/d164939d8k.htm"
-  ],
-  [
-   "2026-11-05",
-   "SCHEDULE 13D/A",
-   "",
-   "",
-   "https://www.sec.gov/Archives/edgar/data/27904/000168316826008357/xslSCHEDULE_13D_X02/primary_doc.xml"
   ],
   [
    "2026-11-05",
@@ -95,24 +81,10 @@
   ],
   [
    "2026-08-14",
-   "SCHEDULE 13G/A",
-   "",
-   "",
-   "https://www.sec.gov/Archives/edgar/data/27904/000119312526352910/xslSCHEDULE_13G_X02/primary_doc.xml"
-  ],
-  [
-   "2026-08-14",
    "13F-HR",
    "",
    "",
    "https://www.sec.gov/Archives/edgar/data/27904/000168316826006483/xslForm13F_X02/primary_doc.xml"
-  ],
-  [
-   "2026-08-06",
-   "SCHEDULE 13G",
-   "",
-   "",
-   "https://www.sec.gov/Archives/edgar/data/27904/000031506626002003/xslSCHEDULE_13G_X02/primary_doc.xml"
   ],
   [
    "2026-07-10",
@@ -127,6 +99,34 @@
    "10-Q",
    "",
    "https://www.sec.gov/Archives/edgar/data/27904/000002790426000031/dal-20260630.htm"
+  ],
+  [
+   "2026-07-10",
+   "8-K",
+   "8-K",
+   "2.02,9.01",
+   "https://www.sec.gov/Archives/edgar/data/27904/000002790426000029/dal-20260710.htm"
+  ],
+  [
+   "2026-06-22",
+   "8-K",
+   "FORM 8-K",
+   "5.07",
+   "https://www.sec.gov/Archives/edgar/data/27904/000168316826005025/delta_8k.htm"
+  ],
+  [
+   "2026-06-12",
+   "8-K",
+   "FORM 8-K",
+   "1.01,2.03",
+   "https://www.sec.gov/Archives/edgar/data/27904/000168316826004816/delta_8k.htm"
+  ],
+  [
+   "2026-05-15",
+   "13F-HR",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000168316826004035/xslForm13F_X02/primary_doc.xml"
   ]
  ],
  "insider": [
@@ -521,5 +521,5 @@
    }
   ]
  },
- "updated_at": "2026-11-24 19:52 KST"
+ "updated_at": "2026-11-24 20:14 KST"
 }

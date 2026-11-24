@@ -1,0 +1,59 @@
+name: 개장 전 브리핑 예비 발간
+
+# 평일 06:08(KST) Claude 예약 작업이 브리핑을 채워 main에 올린다(tools/briefing_task.md).
+# 이 워크플로는 그게 06:40까지 안 올라왔을 때만 공식 자료로 채운 초안(tools/make_briefing.py --prune)을 올린다.
+# 글이 이미 있으면 아무것도 하지 않는다. 예약 작업이 늦게 끝나면 이 초안을 덮어쓴다.
+on:
+  schedule:
+    # 평일 한국시간 06:40, 07:15(재시도) = UTC 21:40·22:15 일~목
+    - cron: "40 21 * * 0-4"
+    - cron: "15 22 * * 0-4"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: briefing
+  cancel-in-progress: false
+
+jobs:
+  fallback:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 오늘 글이 있는지 확인
+        id: chk
+        run: |
+          f="_posts/$(TZ=Asia/Seoul date +%F)-pre-market-briefing.md"
+          echo "file=$f" >> "$GITHUB_OUTPUT"
+          if [ -f "$f" ]; then echo "exists=true" >> "$GITHUB_OUTPUT"; echo "이미 있음: $f"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
+
+      - uses: actions/setup-python@v5
+        if: steps.chk.outputs.exists == 'false'
+        with:
+          python-version: "3.12"
+
+      - name: 초안 작성·커밋
+        id: commit
+        if: steps.chk.outputs.exists == 'false'
+        run: |
+          python tools/make_briefing.py --prune
+          git add "${{ steps.chk.outputs.file }}"
+          git diff --cached --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "개장 전 브리핑 예비 발간 ($(TZ=Asia/Seoul date +%Y.%m.%d))"
+          for i in 1 2 3 4; do
+            git pull --rebase && git push && { echo "changed=true" >> "$GITHUB_OUTPUT"; exit 0; }
+            sleep $((i * 5))
+          done
+          exit 1
+
+      - name: Pages 다시 빌드
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages 재빌드 요청 실패"

@@ -1,0 +1,36 @@
+<!-- 개장 전 브리핑의 "전 거래일 신규 상장 ETF" (tools/make_briefing.py가 글에 넣음)
+     미국: _data/new_etf_confirmed.yml에서 그날 checked면 확인된 것만, 아니면 SEC 8-A 후보를 "확인 중"으로
+     한국: _data/new_etf.json kr.items 중 국내 전 거래일에 처음 나타난 종목
+     빌드할 때 그리므로 05:52 ETF 확인 작업이 글보다 늦게 끝나도 Pages가 다시 빌드되면 바로 반영된다 -->
+{% assign bu = include.us %}{% assign bk = include.kr %}
+{% assign ne = site.data.new_etf %}
+{% assign cf = site.data.new_etf_confirmed[bu] %}
+{% assign cand = ne.us.items | where: "ld", bu %}
+{% assign krl = ne.kr.items | where: "d", bk %}
+<p><strong>🇺🇸 미국 ({{ bu | date: "%-m/%-d" }} 첫 거래)</strong>{% unless cf and cf.checked %} <span class="flat">확인 중</span>{% endunless %}</p>
+{% if cf and cf.checked %}
+{% assign ok = cf.etfs | default: empty %}
+{% if ok.size > 0 %}
+<ul>
+{% for r in ok %}<li><strong>{{ r.ticker | default: "—" }}</strong> {{ r.name }} <span class="krx-sub">({{ r.issuer }}{% if r.exchange %} · {{ r.exchange }}{% endif %})</span>{% if r.note %} · {{ r.note }}{% endif %}{% if r.src %} <a href="{{ r.src }}" target="_blank" rel="noopener">출처</a>{% endif %}</li>
+{% endfor %}</ul>
+{% elsif cf.partial %}<p>보도자료·공지로 첫 거래가 확인된 신규 ETF를 찾지 못했어요.</p>
+{% else %}<p>새로 상장한 ETF가 없어요.</p>{% endif %}
+<p class="note">운용사 보도자료·펀드 페이지·거래소 공지로 첫 거래를 확인한 것만 실었어요(그날 SEC 8-A 후보 {{ cand.size }}개).{% if cf.partial %} 나중에 보충한 목록이라 빠진 펀드가 있을 수 있어요.{% endif %}</p>
+{% elsif cand.size > 0 %}
+<ul>
+{% for r in cand %}<li><strong>{% if r.ticker != "" %}{{ r.ticker }}{% else %}—{% endif %}</strong> {{ r.name | default: r.issuer }} <span class="krx-sub">({{ r.issuer }}{% if r.exchange != "" %} · {{ r.exchange }}{% endif %})</span> <a href="{{ r.url }}" target="_blank" rel="noopener">8-A</a></li>
+{% endfor %}</ul>
+<p class="note">첫 거래 확인 전이라 SEC Form 8-A 제출 기준 후보를 먼저 보여 드려요. 확인이 끝나면 자동으로 바뀌어요.</p>
+{% elsif ne %}<p>SEC 8-A 기준 후보가 없어요. 첫 거래 확인이 끝나면 자동으로 반영돼요.</p>
+{% else %}<p class="note">신규 상장 ETF 자료를 준비 중이에요.</p>{% endif %}
+{% if ne.kr %}
+<p><strong>🇰🇷 한국 ({{ bk | date: "%-m/%-d" }} 상장)</strong></p>
+{% if krl.size > 0 %}
+<ul>
+{% for r in krl %}<li><strong>{{ r.name }}</strong> <span class="krx-sub">({{ r.code }} · 기초지수 {{ r.index }}{% if r.aum_txt %} · 순자산 {{ r.aum_txt }}{% endif %})</span></li>
+{% endfor %}</ul>
+{% elsif ne.kr.updated < bk %}<p class="note">KRX 자료가 아침(08:30)에 들어오면 자동으로 반영돼요.</p>
+{% else %}<p>새로 상장한 ETF가 없어요.</p>{% endif %}
+{% endif %}
+<p class="note">자료: SEC EDGAR, 운용사 공시·보도자료, 한국거래소(KRX) Open API</p>

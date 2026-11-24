@@ -2,7 +2,13 @@
 title: "개장 전 브리핑 | 전일 시황 종합 (2026.11.13 금)"
 date: 2026-11-13 07:30:00 +0900
 summary: "젠슨 황 엔비디아 CEO 전격 사임, 엔비디아 −4.34%"
+us_day: "2026-11-12"
+kr_day: "2026-11-12"
 ---
+
+## 전 거래일 신규 상장 ETF
+
+{% include briefing-etf.html us=page.us_day kr=page.kr_day %}
 
 ## 미국 증시 (11/12 마감)
 

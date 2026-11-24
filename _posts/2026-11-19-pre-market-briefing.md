@@ -2,7 +2,13 @@
 title: "개장 전 브리핑 | 전일 시황 종합 (2026.11.19 목)"
 date: 2026-11-19 07:30:00 +0900
 summary: "엔비디아 호실적에도 혼조…월러 이사 '빅스텝' 시사"
+us_day: "2026-11-18"
+kr_day: "2026-11-18"
 ---
+
+## 전 거래일 신규 상장 ETF
+
+{% include briefing-etf.html us=page.us_day kr=page.kr_day %}
 
 ## 미국 증시 (11/18 마감)
 

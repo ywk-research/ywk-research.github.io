@@ -502,3 +502,6 @@ section[id] { scroll-margin-top: 56px; }
 .earn .ecal-now .ecal-more { margin: 8px 0 0; }
 .earn .krx-head { flex-wrap: wrap; gap: 8px; }
 @media (max-width: 760px) { .earn .ecal-nav { width: 100%; } }
+.mk-tabs { margin-top: 18px; }
+.mk-tabs button { font-size: 15px; padding: 6px 22px; }
+.mk-pane > .wl-lead { margin: 4px 0 0; font-size: 13px; }
