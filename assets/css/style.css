@@ -174,4 +174,4 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .tv-box { height: 560px; padding: 4px 2px; background: var(--soft); border-radius: 12px; overflow: hidden; }
 .tv-w .tradingview-widget-container, .tv-box .tradingview-widget-container { height: 100%; }
 @media (max-width: 760px) { .tv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 400px) { .tv-grid { grid-template-columns: 1fr; } }
+@media (max-width: 330px) { .tv-grid { grid-template-columns: 1fr; } }
