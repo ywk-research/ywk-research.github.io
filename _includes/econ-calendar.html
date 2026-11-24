@@ -1,0 +1,81 @@
+<!-- 월간 경제 일정 달력: 중앙은행 회의(_data/econ_events.yml, 손으로 관리) + 미국 지표 발표(_data/econ_calendar.json, BLS·BEA 공식 .ics 자동 수집) -->
+<section class="ecal" id="econ-month">
+  <div class="krx-head">
+    <h2>경제 일정</h2>
+    <div class="ecal-nav">
+      <button type="button" data-step="-1" aria-label="이전 달">‹</button>
+      <span class="ecal-title"></span>
+      <button type="button" data-step="1" aria-label="다음 달">›</button>
+      <button type="button" data-step="0" class="ecal-today">오늘</button>
+    </div>
+  </div>
+  <div class="ecal-grid" role="grid"></div>
+  <div class="ecal-day" aria-live="polite"></div>
+  <p class="note">한국시간 기준. 미국 지표는 미 노동통계국(BLS)·경제분석국(BEA) 공식 발표 일정, 금리 결정은 연준·한국은행·일본은행·ECB 공식 회의 일정. 일본은행·한국은행은 발표 시각이 따로 정해지지 않아 시간을 비워 뒀어요.</p>
+  <script>
+    (function () {
+      var manual = {{ site.data.econ_events | jsonify }} || [];
+      var auto = ({{ site.data.econ_calendar | jsonify }} || {}).events || [];
+      var FLAG = { us: '🇺🇸', kr: '🇰🇷', jp: '🇯🇵', cn: '🇨🇳', eu: '🇪🇺' };
+      var WD = ['일', '월', '화', '수', '목', '금', '토'];
+      var byDate = {};
+      manual.concat(auto).forEach(function (e) { (byDate[e.date] = byDate[e.date] || []).push(e); });
+      Object.keys(byDate).forEach(function (d) {
+        byDate[d].sort(function (a, b) { return (a.time || '99').localeCompare(b.time || '99'); });
+      });
+
+      function pad(n) { return (n < 10 ? '0' : '') + n; }
+      function key(y, m, d) { return y + '-' + pad(m + 1) + '-' + pad(d); }
+      // 오늘(한국시간)
+      var now = new Date(Date.now() + (9 * 60 + new Date().getTimezoneOffset()) * 60000);
+      var today = key(now.getFullYear(), now.getMonth(), now.getDate());
+      var cur = { y: now.getFullYear(), m: now.getMonth() }, sel = today;
+
+      var root = document.getElementById('econ-month');
+      var grid = root.querySelector('.ecal-grid'), title = root.querySelector('.ecal-title'), day = root.querySelector('.ecal-day');
+
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+      function showDay(k) {
+        sel = k;
+        grid.querySelectorAll('.ecal-cell').forEach(function (c) { c.classList.toggle('sel', c.dataset.d === k); });
+        var p = k.split('-'), wd = WD[new Date(+p[0], +p[1] - 1, +p[2]).getDay()];
+        var list = byDate[k] || [];
+        day.innerHTML = '<h3>' + (+p[1]) + '월 ' + (+p[2]) + '일 (' + wd + ')</h3>' + (list.length
+          ? '<ul>' + list.map(function (e) {
+              return '<li><span class="ecal-time">' + (e.time || '—') + '</span><span class="ecal-flag">' + (FLAG[e.c] || '') + '</span>' + esc(e.t) + '</li>';
+            }).join('') + '</ul>'
+          : '<p class="ecal-empty">주요 일정이 없어요.</p>');
+      }
+
+      function render() {
+        var y = cur.y, m = cur.m;
+        title.textContent = y + '년 ' + (m + 1) + '월';
+        var first = new Date(y, m, 1).getDay(), days = new Date(y, m + 1, 0).getDate();
+        var html = WD.map(function (w, i) { return '<div class="ecal-wd' + (i === 0 ? ' sun' : i === 6 ? ' sat' : '') + '">' + w + '</div>'; }).join('');
+        for (var i = 0; i < first; i++) html += '<div class="ecal-cell blank"></div>';
+        for (var d = 1; d <= days; d++) {
+          var k = key(y, m, d), list = byDate[k] || [], wd = (first + d - 1) % 7;
+          html += '<button type="button" class="ecal-cell' + (k === today ? ' today' : '') + (wd === 0 ? ' sun' : wd === 6 ? ' sat' : '') + '" data-d="' + k + '">' +
+            '<span class="ecal-num">' + d + '</span>' +
+            list.map(function (e) { return '<span class="ecal-ev ' + e.c + '">' + (FLAG[e.c] || '') + '<b>' + esc(e.s || e.t) + '</b></span>'; }).join('') +
+            '</button>';
+        }
+        grid.innerHTML = html;
+        grid.querySelectorAll('.ecal-cell[data-d]').forEach(function (c) { c.addEventListener('click', function () { showDay(c.dataset.d); }); });
+        var p = sel.split('-');
+        showDay(+p[0] === y && +p[1] === m + 1 ? sel : key(y, m, 1));
+      }
+
+      root.querySelectorAll('.ecal-nav button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var s = +b.dataset.step;
+          if (s === 0) { cur = { y: now.getFullYear(), m: now.getMonth() }; sel = today; }
+          else { var t = new Date(cur.y, cur.m + s, 1); cur = { y: t.getFullYear(), m: t.getMonth() }; }
+          render();
+        });
+      });
+      render();
+    })();
+  </script>
+</section>

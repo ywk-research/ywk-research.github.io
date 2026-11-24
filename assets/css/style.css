@@ -191,6 +191,36 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .tv-news-box .tradingview-widget-container { height: 100%; }
 @media (max-width: 1000px) { .home-brief .tv-news { order: -1; margin-bottom: 8px; } }
 
+/* 월간 경제 일정 달력 (_includes/econ-calendar.html) */
+.ecal { margin-bottom: 40px; }
+.ecal-nav { display: flex; align-items: center; gap: 6px; padding-bottom: 6px; }
+.ecal-nav button { font: inherit; font-size: 14px; line-height: 1; padding: 5px 10px; border: 1px solid var(--line); background: var(--bg); color: var(--text); border-radius: 999px; cursor: pointer; }
+.ecal-nav .ecal-today { font-size: 13px; color: var(--muted); }
+.ecal-title { min-width: 96px; text-align: center; font-weight: 700; }
+.ecal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.ecal-wd { text-align: center; font-size: 13px; color: var(--muted); padding: 2px 0; }
+.ecal-wd.sun, .ecal-cell.sun .ecal-num { color: var(--up); }
+.ecal-wd.sat, .ecal-cell.sat .ecal-num { color: var(--down); }
+.ecal-cell { display: flex; flex-direction: column; align-items: stretch; gap: 3px; min-height: 92px; padding: 6px; font: inherit; text-align: left; color: var(--text); background: var(--soft); border: 1px solid transparent; border-radius: 8px; cursor: pointer; overflow: hidden; }
+.ecal-cell.blank { background: transparent; cursor: default; }
+.ecal-cell:hover { border-color: var(--line); }
+.ecal-cell.sel { border-color: var(--accent); }
+.ecal-num { font-size: 13px; font-weight: 600; line-height: 1.2; }
+.ecal-cell.today .ecal-num { display: inline-block; align-self: flex-start; padding: 1px 6px; border-radius: 999px; background: var(--accent); color: var(--bg); }
+.ecal-ev { display: block; font-size: 12px; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ecal-ev b { font-weight: 500; margin-left: 3px; }
+.ecal-day { margin-top: 14px; padding: 12px 16px; background: var(--soft); border-radius: 12px; }
+.ecal-day h3 { margin: 0 0 6px; font-size: 16px; }
+.ecal-day ul { list-style: none; margin: 0; padding: 0; }
+.ecal-day li { display: flex; gap: 10px; padding: 4px 0; border-top: 1px solid var(--line); }
+.ecal-day li:first-child { border-top: 0; }
+.ecal-time { min-width: 44px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ecal-empty { margin: 0; color: var(--muted); }
+@media (max-width: 560px) {
+  .ecal-cell { min-height: 58px; padding: 4px; }
+  .ecal-ev b { display: none; } /* 좁은 화면은 국기만, 내용은 날짜를 눌러서 */
+  .ecal-ev { display: inline; font-size: 11px; }
+}
 /* 데이터 탭: 관심종목 수익률 */
 .tv-wl { margin-top: 40px; }
 .wl-mix { margin: -4px 0 10px; color: var(--muted); font-size: 14px; }
