@@ -76,6 +76,33 @@ en:
   news.title: World Market News
   news.note: 'Click a headline to open the story on TradingView · News widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
 
+  # 데이터 탭 (data.html, _includes/econ-calendar.html, tv-calendar.html, macro.html)
+  data.title: Data
+  data.intro: Indicators and schedules one level deeper than the home page summary.
+  ecal.title: Economic Calendar
+  ecal.prev: Previous month
+  ecal.next: Next month
+  ecal.today: Today
+  ecal.empty: No major events.
+  ecal.note: "Korea time (KST). US data releases follow the official schedules of the Bureau of Labor Statistics (BLS) and Bureau of Economic Analysis (BEA); rate decisions follow the official meeting calendars of the Fed, Bank of Korea, Bank of Japan and ECB. The Bank of Japan and Bank of Korea don't fix an announcement time, so the time is left blank."
+  tvcal.title: Indicator Details (Forecast &amp; Actual)
+  tvcal.note: 'US, Korea, Japan, China and the euro area, medium importance and above. Times follow your device time zone (KST in Korea) · Calendar widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  mc.title: Macro
+  mc.us_curve: US Treasury Yield Curve
+  mc.kr_curve: Korea Treasury Yield Curve
+  mc.spread: Term Spread <span class="krx-sub">pp</span>
+  mc.gap: Korea–US Rate Gap <span class="krx-sub">Korea − US, pp</span>
+  mc.short: Korea Short-term Rates <span class="krx-sub">%</span>
+  mc.note: 'As of US {us}, Korea {kr} (local dates). US term spread is 10Y−2Y, Korea is 10Y−3Y. The Korea–US gap compares values on the same date (or the latest before it); the US policy rate is the upper bound of the Fed target range. Card changes in bp from the previous day · Sources: U.S. Treasury, Bank of Korea ECOS, FRED (Federal Reserve) · Updated {u}'
+
+  # 관심종목 탭 (watchlist.html, _includes/tv-watchlist.html)
+  wl.title: Watchlist Returns
+  wl.intro: A hypothetical portfolio of US stocks I'm watching, held at fixed weights.
+  wl.note: 'Share counts are set from the target weights at the {d} close and held unchanged since (value 100 on the base date). Rebalancing, dividends, FX and fees are not included. Use the tabs above to switch between the portfolio and the benchmark.'
+  wl.note2: 'Last 12 months, returns measured from the first day of the period. Delayed quotes, not investment advice · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  wl.portfolio: Portfolio
+
+
 names:
   # 지표 이름·출처 (_data/global_index.json)
   美 10년물: US 10Y
@@ -122,3 +149,40 @@ names:
   IT 서비스: IT Services
   기타제조: Other Manufacturing
   출판·매체복제: Publishing & Media
+  # 경제 일정 (_data/econ_events.yml, econ_calendar.json)
+  FOMC 금리 결정: FOMC rate decision
+  한국은행 금통위 기준금리 결정: Bank of Korea rate decision
+  일본은행 금융정책결정회의 결과: Bank of Japan policy decision
+  ECB 통화정책회의 결과: ECB monetary policy decision
+  소비자물가(CPI): Consumer Price Index (CPI)
+  생산자물가(PPI): Producer Price Index (PPI)
+  고용보고서(비농업 고용·실업률): Employment report (payrolls, unemployment)
+  구인·이직 보고서(JOLTS): Job openings and labor turnover (JOLTS)
+  GDP 속보치: GDP (advance)
+  GDP 잠정치: GDP (second estimate)
+  GDP 확정치: GDP (third estimate)
+  개인소득·지출(PCE 물가): Personal income and outlays (PCE)
+  고용: Jobs
+  금통위: BOK
+  # 매크로 (_includes/macro.html)
+  美 2년: US 2Y
+  美 10년: US 10Y
+  美 10년−2년: US 10Y−2Y
+  韓 10년−3년: KR 10Y−3Y
+  韓 국고 3년: KR 3Y
+  韓 국고 10년: KR 10Y
+  한미 기준금리차: KR−US policy rate gap
+  최근: Latest
+  1개월 전: 1M ago
+  1년 전: 1Y ago
+  기준금리: Policy rate
+  10년물: 10Y
+  콜(1일): Call (1-day)
+  CD(91일): CD (91-day)
+  CP(91일): CP (91-day)
+  # 관심종목 (_data/watchlist.yml)
+  트랜스다임: TransDigm
+  에퀴닉스: Equinix
+  델타항공: Delta Air Lines
+  # 글 종류 (브리핑 front matter의 category_label)
+  주간 코멘트: Weekly Comment
