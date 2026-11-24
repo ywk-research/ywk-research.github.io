@@ -12,3 +12,164 @@
 #       issuer: Example Trust
 #       exchange: NYSE Arca
 #       src: https://example.com/press-release
+
+# 2026-11-10 ~ 11-23 과거분 보충(2026-11-24). 운용사 보도자료·펀드 페이지·거래소 공지로 첫 거래일을 확인한 것만.
+# partial: true = 그날을 전부 훑지 못해 빠진 펀드가 있을 수 있음(글에 그렇게 표시)
+"2026-11-10":
+  checked: true
+  partial: true
+  etfs: []
+"2026-11-11":
+  checked: true
+  partial: true
+  etfs: []
+"2026-11-12":
+  checked: true
+  partial: true
+  etfs: []
+"2026-11-13":
+  checked: true
+  partial: true
+  etfs: []
+"2026-11-16":
+  checked: true
+  partial: true
+  etfs:
+    - ticker: HCOP
+      name: Hartford Hybrid and Credit Opportunities ETF
+      issuer: Hartford Funds
+      exchange: Nasdaq
+      src: https://www.hartfordfunds.com/funds/hcop.html
+      note: 뮤추얼펀드 전환
+"2026-11-17":
+  checked: true
+  partial: true
+  etfs:
+    - ticker: GMIX
+      name: iShares Macro AlphaBeta Active ETF
+      issuer: BlackRock (iShares)
+      exchange: NYSE Arca
+      src: https://www.blackrock.com/us/individual/products/354518/ishares-macro-alphabeta-active-etf
+    - ticker: PCHX
+      name: State Street SPDR Nasdaq MyPaycheck ETF
+      issuer: State Street
+      exchange: Nasdaq
+      src: https://www.ssga.com/us/en/intermediary/etfs/state-street-spdr-nasdaq-mypaycheck-etf-pchx
+    - ticker: NTCR
+      name: Nuveen Technology & Infrastructure Credit ETF
+      issuer: Nuveen
+      exchange: Nasdaq
+      src: https://www.nasdaqtrader.com/content/newsalerts/2026/InfoCircular/NTCR_Circular_NQ.pdf
+    - ticker: ZDAY
+      name: Bitwise AI Cyber Defense ETF
+      issuer: Bitwise
+      exchange: NYSE
+      src: https://www.theblock.co/news/markets/2026-11-17-bitwise-zday-ai-cyber-defense-etf-442062
+"2026-11-18":
+  checked: true
+  partial: true
+  etfs:
+    - ticker: TRLL
+      name: Direxion Trillions ETF
+      issuer: Direxion
+      exchange: NYSE
+      src: https://www.direxion.com/press-release/the-trillion-dollar-club-in-one-etf-direxion-launches-trll
+    - ticker: YO
+      name: Amplify S&P 500 Buffered Autocallable Yield Opportunity ETF
+      issuer: Amplify ETFs
+      exchange: NYSE Arca
+      src: https://amplifyetfs.com/yo/
+    - ticker: SDC
+      name: KICK Space Data Center & Infrastructure Index ETF
+      issuer: Exchange Traded Concepts · Kiwoom Securities USA
+      exchange: Nasdaq
+      src: https://finviz.com/news/424630/exchange-traded-concepts-and-kiwoom-securities-usa-launch-kick-space-data-center-infrastructure-index-etf-nasdaq-sdc
+    - ticker: IQQI
+      name: IncomeQ Nasdaq-100 Premium Income ETF
+      issuer: Tidal Trust II
+      exchange: Nasdaq
+      src: https://www.nasdaqtrader.com/content/newsalerts/2026/InfoCircular/IQQI_Circular_NQ.pdf
+"2026-11-19":
+  checked: true
+  partial: true
+  etfs:
+    - ticker: CGMI
+      name: Capital Group Multi-Asset Income ETF
+      issuer: Capital Group
+      exchange: NYSE
+      src: https://www.prnewswire.com/news-releases/capital-group-expands-active-multi-asset-etf-suite-launches-two-new-income-focused-etfs-302944500.html
+    - ticker: CGBI
+      name: Capital Group Multi-Asset Income Builder ETF
+      issuer: Capital Group
+      exchange: NYSE
+      src: https://www.prnewswire.com/news-releases/capital-group-expands-active-multi-asset-etf-suite-launches-two-new-income-focused-etfs-302944500.html
+    - ticker: GQGG
+      name: GQG Global Equity ETF
+      issuer: GQG Partners
+      exchange: NYSE
+      src: https://www.globenewswire.com/news-release/2026/11/19/3406718/0/en/gqg-launches-global-equity-etf-gqgg.html
+"2026-11-20":
+  checked: true
+  partial: true
+  etfs:
+    - ticker: ISMH
+      name: xETFs International Semiconductor Index ETF
+      issuer: xETFs
+      src: https://www.globenewswire.com/news-release/2026/11/20/3407545/0/en/xetfs-launches-international-semiconductor-index-etf-ismh-targeting-chip-leaders-beyond-the-u-s.html
+"2026-11-23":
+  checked: true
+  partial: true
+  etfs:
+    - ticker: ANTC
+      name: Defiance 2X ANT Long Daily ETF
+      issuer: Defiance
+      exchange: Nasdaq
+      src: https://www.globenewswire.com/news-release/2026/11/23/3408217/0/en/defiance-launches-antc-and-antq-2x-long-and-2x-short-daily-etfs-for-anthropic.html
+    - ticker: ANTQ
+      name: Defiance 2X ANT Short Daily ETF
+      issuer: Defiance
+      exchange: Nasdaq
+      src: https://www.globenewswire.com/news-release/2026/11/23/3408217/0/en/defiance-launches-antc-and-antq-2x-long-and-2x-short-daily-etfs-for-anthropic.html
+    - ticker: AIL
+      name: GraniteShares 2x Long Anthropic Daily ETF
+      issuer: GraniteShares
+      exchange: Nasdaq
+      src: https://www.globenewswire.com/news-release/2026/11/23/3408339/0/en/graniteshares-launches-ail-and-ans-putting-both-sides-of-anthropic-on-one-exchange.html
+    - ticker: ANS
+      name: GraniteShares 2x Short Anthropic Daily ETF
+      issuer: GraniteShares
+      exchange: Nasdaq
+      src: https://www.globenewswire.com/news-release/2026/11/23/3408339/0/en/graniteshares-launches-ail-and-ans-putting-both-sides-of-anthropic-on-one-exchange.html
+    - ticker: ANTT
+      name: Tradr 2X Long Anthropic Daily ETF
+      issuer: Tradr
+      exchange: Cboe
+      src: https://www.prnewswire.com/news-releases/tradr-launches-2x-long-and-short-leveraged-etfs-on-anthropic-302947356.html
+    - ticker: ANTZ
+      name: Tradr 2X Short Anthropic Daily ETF
+      issuer: Tradr
+      exchange: Cboe
+      src: https://www.prnewswire.com/news-releases/tradr-launches-2x-long-and-short-leveraged-etfs-on-anthropic-302947356.html
+    - ticker: ANTO
+      name: Direxion Daily Anthropic Bull 2X ETF
+      issuer: Direxion
+      src: https://www.prnewswire.com/news-releases/anthropic-goes-public-direxion-goes-2x-long-or-short-302948339.html
+    - ticker: ANTD
+      name: Direxion Daily Anthropic Bear 2X ETF
+      issuer: Direxion
+      src: https://www.prnewswire.com/news-releases/anthropic-goes-public-direxion-goes-2x-long-or-short-302948339.html
+    - ticker: ANUU
+      name: Leverage Shares 2X Long Anthropic Daily ETF
+      issuer: Leverage Shares by Themes
+      exchange: Cboe
+      src: https://www.prnewswire.com/news-releases/anuu-andd-and-anss-now-trading-leverage-shares-by-themes-launches-2x-leveraged--short-anthropic-ant-etfs-on-cboe-302947482.html
+    - ticker: ANDD
+      name: Leverage Shares 2X Short Anthropic Daily ETF
+      issuer: Leverage Shares by Themes
+      exchange: Cboe
+      src: https://www.prnewswire.com/news-releases/anuu-andd-and-anss-now-trading-leverage-shares-by-themes-launches-2x-leveraged--short-anthropic-ant-etfs-on-cboe-302947482.html
+    - ticker: ANSS
+      name: Leverage Shares 1X Short Anthropic Daily ETF
+      issuer: Leverage Shares by Themes
+      exchange: Cboe
+      src: https://www.prnewswire.com/news-releases/anuu-andd-and-anss-now-trading-leverage-shares-by-themes-launches-2x-leveraged--short-anthropic-ant-etfs-on-cboe-302947482.html

@@ -14,8 +14,9 @@
 <ul>
 {% for r in ok %}<li><strong>{{ r.ticker | default: "—" }}</strong> {{ r.name }} <span class="krx-sub">({{ r.issuer }}{% if r.exchange %} · {{ r.exchange }}{% endif %})</span>{% if r.note %} · {{ r.note }}{% endif %}{% if r.src %} <a href="{{ r.src }}" target="_blank" rel="noopener">출처</a>{% endif %}</li>
 {% endfor %}</ul>
+{% elsif cf.partial %}<p>보도자료·공지로 첫 거래가 확인된 신규 ETF를 찾지 못했어요.</p>
 {% else %}<p>새로 상장한 ETF가 없어요.</p>{% endif %}
-<p class="note">운용사 보도자료·거래소 공지로 첫 거래를 확인한 것만 실었어요(SEC 8-A 후보 {{ cand.size }}개 중 {{ ok.size }}개).</p>
+<p class="note">운용사 보도자료·펀드 페이지·거래소 공지로 첫 거래를 확인한 것만 실었어요(그날 SEC 8-A 후보 {{ cand.size }}개).{% if cf.partial %} 나중에 보충한 목록이라 빠진 펀드가 있을 수 있어요.{% endif %}</p>
 {% elsif cand.size > 0 %}
 <ul>
 {% for r in cand %}<li><strong>{% if r.ticker != "" %}{{ r.ticker }}{% else %}—{% endif %}</strong> {{ r.name | default: r.issuer }} <span class="krx-sub">({{ r.issuer }}{% if r.exchange != "" %} · {{ r.exchange }}{% endif %})</span> <a href="{{ r.url }}" target="_blank" rel="noopener">8-A</a></li>
