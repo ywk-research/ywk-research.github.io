@@ -1,0 +1,13 @@
+name: tmp probe
+on:
+  push:
+    branches: [claude/project-thread-iv38jp]
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python tools/tmp_probe.py
+        env:
+          KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
