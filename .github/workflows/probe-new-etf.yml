@@ -1,0 +1,26 @@
+name: 임시 점검 - 신규 상장 ETF
+on:
+  push:
+    branches: ['claude/project-thread-gpdo1e']
+    paths: ['tools/fetch_new_etf.py', '.github/workflows/probe-new-etf.yml']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - env:
+          KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+        run: |
+          python tools/fetch_new_etf.py
+          python -c "import json;d=json.load(open('_data/new_etf.json'));print('US',len(d.get('us',{}).get('items',[])),'KR',len(d.get('kr',{}).get('items',[])))"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: new-etf
+          path: _data/new_etf.json
+          retention-days: 1
