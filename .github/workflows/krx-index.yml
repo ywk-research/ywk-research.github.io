@@ -25,7 +25,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: KRX 지수 받아오기
+      - name: KRX 지수·종목 받아오기 (이평선 크로스 포함)
         env:
           KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
         run: python tools/fetch_krx.py
@@ -51,7 +51,7 @@ jobs:
       - name: 변경분 커밋
         id: commit
         run: |
-          git add _data/
+          git add _data/ tools/state/
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0

@@ -4,6 +4,7 @@
 - _data/krx_index.json : 코스피·코스닥·VKOSPI 일별 종가 누적
   (처음 받는 시리즈는 최근 BACKFILL_DAYS일을 채우고, 이후에는 마지막 저장일 다음 날부터 받는다)
 - _data/krx_movers.json : 직전 거래일 코스피·코스닥 등락률 상·하위, 거래대금 상위
+- _data/krx_cross.json : 이평선 골든·데드크로스 종목 (tools/krx_cross.py, 과거 종가는 tools/state/)
 - 이용 신청이 안 된 부가 서비스(VKOSPI, 종목 시세)는 건너뛰고 나머지는 계속 받는다.
 """
 import datetime as dt
@@ -14,6 +15,8 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+
+import krx_cross
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_PATH = os.path.join(ROOT, "_data", "krx_index.json")
@@ -189,26 +192,50 @@ def slim(r):
     }
 
 
-def update_movers(key, day):
+def fetch_stocks(key, day):
+    """시장별 종목 일별매매정보. 휴장일이면 빈 목록."""
+    out = {}
+    for mkt, (endpoint, _) in STOCKS.items():
+        out[mkt] = fetch(endpoint, day.strftime("%Y%m%d"), key)
+        time.sleep(0.25)
+    return out
+
+
+def ranked(rows, min_cap):
+    return [r for r in rows if is_common_stock(r)
+            and (num(r.get("MKTCAP")) or 0) >= min_cap and num(r.get("FLUC_RT")) is not None]
+
+
+def update_movers(stocks, day):
     out = {"source": "한국거래소(KRX) Open API", "d": day.isoformat(), "rules": {}}
-    bas_dd = day.strftime("%Y%m%d")
-    try:
-        for mkt, (endpoint, min_cap) in STOCKS.items():
-            rows = [r for r in fetch(endpoint, bas_dd, key) if is_common_stock(r)]
-            big = [r for r in rows if (num(r.get("MKTCAP")) or 0) >= min_cap and num(r.get("FLUC_RT")) is not None]
-            by_pct = sorted(big, key=lambda r: num(r["FLUC_RT"]))
-            by_val = sorted(rows, key=lambda r: num(r.get("ACC_TRDVAL")) or 0, reverse=True)
-            out[mkt] = {
-                "gainers": [slim(r) for r in reversed(by_pct[-TOP_N:])],
-                "losers": [slim(r) for r in by_pct[:TOP_N]],
-                "value": [slim(r) for r in by_val[:TOP_N]],
-            }
-            out["rules"][mkt] = f"시가총액 {won_txt(min_cap // 100_000_000).strip()} 원 이상, 우선주·스팩 제외"
-            time.sleep(0.25)
-    except NotApproved as e:
-        print(f"건너뜀 — KRX API 인증 실패({e}): 유가증권·코스닥 일별매매정보 이용 승인 여부를 확인하세요.")
-        return 0
+    for mkt, (endpoint, min_cap) in STOCKS.items():
+        rows = [r for r in stocks[mkt] if is_common_stock(r)]
+        by_pct = sorted(ranked(rows, min_cap), key=lambda r: num(r["FLUC_RT"]))
+        by_val = sorted(rows, key=lambda r: num(r.get("ACC_TRDVAL")) or 0, reverse=True)
+        out[mkt] = {
+            "gainers": [slim(r) for r in reversed(by_pct[-TOP_N:])],
+            "losers": [slim(r) for r in by_pct[:TOP_N]],
+            "value": [slim(r) for r in by_val[:TOP_N]],
+        }
+        out["rules"][mkt] = rule_txt(min_cap)
     return write_if_changed(MOVERS_PATH, out)
+
+
+def rule_txt(min_cap):
+    return f"시가총액 {won_txt(min_cap // 100_000_000).strip()} 원 이상, 우선주·스팩 제외"
+
+
+def update_cross(key, stocks, day):
+    """이평선 골든·데드크로스 (tools/krx_cross.py). 처음 한 번은 과거 종가를 채운다."""
+    days = krx_cross.sync(lambda d: fetch_stocks(key, d), day, stocks)
+    universe = {}
+    for mkt, (endpoint, min_cap) in STOCKS.items():
+        for r in ranked(stocks[mkt], min_cap):
+            universe[r["ISU_CD"]] = {"name": r["ISU_NM"], "mkt": mkt,
+                                     "cap": num(r.get("MKTCAP")), "pct": num(r.get("FLUC_RT"))}
+    out = krx_cross.build(days, universe, day)
+    out["rules"] = {mkt: rule_txt(min_cap) for mkt, (_, min_cap) in STOCKS.items()}
+    return write_if_changed(krx_cross.OUT_PATH, out)
 
 
 def main():
@@ -222,8 +249,19 @@ def main():
         print("최근 거래일을 찾지 못했습니다.")
         return
     sec = update_sectors(key, day)
-    moved = update_movers(key, day)
-    print(f"{day} 기준 · 지수 추가 {added}건, 업종 {'갱신' if sec else '변경 없음'}, 종목 {'갱신' if moved else '변경 없음'}")
+    moved = cross = 0
+    try:
+        stocks = fetch_stocks(key, day)
+    except NotApproved as e:
+        print(f"건너뜀 — KRX API 인증 실패({e}): 유가증권·코스닥 일별매매정보 이용 승인 여부를 확인하세요.")
+    else:
+        moved = update_movers(stocks, day)
+        try:
+            cross = update_cross(key, stocks, day)
+        except Exception as e:  # 크로스 계산이 실패해도 다른 데이터는 저장한다
+            print(f"이평선 크로스 실패: {type(e).__name__}: {e}")
+    print(f"{day} 기준 · 지수 추가 {added}건, 업종 {'갱신' if sec else '변경 없음'}, "
+          f"종목 {'갱신' if moved else '변경 없음'}, 크로스 {'갱신' if cross else '변경 없음'}")
 
 
 if __name__ == "__main__":
