@@ -1,0 +1,30 @@
+name: 임시 - 미국 월간 지표 첫 수집
+on:
+  push:
+    branches: [claude/project-thread-kq5fml]
+    paths: [.github/workflows/tmp-us-monthly.yml]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          python - <<'PY'
+          import sys; sys.path.insert(0, "tools")
+          import fetch_macro as f
+          f.PARTS[:] = [p for p in f.PARTS if p[0] == "us_monthly"]
+          for k in list(f.FIXED):
+              if k != "us_monthly": del f.FIXED[k]
+          f.main()
+          PY
+          python -c "import json;d=json.load(open('_data/us_monthly.json'));[print(k,len(v),v[-3:]) for k,v in d['series'].items()]"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _data/us_monthly.json && git commit -m "미국 월간 지표 첫 수집" && git push

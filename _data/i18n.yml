@@ -183,6 +183,14 @@ en:
   kfx.index: Indexed to 100 at the start of the period <span class="krx-sub">Higher = weaker won</span>
   kfx.note: 'Base rates as of {d} (Seoul FX market; JPY per 100 yen). Card changes from the previous business day · Source: Bank of Korea ECOS · Updated {u}'
   # 한국 월간 경제지표 (_includes/kr-monthly.html)
+  um.title: US Monthly Indicators
+  um.cpi: CPI Inflation <span class="krx-sub">YoY, %</span>
+  um.pce: PCE Inflation <span class="krx-sub">YoY, %</span>
+  um.nfp: Nonfarm Payrolls <span class="krx-sub">MoM change, thousands</span>
+  um.unemp: Unemployment Rate <span class="krx-sub">Seasonally adjusted, %</span>
+  um.retail: Retail Sales <span class="krx-sub">MoM, %</span>
+  um.gdp: Real GDP Growth <span class="krx-sub">QoQ annualized, %</span>
+  um.note: 'Card dates show each indicator''s latest reference month (quarter for GDP). All series are seasonally adjusted; core excludes food and energy. Months not published because of the US government shutdown, such as October 2025, are left blank. Card changes from the previous release · Sources: U.S. Bureau of Labor Statistics, Bureau of Economic Analysis, Census Bureau, via FRED · This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis. · Updated {u}'
   km.title: Korea Monthly Indicators
   km.cpi: Consumer Price Inflation <span class="krx-sub">YoY, %</span>
   km.exports: Export Growth <span class="krx-sub">YoY, %</span>
@@ -359,6 +367,11 @@ names:
   소비자심리: Consumer sentiment
   소비자심리지수: Consumer Sentiment Index
   전산업생산: All-industry production
+  근원 PCE: Core PCE
+  비농업 고용: Nonfarm payrolls
+  실질 GDP: Real GDP
+  PCE 물가: PCE prices
+  근원(식품·에너지 제외): Core (ex. food & energy)
   # 관심종목 (_data/watchlist.yml)
   트랜스다임: TransDigm
   에퀴닉스: Equinix

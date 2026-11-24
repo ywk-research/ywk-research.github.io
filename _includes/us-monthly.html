@@ -1,0 +1,77 @@
+<!-- 미국 월간 경제지표. 데이터: _data/us_monthly.json (tools/fetch_macro.py, FRED API — 원자료 BLS·BEA·인구조사국) -->
+{% assign um = site.data.us_monthly %}
+{% if um and um.series %}
+{% include mc-common.html %}
+<section class="krx macro" id="us-monthly">
+  <div class="krx-head">
+    <h2 data-i18n="um.title">미국 월간 경제지표</h2>
+    <div class="krx-range" id="um-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-months="12" data-i18n="range.1y">1년</button>
+      <button type="button" data-months="36" class="on" data-i18n="range.3y">3년</button>
+    </div>
+  </div>
+  <div class="gl-cards" id="um-cards"></div>
+  <div class="mc-grid">
+    <div class="mc-box"><p class="krx-name" data-i18n="um.cpi">소비자물가(CPI) 상승률 <span class="krx-sub">전년 동월 대비, %</span></p><div class="mc-chart"><canvas id="um-cpi" aria-label="미국 소비자물가 상승률"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="um.pce">PCE 물가 상승률 <span class="krx-sub">전년 동월 대비, %</span></p><div class="mc-chart"><canvas id="um-pce" aria-label="미국 PCE 물가 상승률"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="um.nfp">비농업 고용 증감 <span class="krx-sub">전월 대비, 천 명</span></p><div class="mc-chart"><canvas id="um-nfp" aria-label="미국 비농업 고용 증감"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="um.unemp">실업률 <span class="krx-sub">계절조정, %</span></p><div class="mc-chart"><canvas id="um-unemp" aria-label="미국 실업률"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="um.retail">소매판매 <span class="krx-sub">전월 대비, %</span></p><div class="mc-chart"><canvas id="um-retail" aria-label="미국 소매판매 증감률"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="um.gdp">실질 GDP 성장률 <span class="krx-sub">전기 대비 연율, %</span></p><div class="mc-chart"><canvas id="um-gdp" aria-label="미국 실질 GDP 성장률"></canvas></div></div>
+  </div>
+  <p class="note" data-i18n="um.note" data-u="{{ um.updated_at }}">카드 날짜는 해당 지표의 최근 기준월(GDP는 분기)이에요. 모두 계절조정 계열이고, 근원은 식품·에너지 제외예요. 2025년 10월처럼 미 정부 셧다운으로 발표되지 않은 달은 비어 있어요. 카드 변동은 직전 발표 대비 · 자료: 미 노동통계국(BLS), 경제분석국(BEA), 인구조사국, FRED 경유 · This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis. · 업데이트 {{ um.updated_at }}</p>
+  <script>
+    (function () {
+      var U = {{ um.series | jsonify }};
+      var EN = window.LANG === 'en';
+      function get(k) { return U[k] || []; }
+      function map(s) { var m = {}; s.forEach(function (p) { m[p[0]] = p[1]; }); return m; }
+      function r(x, d) { var f = Math.pow(10, d); return Math.round(x * f) / f; }
+      // 전년 동월 대비 %, 전월 대비 %, 전월 대비 증감(직전 달이 있을 때만)
+      function yoy(s) { var m = map(s); return s.filter(function (p) { return m[MC.back(p[0], 12)]; }).map(function (p) { return [p[0], r((p[1] / m[MC.back(p[0], 12)] - 1) * 100, 1)]; }); }
+      function mom(s) { var m = map(s); return s.filter(function (p) { return m[MC.back(p[0], 1)]; }).map(function (p) { return [p[0], r((p[1] / m[MC.back(p[0], 1)] - 1) * 100, 1)]; }); }
+      function diff(s) { var m = map(s); return s.filter(function (p) { return MC.back(p[0], 1) in m; }).map(function (p) { return [p[0], r(p[1] - m[MC.back(p[0], 1)], 0)]; }); }
+
+      var cpi = yoy(get('cpi')), core = yoy(get('core')), pce = yoy(get('pce')), cpce = yoy(get('core_pce'));
+      var nfp = diff(get('nfp')), unemp = get('unemp'), retail = mom(get('retail')), gdp = get('gdp');
+
+      function ym(d) { return d.slice(2).replace('-', '.'); }
+      function yq(d) { return d.slice(2, 4) + ' Q' + Math.ceil(+d.slice(5, 7) / 3); }
+      function sgn(v, s) { return (v > 0 ? '+' : v < 0 ? '−' : '') + s; }
+      var wrap = document.getElementById('um-cards');
+      // kind: 'pct'(값 %, 변동 %p), 'rate'(부호 없는 %), 'jobs'(천 명)
+      function one(label, s, kind, q) {
+        if (!s.length) return;
+        var last = s[s.length - 1], prev = s.length > 1 ? s[s.length - 2][1] : last[1], v = last[1], ch = v - prev, a = Math.abs(ch);
+        var val, cv;
+        if (kind === 'jobs') {
+          val = EN ? sgn(v, Math.abs(v).toFixed(0) + 'k') : sgn(v, (Math.abs(v) / 10).toFixed(1) + '만 명');
+          cv = EN ? a.toFixed(0) + 'k' : (a / 10).toFixed(1) + '만 명';
+        } else {
+          val = (kind === 'rate' ? Math.abs(v).toFixed(1) : sgn(v, Math.abs(v).toFixed(1))) + '%';
+          cv = a.toFixed(1) + (EN ? 'pp' : '%p');
+        }
+        MC.card(wrap, { label: label, date: q ? yq(last[0]) : ym(last[0]), value: val,
+          chg: (ch > 0 ? '▲ ' : ch < 0 ? '▼ ' : '') + cv, dir: ch });
+      }
+      one('소비자물가', cpi, 'pct');
+      one('근원 PCE', cpce, 'pct');
+      one('비농업 고용', nfp, 'jobs');
+      one('실업률', unemp, 'rate');
+      one('소매판매', retail, 'pct');
+      one('실질 GDP', gdp, 'pct', true);
+
+      var mo = { labelFmt: ym, digits: 1 };
+      function o(x) { return Object.assign({}, mo, x); }
+      MC.range(document.getElementById('um-range'), function (months) {
+        MC.line(document.getElementById('um-cpi'), [['소비자물가', cpi, 0], ['근원(식품·에너지 제외)', core, 1]], o({ months: months, zeroAt: 0 }));
+        MC.line(document.getElementById('um-pce'), [['PCE 물가', pce, 0], ['근원(식품·에너지 제외)', cpce, 1]], o({ months: months, zeroAt: 0 }));
+        MC.line(document.getElementById('um-nfp'), [['비농업 고용', nfp, 0]], o({ months: months, type: 'bar', zeroAt: 0, digits: 0 }));
+        MC.line(document.getElementById('um-unemp'), [['실업률', unemp, 0]], o({ months: months }));
+        MC.line(document.getElementById('um-retail'), [['소매판매', retail, 0]], o({ months: months, type: 'bar', zeroAt: 0 }));
+        MC.line(document.getElementById('um-gdp'), [['실질 GDP', gdp, 0]], o({ months: months, type: 'bar', zeroAt: 0, labelFmt: yq }));
+      });
+    })();
+  </script>
+</section>
+{% endif %}
