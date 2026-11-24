@@ -77,7 +77,14 @@ wide: true
     body.innerHTML = '<p class="note st-empty">' + esc(t('st.empty', '위에서 종목을 검색하거나 고르세요. 관심종목, 홈의 종목 등락 목록에서 종목을 눌러도 이 화면으로 와요.')) + '</p>';
     return;
   }
-  if (/^\d{6}$/.test(sym)) krx(sym); else overseas(sym);
+  var raw = (new URLSearchParams(location.search).get('s') || '').trim();
+  if (/^\d{6}$/.test(sym)) krx(sym);
+  else if (/[가-힣]/.test(raw)) krxIndex.then(function (ix) {
+    var hit = ix && Object.keys(ix.stocks).filter(function (c) { return ix.stocks[c].n === raw; })[0];
+    if (hit) location.replace(link(hit));
+    else body.innerHTML = '<p class="note st-empty">' + esc(t('st.krx_none', '')) + '</p>';
+  });
+  else overseas(sym);
 
   // ---------------- 해외 ----------------
   function mount(id, type, cfg) {
@@ -103,10 +110,10 @@ wide: true
       '<div class="tv-box st-chart" id="tv-st-chart"></div>' +
       '<div class="st-grid">' +
         '<section><h2>' + esc(t('st.ta', '기술 지표 요약')) + '</h2><div class="tv-box st-ta" id="tv-st-ta"></div></section>' +
-        '<section><h2>' + esc(t('st.profile', '기업 개요')) + '</h2><div class="tv-box st-ta" id="tv-st-profile"></div></section>' +
+        '<section><h2>' + esc(t('st.profile', '기업 개요')) + ' <span class="krx-sub">SEC</span></h2><div class="st-profile" id="st-profile"></div></section>' +
       '</div>' +
       '<section><h2>' + esc(t('st.fin', '재무')) + '</h2><div class="tv-box st-fin" id="tv-st-fin"></div></section>' +
-      '<section><h2>' + esc(t('st.news', '종목 뉴스')) + '</h2><div class="tv-box st-news" id="tv-st-news"></div></section>' +
+      '<section><h2>' + esc(t('st.filings', '최근 SEC 공시')) + '</h2><div id="st-filings"></div></section>' +
       '<p class="note">' + t('st.tv_note', '지연 시세, 위젯 색은 미국식(상승 초록). 투자 권유가 아니에요 · 위젯: ') + TV + '</p>' +
       '<section id="st-edgar"></section>';
     var common = { locale: TV_LOCALE, colorTheme: th, isTransparent: true };
@@ -117,21 +124,46 @@ wide: true
       backgroundColor: color('--soft') || undefined
     });
     mount('tv-st-ta', 'technical-analysis', Object.assign({ symbol: sym, interval: '1D', width: '100%', height: '100%', showIntervalTabs: true, displayMode: 'single' }, common));
-    mount('tv-st-profile', 'symbol-profile', Object.assign({ symbol: sym, width: '100%', height: '100%' }, common));
     mount('tv-st-fin', 'financials', Object.assign({ symbol: sym, width: '100%', height: '100%', displayMode: 'regular' }, common));
-    mount('tv-st-news', 'timeline', Object.assign({ feedMode: 'symbol', symbol: sym, displayMode: 'regular', width: '100%', height: '100%' }, common));
     edgar(ticker);
   }
 
   var CODE = { P: ['장내 매수', 'Open-market buy'], S: ['장내 매도', 'Open-market sale'], A: ['보상 지급', 'Grant/award'],
     M: ['옵션 행사', 'Option exercise'], F: ['세금 납부용 처분', 'Tax withholding'], G: ['증여', 'Gift'],
     D: ['회사에 처분', 'Disposed to issuer'], C: ['전환', 'Conversion'], X: ['옵션 행사', 'Option exercise'] };
+  var FORM = { '10-K': ['연간 보고서', 'Annual report'], '10-Q': ['분기 보고서', 'Quarterly report'], '8-K': ['수시 공시', 'Current report'],
+    'DEF 14A': ['주주총회 위임장', 'Proxy statement'], '20-F': ['연간 보고서(외국 기업)', 'Annual report (foreign)'], '6-K': ['수시 공시(외국 기업)', 'Current report (foreign)'],
+    'S-8': ['임직원 주식 등록', 'Employee plan registration'], '424B2': ['증권 발행 설명서', 'Prospectus'], '11-K': ['종업원 주식계획 연간 보고', 'Employee plan annual report'] };
+  function formTxt(f) { var x = FORM[f.replace('/A', '')]; return x ? x[LANG === 'en' ? 1 : 0] + (/\/A$/.test(f) ? (LANG === 'en' ? ' (amended)' : ' (정정)') : '') : f; }
+  var ITEM = { '1.01': ['주요 계약', 'Material agreement'], '2.01': ['인수·매각 완료', 'Acquisition/disposition'], '2.02': ['실적 발표', 'Earnings'],
+    '2.03': ['채무 발생', 'New debt'], '5.02': ['임원 변동', 'Officer/director change'], '5.03': ['정관 변경', 'Bylaws change'], '5.07': ['주총 결과', 'Shareholder vote'],
+    '7.01': ['공정공시(Reg FD)', 'Reg FD'], '8.01': ['기타 주요 사항', 'Other events'] };
+  function itemTxt(s) { return s.split(',').filter(function (x) { return x !== '9.01'; }).map(function (x) { var y = ITEM[x]; return y ? y[LANG === 'en' ? 1 : 0] : 'Item ' + x; }).join(', ') || 'Item 9.01'; }
   function codeTxt(c) { var x = CODE[c]; return x ? x[LANG === 'en' ? 1 : 0] : c; }
   function shTxt(n) { return n == null ? '–' : fmt(n); }
 
   function edgar(ticker) {
     var box = document.getElementById('st-edgar');
+    var pbox = document.getElementById('st-profile'), fbox = document.getElementById('st-filings');
     getJSON(BASE + 'edgar/' + ticker + '.json').then(function (d) {
+      var P = d.profile;
+      if (P) {
+        var rows = [[t('st.p_name', '회사명'), esc(P.name)],
+          [t('st.p_ticker', '티커 · 거래소'), esc(P.tickers.join(', ')) + (P.exchanges.length ? ' · ' + esc(P.exchanges.join(', ')) : '')],
+          [t('st.p_sic', '업종(SIC)'), esc(P.sic_desc || '') + (P.sic ? ' <span class="krx-sub">' + esc(P.sic) + '</span>' : '')],
+          [t('st.p_hq', '본사'), esc(P.city)], [t('st.p_state', '설립지'), esc(P.state || '')],
+          [t('st.p_fy', '회계연도 말'), esc(P.fy_end)], ['CIK', '<a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=' + d.cik + '" target="_blank" rel="noopener">' + d.cik + '</a>']];
+        if (P.website) rows.push([t('st.p_web', '웹사이트'), '<a href="' + esc(/^https?:/.test(P.website) ? P.website : 'https://' + P.website) + '" target="_blank" rel="noopener">' + esc(P.website) + '</a>']);
+        if (P.former && P.former.length) rows.push([t('st.p_former', '이전 이름'), esc(P.former.join(', '))]);
+        pbox.innerHTML = '<table class="st-table st-kv"><tbody>' + rows.filter(function (r) { return r[1]; }).map(function (r) { return '<tr><th>' + esc(r[0]) + '</th><td>' + r[1] + '</td></tr>'; }).join('') + '</tbody></table>';
+      }
+      if (d.filings && d.filings.length) {
+        fbox.innerHTML = '<ul class="st-dart">' + d.filings.map(function (f) {
+          var label = f[2] && f[2].toUpperCase() !== f[1].toUpperCase() ? f[2] : '';
+          return '<li><span class="st-dart-d">' + esc(f[0].slice(5).replace('-', '/')) + '</span><span class="st-form">' + esc(f[1]) + '</span>' +
+            '<a href="' + esc(f[4]) + '" target="_blank" rel="noopener">' + esc(formTxt(f[1]) + (label ? ' · ' + label : '') + (f[3] ? ' (' + itemTxt(f[3]) + ')' : '')) + '</a></li>';
+        }).join('') + '</ul><p class="note">' + esc(t('st.filings_note', '내부자·대량보유 신고는 빼고 최근 15건 · 제목을 누르면 SEC 원문(영문)이 열려요')) + '</p>';
+      }
       var h = '<h2>' + esc(t('st.insider', '내부자 매매')) + ' <span class="krx-sub">Form 4</span></h2>';
       if (d.insider && d.insider.length) {
         h += '<div class="st-table-wrap"><table class="st-table"><thead><tr><th>' + [t('st.c_date', '거래일'), t('st.c_who', '이름 · 직위'), t('st.c_type', '구분'), t('st.c_sh', '주식 수'), t('st.c_px', '가격($)'), t('st.c_after', '거래 후 보유')].map(esc).join('</th><th>') + '</th></tr></thead><tbody>';
@@ -166,6 +198,9 @@ wide: true
       h += '<p class="note">' + esc(t('st.edgar_note', '자료: 미국 증권거래위원회(SEC) EDGAR · 업데이트 {u}', { u: d.updated_at || '' })) + '</p>';
       box.innerHTML = h;
     }).catch(function () {
+      var none = '<p class="note">' + esc(t('st.no_edgar_short', 'SEC EDGAR 자료는 백테스트(관심종목)에 있는 종목만 받아 둬요.')) + '</p>';
+      pbox.innerHTML = none;
+      fbox.innerHTML = none;
       box.innerHTML = '<h2>' + esc(t('st.insider_inst', '내부자 매매 · 기관 보유')) + '</h2><p class="note">' +
         esc(t('st.no_edgar', 'SEC EDGAR 자료는 관심종목에 있는 종목만 매일 받아 둬요. 이 종목은 아직 없어요.')) + '</p>';
     });
