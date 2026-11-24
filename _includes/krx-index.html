@@ -28,7 +28,6 @@
   {% assign lk = krx.kospi | last %}
   <p class="note">{{ lk.d }} 종가 기준 · 자료: 한국거래소(KRX) Open API · 업데이트 {{ krx.updated_at }}</p>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script>
     (function () {
       var DATA = {{ krx | jsonify }};

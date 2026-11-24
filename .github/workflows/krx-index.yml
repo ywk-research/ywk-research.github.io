@@ -30,6 +30,12 @@ jobs:
           KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
         run: python tools/fetch_krx.py
 
+      - name: FRED 해외 지수 받아오기
+        continue-on-error: true
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python tools/fetch_fred.py
+
       - name: 변경분 커밋
         id: commit
         run: |
