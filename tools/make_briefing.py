@@ -143,9 +143,15 @@ def build(pub, now):
     missing = []
 
     # 국내 전 거래일 = 발간일 이전 코스피 마지막 날짜
-    kd, kclose, _ = last_on_or_before([r for r in ki.get("kospi", []) if r["d"] < pub.isoformat()], "9999")
-    kospi_row = next((r for r in ki.get("kospi", []) if r["d"] == kd), None)
-    kr_d = dt.date.fromisoformat(kd) if kd else pub - dt.timedelta(days=1)
+    # 국내 전 거래일: KRX Open API는 다음 날 아침에야 전일 자료를 주므로(06시대엔 없음) ECOS 서울 종가 날짜로 정한다.
+    # ECOS 종가는 당일 저녁에 들어온다. 그것도 없으면 발간일 전 평일
+    closes = [r[0] for r in (fx.get("series", {}).get("usd_close") or []) if r[0] < pub.isoformat()]
+    kd_fx = max(closes) if closes else None
+    kd_wd = pub - dt.timedelta(days=1)
+    while kd_wd.weekday() >= 5:
+        kd_wd -= dt.timedelta(days=1)
+    kr_d = dt.date.fromisoformat(kd_fx) if kd_fx and kd_fx >= (kd_wd - dt.timedelta(days=4)).isoformat() else kd_wd
+    kospi_row = next((r for r in ki.get("kospi", []) if r["d"] == kr_d.isoformat()), None)
 
     # 글 날짜는 발간일. 오늘 글이면 지금 시각(빌드 시점보다 미래면 Jekyll이 글을 숨김), 아니면 06:00
     stamp = now.strftime("%H:%M:%S") if now.date() == pub else "06:00:00"
@@ -177,7 +183,7 @@ def build(pub, now):
     if kospi_row:
         L.append(f"| 코스피 | {md(kr_d)} | {fmt(kospi_row['close'])} | {pct(kospi_row.get('pct'))} |")
     else:
-        L.append(f"| 코스피 | {DASH} | {DASH} | {DASH} |")
+        L.append(f"| 코스피 | {md(kr_d)} | {DASH} | {DASH} |")
         missing.append("코스피")
     for name in ["닛케이225", "상하이종합", "항셍"]:
         L.append(f"| {name} | {md(kr_d)} | {DASH} | {DASH} |")
