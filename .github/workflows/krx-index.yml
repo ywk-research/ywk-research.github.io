@@ -37,6 +37,13 @@ jobs:
           ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
         run: python tools/fetch_global.py
 
+      - name: 매크로(한미 금리) 받아오기
+        continue-on-error: true
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+        run: python tools/fetch_macro.py
+
       - name: 변경분 커밋
         id: commit
         run: |

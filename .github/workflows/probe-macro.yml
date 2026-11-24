@@ -3,20 +3,22 @@ on:
   push:
     branches: [claude/project-thread-xwxure]
     paths: [.github/workflows/probe-macro.yml]
+permissions:
+  contents: write
 jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - env:
           ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-        run: |
-          python3 - <<'PY'
-          import json, os, urllib.request
-          k = os.environ["ECOS_API_KEY"].strip()
-          def g(u):
-              return json.loads(urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent":"Mozilla/5.0"}), timeout=40).read().decode("utf-8-sig"))
-          j = g(f"https://ecos.bok.or.kr/api/StatisticItemList/{k}/json/kr/1/300/817Y002")
-          for r in j.get("StatisticItemList", {}).get("row", []):
-              print("817", r["CYCLE"], r["ITEM_CODE"], r["ITEM_NAME"], r["START_TIME"], r["END_TIME"])
-          PY
+        run: python tools/fetch_macro.py
+      - run: |
+          ls -la _data/macro.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _data/macro.json && git commit -m "매크로 데이터 첫 수집" && git push
