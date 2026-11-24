@@ -7,7 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pip install -q openpyxl && python tools/tmp_probe.py
+      - run: |
+          pip install -q openpyxl
+          python tools/fetch_commodity.py
+          echo "B64START"; gzip -c _data/commodity.json | base64 -w0; echo; echo "B64END"
         env:
-          KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
