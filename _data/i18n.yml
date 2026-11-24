@@ -167,6 +167,33 @@ en:
   # 관심종목 탭 (watchlist.html, _includes/tv-watchlist.html)
   wl.title: Watchlist Backtest
   wl.intro: "A hypothetical portfolio of US stocks I'm watching, held at fixed weights. Simple buy-and-hold: bought once on the base date and held (no rebalancing, no dividends)."
+  wl.intro2: A hypothetical portfolio of stocks I'm watching, held at fixed weights.
+  wl.tab_kr: Korea
+  wl.tab_us: US
+  wlk.mix: Holdings
+  wlk.code: Code
+  wlk.first: '{d} close'
+  wlk.last: '{d} close'
+  wlk.ret_all: Return
+  wlk.periods: Returns by Period
+  wlk.periods_note: Assumes the portfolio is bought at the weights on the first close of each period and held. Excess return is portfolio − KOSPI (pp).
+  wlk.p1w: 1W
+  wlk.p1m: 1M
+  wlk.p3m: 3M
+  wlk.p6m: 6M
+  wlk.pall: Full period
+  wlk.kospi: KOSPI
+  wlk.excess: Excess (pp)
+  wlk.strat: 'Full-period Performance <span class="krx-sub">{s} ~ {e}</span>'
+  wlk.hold: Buy and hold
+  wlk.rebal: Monthly rebalance
+  wlk.m_ret: Cumulative return
+  wlk.m_excess: vs KOSPI
+  wlk.m_mdd: Max drawdown
+  wlk.m_vol: Volatility (ann.)
+  wlk.m_sharpe: Sharpe ratio
+  wlk.chart: 'Cumulative Return <span class="krx-sub">start = 100</span>'
+  wlk.note: 'Price returns based on {n} trading days of KRX daily closes (adjusted for splits and bonus issues). Dividends are not in the price data and are excluded; trading costs and taxes are ignored. Monthly rebalance resets the weights at the first close of each month. Volatility is the annualized standard deviation of daily returns; Sharpe ratio is (annualized mean return − 91-day CD rate {rf}%) ÷ volatility. Not investment advice · {e} close · Source: Korea Exchange (KRX) Open API'
   wl.th_name: Stock
   wl.th_ticker: Ticker
   wl.th_weight: Weight
@@ -309,5 +336,11 @@ names:
   에퀴닉스: Equinix
   델타항공: Delta Air Lines
   GE 에어로스페이스: GE Aerospace
+  심텍: Simmtech
+  삼성E&A: Samsung E&A
+  OCI홀딩스: OCI Holdings
+  그대로 보유: Buy and hold
+  월별 리밸런싱: Monthly rebalance
+  코스피: KOSPI
   # 글 종류 (브리핑 front matter의 category_label)
   주간 코멘트: Weekly Comment

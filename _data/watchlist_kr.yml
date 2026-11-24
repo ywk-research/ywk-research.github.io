@@ -1,0 +1,16 @@
+# 국내 관심종목 백테스트 (관심종목 백테스트 탭 → 국내). tools/krx_backtest.py가 읽어 _data/watchlist_kr.json을 만든다
+# code: KRX 단축코드 6자리. weight: 비중(합으로 나눠 씀)
+# 기간: tools/state/krx_closes에 쌓인 KRX 종가 전체(약 205거래일, 분할·증자 보정)
+stocks:
+  - code: "222800"
+    name: 심텍
+    weight: 25
+  - code: "028050"
+    name: 삼성E&A
+    weight: 25
+  - code: "010060"
+    name: OCI홀딩스
+    weight: 25
+  - code: "010950"
+    name: S-Oil
+    weight: 25
