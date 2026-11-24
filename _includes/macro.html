@@ -1,0 +1,148 @@
+<!-- 매크로: 한미 금리. 데이터는 tools/fetch_macro.py → _data/macro.json -->
+{% assign mc = site.data.macro %}
+{% if mc and mc.us and mc.kr %}
+<section class="krx macro" id="macro">
+  <div class="krx-head">
+    <h2>매크로</h2>
+    <div class="krx-range" id="mc-range" role="group" aria-label="기간">
+      <button type="button" data-months="3">3개월</button>
+      <button type="button" data-months="12" class="on">1년</button>
+    </div>
+  </div>
+  <div class="gl-cards" id="mc-cards"></div>
+
+  <div class="mc-grid">
+    <div class="mc-box"><p class="krx-name">美 국채 수익률 곡선</p><div class="mc-chart"><canvas id="mc-us-curve" aria-label="미국 국채 수익률 곡선"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name">韓 국고채 수익률 곡선</p><div class="mc-chart"><canvas id="mc-kr-curve" aria-label="한국 국고채 수익률 곡선"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name">장단기 금리차 <span class="krx-sub">%p</span></p><div class="mc-chart"><canvas id="mc-spread" aria-label="장단기 금리차 추이"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name">한미 금리차 <span class="krx-sub">한국 − 미국, %p</span></p><div class="mc-chart"><canvas id="mc-gap" aria-label="한미 금리차 추이"></canvas></div></div>
+    <div class="mc-box mc-wide"><p class="krx-name">한국 단기금리 <span class="krx-sub">%</span></p><div class="mc-chart"><canvas id="mc-short" aria-label="한국 단기금리 추이"></canvas></div></div>
+  </div>
+  {% assign us_last = mc.us | last %}{% assign kr_last = mc.kr | last %}
+  <p class="note">美 {{ us_last[0] }}, 韓 {{ kr_last[0] }} 기준(현지 날짜). 美 장단기차는 10년−2년, 韓은 10년−3년. 한미 금리차는 같은 날짜(또는 그 전 최근일) 값끼리 비교하고, 美 기준금리는 연준 목표 범위 상단이에요. 카드 변동은 전일 대비 bp · 자료: 미 재무부, 한국은행 ECOS, FRED(연준) · 업데이트 {{ mc.updated_at }}</p>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    (function () {
+      var M = {{ mc | jsonify }};
+      var css = getComputedStyle(document.documentElement);
+      function c(n) { return css.getPropertyValue(n).trim(); }
+      var S = [c('--s1'), c('--s2'), c('--s3'), c('--s4')];
+      var MUTED = c('--muted'), LINE = c('--line');
+
+      function col(rows, i) { return rows.filter(function (r) { return r[1][i] != null; }).map(function (r) { return [r[0], r[1][i]]; }); }
+      function idx(tenors, t) { return tenors.indexOf(t); }
+      // a의 날짜마다 b에서 같은 날 또는 그 전 최근 값을 찾아 a − b
+      function diff(a, b) {
+        var out = [], j = -1;
+        a.forEach(function (p) {
+          while (j + 1 < b.length && b[j + 1][0] <= p[0]) j++;
+          if (j >= 0) out.push([p[0], Math.round((p[1] - b[j][1]) * 1000) / 1000]);
+        });
+        return out;
+      }
+      var us2 = col(M.us, idx(M.us_tenors, '2Y')), us10 = col(M.us, idx(M.us_tenors, '10Y'));
+      var kr3 = col(M.kr, idx(M.kr_tenors, '3Y')), kr10 = col(M.kr, idx(M.kr_tenors, '10Y'));
+      var usSpread = diff(us10, us2), krSpread = diff(kr10, kr3);
+      var gap10 = diff(kr10, us10);
+      // 기준금리는 주말도 들어 있어, 단기금리(CD) 영업일마다 그날 또는 그 전 최근 값으로 맞춘다
+      function onDays(days, s) {
+        var out = [], j = -1;
+        days.forEach(function (d) { while (j + 1 < s.length && s[j + 1][0] <= d) j++; if (j >= 0) out.push([d, s[j][1]]); });
+        return out;
+      }
+      var bizDays = M.kr_short.cd.map(function (p) { return p[0]; });
+      var base = onDays(bizDays, M.kr_short.base);
+      var gapBase = M.fed_upper ? diff(base, M.fed_upper) : [];
+
+      function fmt(v, d) { return v.toFixed(d); }
+      function card(label, s, unit) {
+        if (!s.length) return;
+        var last = s[s.length - 1], prev = s.length > 1 ? s[s.length - 2][1] : last[1];
+        var bp = Math.round((last[1] - prev) * 100);
+        var cls = bp > 0 ? 'up' : bp < 0 ? 'down' : 'flat';
+        var val = unit === 'pct' ? fmt(last[1], 2) + '%' : (last[1] > 0 ? '+' : last[1] < 0 ? '−' : '') + fmt(Math.abs(last[1]), 2) + '%p';
+        var el = document.createElement('div');
+        el.className = 'gl-card';
+        el.innerHTML = '<p class="krx-name">' + label + ' <span class="krx-sub">' + last[0].slice(5).replace('-', '/') + '</span></p>' +
+          '<p class="gl-close">' + val + '</p><p class="krx-chg ' + cls + '">' + (bp > 0 ? '▲ ' : bp < 0 ? '▼ ' : '') + Math.abs(bp) + 'bp</p>';
+        document.getElementById('mc-cards').appendChild(el);
+      }
+      card('美 2년', us2, 'pct');
+      card('美 10년', us10, 'pct');
+      card('美 10년−2년', usSpread, 'pp');
+      card('韓 국고 3년', kr3, 'pct');
+      card('韓 국고 10년', kr10, 'pct');
+      card('한미 기준금리차', gapBase, 'pp');
+
+      var axis = { ticks: { color: MUTED, maxTicksLimit: 6 }, grid: { color: LINE }, border: { display: false } };
+      var xaxis = { ticks: { color: MUTED, maxTicksLimit: 6, maxRotation: 0 }, grid: { display: false } };
+      function opts(extra) {
+        return Object.assign({
+          animation: false, maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'bottom', labels: { color: MUTED, boxWidth: 14, boxHeight: 2, padding: 12 } },
+            tooltip: { callbacks: { label: function (x) { return ' ' + x.dataset.label + ' ' + (x.parsed.y == null ? '-' : x.parsed.y.toFixed(2)); } } }
+          },
+          scales: { x: xaxis, y: axis }
+        }, extra || {});
+      }
+      function ds(label, data, i, extra) {
+        return Object.assign({ label: label, data: data, borderColor: S[i], backgroundColor: S[i], borderWidth: 2,
+          pointRadius: 0, pointHoverRadius: 4, tension: 0.1, spanGaps: true }, extra || {});
+      }
+
+      // 수익률 곡선: 최근 / 1개월 전 / 1년 전 (각 시점과 같거나 그 전 최근 영업일)
+      function at(rows, iso) { var r = null; rows.forEach(function (x) { if (x[0] <= iso) r = x; }); return r; }
+      function back(iso, m) { var d = new Date(iso); d.setMonth(d.getMonth() - m); return d.toISOString().slice(0, 10); }
+      function curve(id, rows, tenors) {
+        var last = rows[rows.length - 1];
+        var pts = [[last, '최근'], [at(rows, back(last[0], 1)), '1개월 전'], [at(rows, back(last[0], 12)), '1년 전']];
+        var sets = pts.filter(function (p) { return p[0]; }).map(function (p, i) {
+          return ds(p[1] + ' (' + p[0][0].slice(2).replace(/-/g, '.') + ')', p[0][1], i,
+            { pointRadius: i === 0 ? 3 : 0, borderDash: i === 0 ? [] : [5, 4], tension: 0 });
+        });
+        new Chart(document.getElementById(id), { type: 'line', data: { labels: tenors, datasets: sets },
+          options: opts({ scales: { x: { ticks: { color: MUTED }, grid: { display: false } }, y: axis } }) });
+      }
+      curve('mc-us-curve', M.us, M.us_tenors);
+      curve('mc-kr-curve', M.kr, M.kr_tenors);
+
+      // 시계열: 여러 계열을 날짜 합집합 위에 놓는다
+      var charts = {};
+      function series(id, list, months, extra) {
+        var end = list.reduce(function (m, s) { var d = s[1].length ? s[1][s[1].length - 1][0] : ''; return d > m ? d : m; }, '');
+        var cut = back(end, months);
+        var days = {};
+        list.forEach(function (s) { s[1].forEach(function (p) { if (p[0] >= cut) days[p[0]] = 1; }); });
+        var labels = Object.keys(days).sort();
+        var sets = list.map(function (s, i) {
+          var m = {}; s[1].forEach(function (p) { m[p[0]] = p[1]; });
+          return ds(s[0], labels.map(function (d) { return d in m ? m[d] : null; }), s[2] != null ? s[2] : i, s[3]);
+        });
+        if (charts[id]) charts[id].destroy();
+        var o = opts(extra);
+        o.scales.x = Object.assign({}, xaxis, { ticks: Object.assign({}, xaxis.ticks, {
+          callback: function (v) { return labels[v].slice(2, 7).replace('-', '.'); } }) });
+        charts[id] = new Chart(document.getElementById(id), { type: 'line',
+          data: { labels: labels, datasets: sets }, options: o });
+      }
+      function render(months) {
+        series('mc-spread', [['美 10년−2년', usSpread], ['韓 10년−3년', krSpread]], months);
+        series('mc-gap', [['기준금리', gapBase, 0, { stepped: true }], ['10년물', gap10]], months);
+        series('mc-short', [['기준금리', base, 3, { stepped: true }], ['콜(1일)', M.kr_short.call, 0],
+          ['CD(91일)', M.kr_short.cd, 1], ['CP(91일)', M.kr_short.cp, 2]], months);
+      }
+      document.querySelectorAll('#mc-range button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('#mc-range button').forEach(function (x) { x.classList.remove('on'); });
+          b.classList.add('on');
+          render(+b.dataset.months);
+        });
+      });
+      render(12);
+    })();
+  </script>
+</section>
+{% endif %}

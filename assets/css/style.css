@@ -7,6 +7,10 @@
   --accent: #1f4ed8;
   --up: #d93a3a;
   --down: #2563eb;
+  --s1: #2a78d6;
+  --s2: #eb6834;
+  --s3: #1baf7a;
+  --s4: #c98500;
 }
 
 /* 기본 다크 (data-theme은 _layouts/default.html에서 설정) */
@@ -20,6 +24,10 @@
   --accent: #7aa2ff;
   --up: #ff6b6b;
   --down: #6ea8ff;
+  --s1: #3987e5;
+  --s2: #d95926;
+  --s3: #199e70;
+  --s4: #c98500;
 }
 
 * { box-sizing: border-box; }
@@ -197,3 +205,11 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .tv-wl-box { height: 460px; }
 .tv-wl-chart { height: 480px; margin-top: 20px; }
 @media (max-width: 560px) { .tv-wl-box { height: 420px; } .tv-wl-chart { height: 380px; } }
+
+/* 데이터 탭: 매크로(한미 금리) */
+.macro { margin-top: 40px; }
+.mc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.mc-box { padding: 12px 14px 8px; background: var(--soft); border-radius: 12px; min-width: 0; }
+.mc-wide { grid-column: 1 / -1; }
+.mc-chart { position: relative; height: 240px; margin-top: 6px; }
+@media (max-width: 560px) { .mc-grid { grid-template-columns: 1fr; } }
