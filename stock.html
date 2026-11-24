@@ -135,6 +135,10 @@ wide: true
     'DEF 14A': ['주주총회 위임장', 'Proxy statement'], '20-F': ['연간 보고서(외국 기업)', 'Annual report (foreign)'], '6-K': ['수시 공시(외국 기업)', 'Current report (foreign)'],
     'S-8': ['임직원 주식 등록', 'Employee plan registration'], '424B2': ['증권 발행 설명서', 'Prospectus'], '11-K': ['종업원 주식계획 연간 보고', 'Employee plan annual report'] };
   function formTxt(f) { var x = FORM[f.replace('/A', '')]; return x ? x[LANG === 'en' ? 1 : 0] + (/\/A$/.test(f) ? (LANG === 'en' ? ' (amended)' : ' (정정)') : '') : f; }
+  var ITEM = { '1.01': ['주요 계약', 'Material agreement'], '2.01': ['인수·매각 완료', 'Acquisition/disposition'], '2.02': ['실적 발표', 'Earnings'],
+    '2.03': ['채무 발생', 'New debt'], '5.02': ['임원 변동', 'Officer/director change'], '5.03': ['정관 변경', 'Bylaws change'], '5.07': ['주총 결과', 'Shareholder vote'],
+    '7.01': ['공정공시(Reg FD)', 'Reg FD'], '8.01': ['기타 주요 사항', 'Other events'] };
+  function itemTxt(s) { return s.split(',').filter(function (x) { return x !== '9.01'; }).map(function (x) { var y = ITEM[x]; return y ? y[LANG === 'en' ? 1 : 0] : 'Item ' + x; }).join(', ') || 'Item 9.01'; }
   function codeTxt(c) { var x = CODE[c]; return x ? x[LANG === 'en' ? 1 : 0] : c; }
   function shTxt(n) { return n == null ? '–' : fmt(n); }
 
@@ -157,7 +161,7 @@ wide: true
         fbox.innerHTML = '<ul class="st-dart">' + d.filings.map(function (f) {
           var label = f[2] && f[2].toUpperCase() !== f[1].toUpperCase() ? f[2] : '';
           return '<li><span class="st-dart-d">' + esc(f[0].slice(5).replace('-', '/')) + '</span><span class="st-form">' + esc(f[1]) + '</span>' +
-            '<a href="' + esc(f[4]) + '" target="_blank" rel="noopener">' + esc(formTxt(f[1]) + (label ? ' · ' + label : '') + (f[3] ? ' (Item ' + f[3] + ')' : '')) + '</a></li>';
+            '<a href="' + esc(f[4]) + '" target="_blank" rel="noopener">' + esc(formTxt(f[1]) + (label ? ' · ' + label : '') + (f[3] ? ' (' + itemTxt(f[3]) + ')' : '')) + '</a></li>';
         }).join('') + '</ul><p class="note">' + esc(t('st.filings_note', '내부자·대량보유 신고는 빼고 최근 15건 · 제목을 누르면 SEC 원문(영문)이 열려요')) + '</p>';
       }
       var h = '<h2>' + esc(t('st.insider', '내부자 매매')) + ' <span class="krx-sub">Form 4</span></h2>';

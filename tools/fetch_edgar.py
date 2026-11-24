@@ -144,7 +144,8 @@ def insider(cik):
     return sub, out[:INSIDER_N]
 
 
-SKIP_FORMS = {"3", "4", "5", "3/A", "4/A", "5/A", "144", "144/A", "SC 13G", "SC 13G/A", "SC 13D", "SC 13D/A"}
+SKIP_FORMS = {"3", "4", "5", "3/A", "4/A", "5/A", "144", "144/A", "SC 13G", "SC 13G/A", "SC 13D", "SC 13D/A",
+              "SCHEDULE 13G", "SCHEDULE 13G/A", "SCHEDULE 13D", "SCHEDULE 13D/A"}
 
 
 def profile(sub):
