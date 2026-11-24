@@ -124,6 +124,13 @@ en:
   ecal.prev: Previous month
   ecal.next: Next month
   ecal.today: Today
+  ecal.now_today: Today's releases
+  ecal.now_next: Next releases
+  ecal.kst: Korea time
+  ecal.tbd: TBD
+  ecal.imp1: Low
+  ecal.imp2: Medium
+  ecal.imp3: High
   ecal.empty: No major events.
   ecal.note: "Korea time (KST). Only official release schedules published by governments, central banks and statistics agencies (US BLS, BEA, Census Bureau, Labor Department, ISM, Fed, ECB, Bank of Korea, Statistics Korea, Korea trade ministry, Bank of Japan, Japan Statistics Bureau, Cabinet Office, China NBS). Korea and China 2027 data dates will be added once the agencies publish them. Small grey items are weekly releases."
   tvcal.title: Indicator Details (Forecast &amp; Actual)

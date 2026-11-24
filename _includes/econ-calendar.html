@@ -1,5 +1,6 @@
 <!-- 월간 경제 일정 달력: 중앙은행 회의(_data/econ_events.yml, 손으로 관리) + 미국 지표 발표(_data/econ_calendar.json, BLS·BEA 공식 .ics 자동 수집) -->
 <section class="ecal" id="econ-month">
+  <div class="ecal-now" aria-live="polite"></div>
   <div class="krx-head">
     <h2 data-i18n="ecal.title">경제 일정</h2>
     <div class="ecal-nav">
@@ -79,6 +80,30 @@
         var p = sel.split('-');
         showDay(+p[0] === y && +p[1] === m + 1 ? sel : key(y, m, 1));
       }
+
+      // 오늘 발표 지표 카드 (달력 위). 오늘 일정이 없으면 다음 발표일
+      // 중요도: 3 금리 결정·물가·고용·GDP·PCE, 1 매주 일정, 나머지 2
+      var HIGH = ['FOMC', '금통위', 'BOJ', 'ECB', 'CPI', '고용', 'GDP', 'PCE'];
+      function imp(e) { return e.minor ? 1 : HIGH.indexOf(e.s) >= 0 ? 3 : 2; }
+      function stars(n) { return '<span class="ecal-imp i' + n + '" title="' + t('ecal.imp' + n, ['', '낮음', '보통', '높음'][n]) + '">' + '●●●'.slice(0, n) + '<i>' + '●●●'.slice(n) + '</i></span>'; }
+      function renderNow() {
+        var box = root.querySelector('.ecal-now'), k = today, label = t('ecal.now_today', '오늘 발표 지표');
+        if (!byDate[k]) {
+          var next = Object.keys(byDate).sort().filter(function (d) { return d > today; })[0];
+          if (!next) { box.hidden = true; return; }
+          k = next; label = t('ecal.now_next', '다음 발표 지표');
+        }
+        var p = k.split('-'), wd = WD[new Date(+p[0], +p[1] - 1, +p[2]).getDay()];
+        var dateTxt = EN ? wd + ', ' + MON[+p[1] - 1].slice(0, 3) + ' ' + (+p[2]) : (+p[1]) + '월 ' + (+p[2]) + '일 (' + wd + ')';
+        var hm = pad(now.getHours()) + ':' + pad(now.getMinutes());
+        box.innerHTML = '<div class="ecal-now-head"><h2>' + label + '</h2><span class="krx-sub">' + dateTxt + ' · ' + t('ecal.kst', '한국시간') + '</span></div>' +
+          '<ul>' + byDate[k].slice().sort(function (a, b) { return (a.time || '99').localeCompare(b.time || '99') || imp(b) - imp(a); }).map(function (e) {
+            var done = k === today && e.time && e.time <= hm;
+            return '<li class="' + (done ? 'done' : '') + (e.minor ? ' minor' : '') + '"><span class="ecal-time">' + (e.time || t('ecal.tbd', '시간 미정')) + '</span>' +
+              '<span class="ecal-flag">' + (FLAG[e.c] || '') + '</span><span class="ecal-t">' + esc(tn(e.t)) + '</span>' + stars(imp(e)) + '</li>';
+          }).join('') + '</ul>';
+      }
+      renderNow();
 
       root.querySelectorAll('.ecal-nav button').forEach(function (b) {
         b.addEventListener('click', function () {
