@@ -19,8 +19,10 @@
 
 <section class="krx gl" id="us-sectors">
   <div class="krx-head">
-    <h2>S&amp;P500 섹터 ETF</h2>
+    <h2>S&amp;P500 섹터</h2>
   </div>
+  <div class="tv-box tv-heat" id="tv-heatmap"></div>
+  <p class="note">S&amp;P500 종목 히트맵, 섹터별로 묶고 크기는 시가총액, 색은 전일 대비 등락률(지연 시세, 미국식 색: 상승 초록)</p>
   <div class="tv-box" id="tv-sectors"></div>
   <p class="note">SPDR 섹터 ETF 11개, 최근 3개월. 종목을 누르면 위 차트가 바뀌어요 · 시세 위젯: <a href="https://kr.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a></p>
   <script>
@@ -60,7 +62,13 @@
             trendLineColor: accent, underLineColor: accentFill, underLineBottomColor: 'rgba(0,0,0,0)'
           });
         });
-        mount(document.getElementById('tv-sectors'), 'market-overview', {
+        mount(document.getElementById('tv-heatmap'), 'stock-heatmap', {
+        dataSource: 'SPX500', exchanges: [], grouping: 'sector', blockSize: 'market_cap_basic',
+        blockColor: 'change', locale: 'kr', symbolUrl: '', colorTheme: t, hasTopBar: false,
+        isDataSetEnabled: false, isZoomEnabled: true, hasSymbolTooltip: true, isMonoSize: false,
+        isTransparent: true, width: '100%', height: '100%'
+      });
+      mount(document.getElementById('tv-sectors'), 'market-overview', {
           colorTheme: t, dateRange: '3M', showChart: true, locale: 'kr', width: '100%', height: '100%',
           largeChartUrl: '', isTransparent: true, showSymbolLogo: true, showFloatingTooltip: false,
           tabs: [{ title: '섹터', symbols: SECTORS.map(function (x) { return { s: x[0], d: x[1] + ' (' + x[0].split(':')[1] + ')' }; }) }]
