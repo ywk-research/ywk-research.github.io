@@ -3,6 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    // 기본은 다크. 방문자가 고른 테마가 있으면 그걸 쓴다
+    (function () {
+      var t = 'dark';
+      try { t = localStorage.getItem('theme') === 'light' ? 'light' : 'dark'; } catch (e) {}
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
   <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -16,6 +24,7 @@
       <nav>
         <a href="{{ '/' | relative_url }}">브리핑</a>
         <a href="{{ '/about/' | relative_url }}">소개</a>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="라이트/다크 전환"></button>
       </nav>
     </div>
   </header>
@@ -30,5 +39,18 @@
       <p>© {{ site.time | date: "%Y" }} {{ site.title }}</p>
     </div>
   </footer>
+  <script>
+    (function () {
+      var b = document.getElementById('theme-toggle'), root = document.documentElement;
+      function label() { var d = root.getAttribute('data-theme') === 'dark'; b.textContent = d ? '☀️' : '🌙'; b.title = d ? '라이트 모드로' : '다크 모드로'; }
+      label();
+      b.addEventListener('click', function () {
+        var t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('theme', t); } catch (e) {}
+        root.setAttribute('data-theme', t);
+        location.reload(); // 차트·위젯 색을 새 테마로 다시 그린다
+      });
+    })();
+  </script>
 </body>
 </html>

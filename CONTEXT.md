@@ -31,7 +31,7 @@
 | `_includes/krx-index.html` | 코스피·코스닥·VKOSPI 카드 + 차트(1개월/3개월/1년), 아래에 업종·종목 include |
 | `_includes/krx-sectors.html` | 업종별 등락 가로 막대(코스피/코스닥 탭) |
 | `_includes/krx-movers.html` | 종목 등락 상위·하위·거래대금 상위 5(탭) |
-| `assets/css/style.css` | 상승 `--up #d93a3a`, 하락 `--down #2563eb`, 다크모드 지원 |
+| `assets/css/style.css` | 상승 `--up #d93a3a`, 하락 `--down #2563eb`. **기본 다크**(`:root[data-theme="dark"]`), 헤더 ☀️/🌙 버튼으로 라이트 전환(localStorage `theme`, 누르면 새로고침해서 차트·위젯 색을 다시 그림). 테마 설정은 `_layouts/default.html` head 스크립트 |
 | `about.md` | 소개. **운영자 소개 부분은 아직 비어 있음** |
 | Chart.js | `index.html`의 데이터 칸 맨 앞에서 CDN으로 1번만 불러옴 |
 

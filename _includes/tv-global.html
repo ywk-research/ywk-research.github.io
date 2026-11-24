@@ -32,8 +32,8 @@
         ['AMEX:XLV', '헬스케어'], ['AMEX:XLI', '산업재'], ['AMEX:XLP', '필수소비재'], ['AMEX:XLE', '에너지'],
         ['AMEX:XLU', '유틸리티'], ['AMEX:XLB', '소재'], ['AMEX:XLRE', '부동산']
       ];
-      var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
-      function theme() { return dark && dark.matches ? 'dark' : 'light'; }
+      // 사이트 테마(_layouts/default.html의 data-theme)를 따른다. 기본 다크
+      function theme() { return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'; }
   
       // 공식 임베드 코드와 같은 구조로 위젯을 붙인다
       function mount(el, type, cfg) {
@@ -76,10 +76,6 @@
       }
   
       render();
-      if (dark) {
-        var onChange = function () { render(); };
-        if (dark.addEventListener) dark.addEventListener('change', onChange); else if (dark.addListener) dark.addListener(onChange);
-      }
     })();
   </script>
 </section>
