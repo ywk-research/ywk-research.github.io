@@ -1,0 +1,66 @@
+name: probe (임시)
+on:
+  push:
+    branches: ['claude/project-thread-jgq9bc']
+    paths: ['.github/workflows/probe.yml']
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - name: probe
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+        shell: python
+        run: |
+          import os, json, urllib.request, urllib.parse
+          def get(u):
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "desk-notes-probe"}), timeout=60) as r:
+                      return r.read().decode("utf-8", "replace")
+              except Exception as e:
+                  return "ERR " + str(e)[:200]
+          print("keys:", {k: bool(os.environ.get(k)) for k in ["FRED_API_KEY","ECOS_API_KEY","DART_API_KEY","EIA_API_KEY"]})
+          fk = os.environ.get("FRED_API_KEY", "")
+          for s in ["WALCL","RRPONTSYD","WTREGEN","NFCI","WCESTUS1","WRESBAL"]:
+              t = get(f"https://api.stlouisfed.org/fred/series/observations?series_id={s}&api_key={fk}&file_type=json&sort_order=desc&limit=3")
+              try: print(s, json.loads(t)["observations"][:2])
+              except Exception: print(s, t[:200])
+              t = get(f"https://api.stlouisfed.org/fred/series?series_id={s}&api_key={fk}&file_type=json")
+              try: d=json.loads(t)["seriess"][0]; print("  ", d["title"], d["units"], d["frequency"], d.get("notes","")[:200].replace("\n"," "))
+              except Exception: print(t[:200])
+          print("== auctions")
+          t = get("https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/auctions_query?sort=-auction_date&page[size]=2&filter=security_type:eq:Note")
+          try:
+              d=json.loads(t)["data"]; print(sorted(d[0].keys())); print({k:d[0][k] for k in d[0] if any(x in k for x in ["term","date","yield","bid_to","accepted","tendered","type","offering","cusip"])})
+          except Exception: print(t[:300])
+          print("== cftc tff")
+          for ds, code in [("gpe5-46if","097741"),("72hh-3qpy","067651"),("6dca-aqww","088691")]:
+              t = get(f"https://publicreporting.cftc.gov/resource/{ds}.json?cftc_contract_market_code={code}&$order=report_date_as_yyyy_mm_dd%20DESC&$limit=1")
+              try: d=json.loads(t)[0]; print(ds, {k:v for k,v in d.items() if any(x in k for x in ["date","name","lev_","m_money","asset_mgr","noncomm","open_interest_all","code"]) and "pct" not in k and "chg" not in k and "trader" not in k and "spread" not in k})
+              except Exception: print(ds, t[:300])
+          print("== bis")
+          t = get("https://stats.bis.org/api/v2/data/dataflow/BIS/WS_EER/1.0/M.R.B.KR+US+JP+CN?startPeriod=2025-06&format=csv")
+          print(t[:700])
+          print("== ecos items 301Y013")
+          ek = os.environ.get("ECOS_API_KEY","")
+          for tb in ["301Y013","301Y017"]:
+              t = get(f"https://ecos.bok.or.kr/api/StatisticItemList/{ek}/json/kr/1/200/{tb}")
+              try:
+                  rows=json.loads(t)["StatisticItemList"]["row"]
+                  for r in rows:
+                      if "증권" in r["ITEM_NAME"] or "주식" in r["ITEM_NAME"] or "채권" in r["ITEM_NAME"] or "부채" in r["ITEM_NAME"]: print(tb, r["ITEM_CODE"], r["ITEM_NAME"], r["CYCLE"], r.get("END_TIME"))
+              except Exception: print(tb, t[:300])
+          t = get(f"https://ecos.bok.or.kr/api/StatisticTableList/{ek}/json/kr/1/1000")
+          try:
+              for r in json.loads(t)["StatisticTableList"]["row"]:
+                  n=r["STAT_NAME"]
+                  if any(x in n for x in ["증권투자","외국인","투자자별"]): print("TABLE", r["STAT_CODE"], n, r.get("CYCLE"))
+          except Exception: print(t[:300])
+          print("== dart")
+          dk = os.environ.get("DART_API_KEY","")
+          if dk:
+              t = get(f"https://opendart.fss.or.kr/api/list.json?crtfc_key={dk}&bgn_de=20261123&end_de=20261123&pblntf_ty=B&page_count=5")
+              print(t[:600].replace(dk,"***"))
