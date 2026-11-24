@@ -11,7 +11,7 @@
 
   {% if krx and krx.kospi.size > 0 %}
   <div class="krx-cards{% if krx.vkospi.size > 0 %} three{% endif %}">
-    {% for key in "kospi,kosdaq,vkospi" | split: "," %}
+    {% assign list_key = "kospi,kosdaq,vkospi" | split: "," %}{% for key in list_key %}
       {% assign s = krx[key] %}
       {% if s == nil or s.size == 0 %}{% continue %}{% endif %}
       {% assign last = s | last %}

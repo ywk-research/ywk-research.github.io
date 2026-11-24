@@ -10,11 +10,11 @@
     </div>
   </div>
   <div class="movers-grid">
-    {% for mkt in "kospi,kosdaq" | split: "," %}
+    {% assign list_mkt = "kospi,kosdaq" | split: "," %}{% for mkt in list_mkt %}
     {% assign m = mv[mkt] %}
     <div class="movers-col">
       <p class="krx-name">{% if mkt == "kospi" %}코스피{% else %}코스닥{% endif %}</p>
-      {% for tab in "gainers,losers,value" | split: "," %}
+      {% assign list_tab = "gainers,losers,value" | split: "," %}{% for tab in list_tab %}
       <ol class="movers-list" data-tab="{{ tab }}"{% unless tab == "gainers" %} hidden{% endunless %}>
         {% for r in m[tab] %}
         <li>
