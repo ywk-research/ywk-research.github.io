@@ -21,7 +21,7 @@
   {% assign us_last = mc.us | last %}{% assign kr_last = mc.kr | last %}
   <p class="note" data-i18n="mc.note" data-us="{{ us_last[0] }}" data-kr="{{ kr_last[0] }}" data-u="{{ mc.updated_at }}">美 {{ us_last[0] }}, 韓 {{ kr_last[0] }} 기준(현지 날짜). 美 장단기차는 10년−2년, 韓은 10년−3년. 한미 금리차는 같은 날짜(또는 그 전 최근일) 값끼리 비교하고, 美 기준금리는 연준 목표 범위 상단이에요. 카드 변동은 전일 대비 bp · 자료: 미 재무부, 한국은행 ECOS, FRED(연준) · 업데이트 {{ mc.updated_at }}</p>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  {% unless chartjs_loaded %}{% assign chartjs_loaded = true %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>{% endunless %}
   <script>
     (function () {
       var M = {{ mc | jsonify }};

@@ -77,6 +77,11 @@ en:
   movers.losers: Top losers
   movers.value: Most traded
   movers.note: 'Gainer and loser rankings: KOSPI {kospi}; KOSDAQ {kosdaq}. The most-traded ranking only excludes preferred shares and SPACs. Stock names are shown in Korean.'
+  cross.title: MA Crossovers <span class="krx-sub">{from}–{to} · last {n} trading days</span>
+  cross.golden: Golden cross
+  cross.dead: Death cross
+  cross.empty: None in the last {n} trading days.
+  cross.note: 'A golden cross is when the short moving average crosses above the long one; a death cross is the reverse. Dates show the trading day of the cross; % change is for {d} only. Universe: KOSPI {kospi}; KOSDAQ {kosdaq} ({stocks} stocks). Computed from daily closes, adjusted for splits and bonus issues using KRX base prices. Not investment advice · Source: Korea Exchange (KRX) Open API · Updated {updated}'
 
   # 홈: 세계 시장 뉴스 (_includes/tv-news.html)
   news.title: World Market News
@@ -132,6 +137,25 @@ en:
   mc.gap: Korea–US Rate Gap <span class="krx-sub">Korea − US, pp</span>
   mc.short: Korea Short-term Rates <span class="krx-sub">%</span>
   mc.note: 'As of US {us}, Korea {kr} (local dates). US term spread is 10Y−2Y, Korea is 10Y−3Y. The Korea–US gap compares values on the same date (or the latest before it); the US policy rate is the upper bound of the Fed target range. Card changes in bp from the previous day · Sources: U.S. Treasury, Bank of Korea ECOS, FRED (Federal Reserve) · Updated {u}'
+  range.3y: 3Y
+  # 매크로 확장: 美 실질금리 (_includes/us-real-rate.html)
+  rr.title: US Real Yields &amp; Inflation Expectations
+  rr.split: 10Y = Real Yield + Breakeven <span class="krx-sub">%</span>
+  rr.bei: Breakeven Inflation (BEI) <span class="krx-sub">%</span>
+  rr.note: 'As of {d} (US date). Real yields are the TIPS yields published by the U.S. Treasury; breakeven inflation (BEI) is the nominal Treasury yield minus the real yield of the same maturity. Card changes in bp from the previous day · Source: U.S. Treasury · Updated {u}'
+  # 원화 환율 (_includes/krw-fx.html)
+  kfx.title: Korean Won Base Rates (BOK)
+  kfx.index: Indexed to 100 at the start of the period <span class="krx-sub">Higher = weaker won</span>
+  kfx.note: 'Base rates as of {d} (Seoul FX market; JPY per 100 yen). Card changes from the previous business day · Source: Bank of Korea ECOS · Updated {u}'
+  # 한국 월간 경제지표 (_includes/kr-monthly.html)
+  km.title: Korea Monthly Indicators
+  km.cpi: Consumer Price Inflation <span class="krx-sub">YoY, %</span>
+  km.exports: Export Growth <span class="krx-sub">YoY, %</span>
+  km.balance: Trade &amp; Current Account Balance <span class="krx-sub">USD 100m</span>
+  km.ip: All-industry Production <span class="krx-sub">YoY, %</span>
+  km.unemp: Unemployment Rate <span class="krx-sub">Seasonally adjusted, %</span>
+  km.csi: Consumer Sentiment Index <span class="krx-sub">100 = long-run average</span>
+  km.note: 'Card dates show each indicator''s latest reference month. CPI from Statistics Korea (core excludes agricultural products and oil), trade on a customs-clearance basis, current account, production and unemployment seasonally adjusted. Card changes from the previous month · Source: Bank of Korea ECOS · Updated {u}'
 
   # 관심종목 탭 (watchlist.html, _includes/tv-watchlist.html)
   wl.title: Watchlist Backtest
@@ -252,6 +276,27 @@ names:
   콜(1일): Call (1-day)
   CD(91일): CD (91-day)
   CP(91일): CP (91-day)
+  # 매크로 확장 (us-real-rate, krw-fx, kr-monthly)
+  美 10년 실질금리: US 10Y real yield
+  美 10년 BEI: US 10Y breakeven
+  美 5년 BEI: US 5Y breakeven
+  명목 10년: Nominal 10Y
+  실질 10년: Real 10Y
+  BEI 10년: 10Y BEI
+  BEI 5년: 5Y BEI
+  원/100엔: JPY/KRW (100 yen)
+  원/위안: CNY/KRW
+  원/유로: EUR/KRW
+  소비자물가: CPI
+  근원물가: Core CPI
+  근원(농산물·석유류 제외): Core (ex. agri & oil)
+  수출: Exports
+  경상수지: Current account
+  무역수지: Trade balance
+  실업률: Unemployment
+  소비자심리: Consumer sentiment
+  소비자심리지수: Consumer Sentiment Index
+  전산업생산: All-industry production
   # 관심종목 (_data/watchlist.yml)
   트랜스다임: TransDigm
   에퀴닉스: Equinix

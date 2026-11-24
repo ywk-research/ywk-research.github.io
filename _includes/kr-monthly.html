@@ -1,0 +1,72 @@
+<!-- 한국 월간 경제지표. 데이터: _data/kr_monthly.json (tools/fetch_macro.py) -->
+{% assign km = site.data.kr_monthly %}
+{% if km and km.series %}
+{% include mc-common.html %}
+<section class="krx macro" id="kr-monthly">
+  <div class="krx-head">
+    <h2 data-i18n="km.title">한국 월간 경제지표</h2>
+    <div class="krx-range" id="km-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-months="12" data-i18n="range.1y">1년</button>
+      <button type="button" data-months="36" class="on" data-i18n="range.3y">3년</button>
+    </div>
+  </div>
+  <div class="gl-cards" id="km-cards"></div>
+  <div class="mc-grid">
+    <div class="mc-box"><p class="krx-name" data-i18n="km.cpi">소비자물가 상승률 <span class="krx-sub">전년 동월 대비, %</span></p><div class="mc-chart"><canvas id="km-cpi" aria-label="소비자물가 상승률"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="km.exports">수출 증가율 <span class="krx-sub">전년 동월 대비, %</span></p><div class="mc-chart"><canvas id="km-exports" aria-label="수출 증가율"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="km.balance">무역수지·경상수지 <span class="krx-sub">억 달러</span></p><div class="mc-chart"><canvas id="km-balance" aria-label="무역수지와 경상수지"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="km.ip">전산업생산 <span class="krx-sub">전년 동월 대비, %</span></p><div class="mc-chart"><canvas id="km-ip" aria-label="전산업생산 증가율"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="km.unemp">실업률 <span class="krx-sub">계절조정, %</span></p><div class="mc-chart"><canvas id="km-unemp" aria-label="실업률"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="km.csi">소비자심리지수 <span class="krx-sub">100 = 장기 평균</span></p><div class="mc-chart"><canvas id="km-csi" aria-label="소비자심리지수"></canvas></div></div>
+  </div>
+  <p class="note" data-i18n="km.note" data-u="{{ km.updated_at }}">카드 날짜는 해당 지표의 최근 기준월이에요. 물가는 통계청 소비자물가지수(근원은 농산물·석유류 제외), 수출입은 관세청 통관 기준, 경상수지·생산·실업률은 계절조정 계열이에요. 카드 변동은 전월 대비 · 자료: 한국은행 ECOS · 업데이트 {{ km.updated_at }}</p>
+  <script>
+    (function () {
+      var K = {{ km.series | jsonify }};
+      function get(k) { return K[k] || []; }
+      function yoy(s) {
+        var m = {}; s.forEach(function (p) { m[p[0]] = p[1]; });
+        return s.filter(function (p) { return m[MC.back(p[0], 12)]; })
+          .map(function (p) { return [p[0], Math.round((p[1] / m[MC.back(p[0], 12)] - 1) * 1000) / 10]; });
+      }
+      var cpi = yoy(get('cpi')), core = yoy(get('core')), exp = yoy(get('exports')), ip = yoy(get('ip'));
+      var imp = {}; get('imports').forEach(function (p) { imp[p[0]] = p[1]; });
+      var trade = get('exports').filter(function (p) { return p[0] in imp; })
+        .map(function (p) { return [p[0], Math.round((p[1] - imp[p[0]]) / 1e4) / 10]; });          // 천 달러 → 억 달러
+      var cur = get('current').map(function (p) { return [p[0], Math.round(p[1]) / 100]; });          // 백만 달러 → 억 달러
+      var unemp = get('unemp'), csi = get('csi');
+
+      var wrap = document.getElementById('km-cards');
+      function ym(d) { return d.slice(2).replace('-', '.'); }
+      function one(label, s, unit, digits) {
+        if (!s.length) return;
+        var last = s[s.length - 1], prev = s.length > 1 ? s[s.length - 2][1] : last[1], ch = last[1] - prev;
+        var u = unit === '%' ? '%' : unit === 'pt' ? '' : (window.LANG === 'en' ? ' $100m' : '억 달러');
+        var cu = unit === '%' ? (window.LANG === 'en' ? 'pp' : '%p') : unit === 'pt' ? 'pt' : u;
+        var v = last[1], a = Math.abs(ch);
+        if (unit === 'usd' && window.LANG === 'en') { v = v / 10; a = a / 10; u = cu = 'bn'; }  // 억 달러 → $bn
+        var pre = unit === 'usd' && window.LANG === 'en' ? '$' : '';
+        MC.card(wrap, { label: label, date: ym(last[0]), value: (unit === '%' && label.indexOf('실업') < 0 && v > 0 ? '+' : '') + (v < 0 ? '−' : '') + pre + Math.abs(v).toFixed(digits) + u,
+          chg: (ch > 0 ? '▲ ' : ch < 0 ? '▼ ' : '') + pre + a.toFixed(digits) + cu, dir: ch });
+      }
+      one('소비자물가', cpi, '%', 1);
+      one('근원물가', core, '%', 1);
+      one('수출', exp, '%', 1);
+      one('경상수지', cur, 'usd', 1);
+      one('실업률', unemp, '%', 1);
+      one('소비자심리', csi, 'pt', 1);
+
+      var mo = { labelFmt: function (d) { return d.slice(2).replace('-', '.'); }, digits: 1 };
+      function o(x) { return Object.assign({}, mo, x); }
+      MC.range(document.getElementById('km-range'), function (months) {
+        MC.line(document.getElementById('km-cpi'), [['소비자물가', cpi, 0], ['근원(농산물·석유류 제외)', core, 1]], o({ months: months, zeroAt: 0 }));
+        MC.line(document.getElementById('km-exports'), [['수출', exp, 0]], o({ months: months, type: 'bar', zeroAt: 0 }));
+        MC.line(document.getElementById('km-balance'), [['무역수지', trade, 0], ['경상수지', cur, 2]], o({ months: months, type: 'bar', zeroAt: 0 }));
+        MC.line(document.getElementById('km-ip'), [['전산업생산', ip, 0]], o({ months: months, zeroAt: 0 }));
+        MC.line(document.getElementById('km-unemp'), [['실업률', unemp, 0]], o({ months: months }));
+        MC.line(document.getElementById('km-csi'), [['소비자심리지수', csi, 0]], o({ months: months, zeroAt: 100 }));
+      });
+    })();
+  </script>
+</section>
+{% endif %}
