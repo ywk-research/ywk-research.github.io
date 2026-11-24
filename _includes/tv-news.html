@@ -1,8 +1,8 @@
 <!-- 세계 시장 뉴스: TradingView Top Stories 무료 위젯 (로고·링크는 약관상 지우지 않음) -->
 <section class="tv-news">
-  <h2>세계 시장 뉴스</h2>
+  <h2 data-i18n="news.title">세계 시장 뉴스</h2>
   <div class="tv-box tv-news-box" id="tv-news"></div>
-  <p class="note">제목을 누르면 TradingView에서 기사가 열려요 · 뉴스 위젯: <a href="https://kr.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a></p>
+  <p class="note" data-i18n="news.note">제목을 누르면 TradingView에서 기사가 열려요 · 뉴스 위젯: <a href="https://kr.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a></p>
   <script>
     (function () {
       var t = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
@@ -13,7 +13,7 @@
       s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-timeline.js';
       s.async = true;
       s.text = JSON.stringify({ feedMode: 'all_symbols', displayMode: 'regular', isTransparent: true,
-        colorTheme: t, locale: 'kr', width: '100%', height: '100%' });
+        colorTheme: t, locale: TV_LOCALE, width: '100%', height: '100%' });
       box.appendChild(s);
       document.getElementById('tv-news').appendChild(box);
     })();

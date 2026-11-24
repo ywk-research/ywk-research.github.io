@@ -1,11 +1,12 @@
 ---
 layout: default
 title: 브리핑
+title_en: Briefing
 wide: true
 ---
 <section class="intro">
-  <h1>개장 전 브리핑</h1>
-  <p>{{ site.description }}. 미국·아시아 증시, 금리·환율·원자재, 전일 주요 뉴스와 오늘 일정을 한 장에 정리합니다.</p>
+  <h1 data-i18n="home.title">개장 전 브리핑</h1>
+  <p data-i18n="home.intro">{{ site.description }}. 미국·아시아 증시, 금리·환율·원자재, 전일 주요 뉴스와 오늘 일정을 한 장에 정리합니다.</p>
 </section>
 
 <div class="home-grid">
@@ -21,25 +22,27 @@ wide: true
 {% assign latest = site.posts | first %}
 {% if latest %}
 <section class="latest">
-  <p class="kicker">최신 브리핑</p>
+  <p class="kicker" data-i18n="home.latest">최신 브리핑</p>
+  <p class="note en-only" data-i18n="brief.korean_only"></p>
   <h2><a href="{{ latest.url | relative_url }}">{{ latest.title }}</a></h2>
   {% if latest.summary %}<p>{{ latest.summary }}</p>{% endif %}
-  <a class="more" href="{{ latest.url | relative_url }}">전체 보기 →</a>
+  <a class="more" href="{{ latest.url | relative_url }}" data-i18n="home.read_more">전체 보기 →</a>
 </section>
 {% endif %}
 
 {% include tv-news.html %}
 
 <section class="archive">
-  <h2>지난 브리핑</h2>
+  <h2 data-i18n="home.archive">지난 브리핑</h2>
   {% assign by_month = site.posts | group_by_exp: "p", "p.date | date: '%Y년 %m월'" %}
   {% for month in by_month %}
-    <h3>{{ month.name }}</h3>
+    {% assign m0 = month.items | first %}
+    <h3 data-en="{{ m0.date | date: '%B %Y' }}">{{ month.name }}</h3>
     <ul>
       {% for p in month.items %}
       <li>
         <a href="{{ p.url | relative_url }}">
-          <span class="date">{{ p.date | date: "%m.%d" }}</span>
+          <span class="date" data-en="{{ p.date | date: '%b %-d' }}">{{ p.date | date: "%m.%d" }}</span>
           <span class="title">{{ p.summary | default: p.title }}</span>
         </a>
       </li>

@@ -29,3 +29,96 @@ en:
   post.meta: Published {d} · All figures as of the previous close
   post.prev: ← {d} briefing
   post.next: "{d} briefing →"
+
+  # 홈: 공통
+  range.aria: Period
+  range.1m: 1M
+  range.3m: 3M
+  range.1y: 1Y
+  mkt.kospi: KOSPI
+  mkt.kosdaq: KOSDAQ
+
+  # 홈: 해외 지수·원자재, S&P500 섹터 (_includes/tv-global.html)
+  gl.title: Global Indices & Commodities
+  gl.qqq: Nasdaq-100 ETF
+  gl.dia: Dow ETF
+  gl.soxx: Semiconductor ETF
+  gl.wti: WTI (USD/bbl)
+  gl.gold: Gold (USD/oz)
+  gl.nky: Nikkei 225 <span class="krx-sub">Prev. close</span>
+  gl.hsi: Hang Seng <span class="krx-sub">Prev. close</span>
+  gl.sse: Shanghai Composite <span class="krx-sub">Prev. close</span>
+  gl.note: 'US indices are not available in the widget, so tracking ETFs are shown instead: SPY (S&amp;P 500), QQQ (Nasdaq-100), DIA (Dow), SOXX (semiconductors). Nikkei 225, Hang Seng and Shanghai Composite are the indices themselves; gold and WTI are spot and front-month. Delayed quotes, 3-month charts. Widget colors follow the US convention (green up, red down) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  sec.title: S&amp;P 500 Sectors
+  sec.heat_note: 'S&amp;P 500 heatmap grouped by sector. Block size is market cap, color is the change from the previous close (delayed quotes, US colors: green up)'
+  sec.note: 'The 11 SPDR sector ETFs, change from the previous close (delayed quotes, US colors: green up) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  sec.group: Sector ETFs
+
+  # 홈: 변동성·금리·환율 (_includes/global-index.html)
+  rates.title: Volatility, Rates & FX
+  rates.note: "Each card's date is the latest observation (local date). 'Lagged' means its date is behind the other US indicators. Rate changes in bp, charts show the last 3 months · Source: {src} · Updated {u}"
+  rates.lagged: lagged
+
+  # 홈: 국내 지수·업종·종목 (_includes/krx-*.html)
+  krx.title: Korean Indices
+  krx.vol: Volatility Index
+  krx.note: 'Close as of {d} · Source: Korea Exchange (KRX) Open API · Updated {u}'
+  krx.empty: Index data is being prepared. KOSPI and KOSDAQ closes and charts will appear after the first update.
+  krxsec.title: Sector Performance <span class="krx-sub">as of {d}</span>
+  krxsec.aria: Bar chart of sector index changes
+  movers.title: Top Movers <span class="krx-sub">as of {d}</span>
+  movers.gainers: Top gainers
+  movers.losers: Top losers
+  movers.value: Most traded
+  movers.note: 'Gainer and loser rankings: KOSPI {kospi}; KOSDAQ {kosdaq}. The most-traded ranking only excludes preferred shares and SPACs. Stock names are shown in Korean.'
+
+  # 홈: 세계 시장 뉴스 (_includes/tv-news.html)
+  news.title: World Market News
+  news.note: 'Click a headline to open the story on TradingView · News widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+
+names:
+  # 지표 이름·출처 (_data/global_index.json)
+  美 10년물: US 10Y
+  원/달러: USD/KRW
+  미 재무부: U.S. Treasury
+  한국은행 ECOS: Bank of Korea ECOS
+  # 종목 순위 조건 (_data/krx_movers.json)
+  시가총액 1조 원 이상, 우선주·스팩 제외: market cap of KRW 1tn or more, excluding preferred shares and SPACs
+  시가총액 3,000억 원 이상, 우선주·스팩 제외: market cap of KRW 300bn or more, excluding preferred shares and SPACs
+  # S&P500 섹터 ETF (_includes/tv-global.html)
+  기술: Technology
+  커뮤니케이션: Communication Services
+  경기소비재: Consumer Discretionary
+  금융: Financials
+  헬스케어: Health Care
+  산업재: Industrials
+  필수소비재: Consumer Staples
+  에너지: Energy
+  유틸리티: Utilities
+  소재: Materials
+  부동산: Real Estate
+  # KRX 업종 (_data/krx_sectors.json)
+  의료·정밀기기: Medical & Precision Instruments
+  음식료·담배: Food, Beverages & Tobacco
+  증권: Securities
+  화학: Chemicals
+  전기전자: Electrical & Electronics
+  제조: Manufacturing
+  섬유·의류: Textiles & Apparel
+  기계·장비: Machinery & Equipment
+  비금속: Non-metallic Minerals
+  금속: Metals
+  전기·가스: Electricity & Gas
+  종이·목재: Paper & Wood
+  운송장비·부품: Transport Equipment & Parts
+  유통: Distribution
+  운송·창고: Transportation & Warehousing
+  오락·문화: Entertainment & Culture
+  제약: Pharmaceuticals
+  통신: Telecommunications
+  보험: Insurance
+  일반서비스: General Services
+  건설: Construction
+  IT 서비스: IT Services
+  기타제조: Other Manufacturing
+  출판·매체복제: Publishing & Media
