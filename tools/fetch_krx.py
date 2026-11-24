@@ -140,13 +140,36 @@ def last_trading_day(key, today):
     return None
 
 
+def closes_on_or_before(endpoint, day, key):
+    """day 또는 그 직전 거래일의 {지수명: 종가}. (거래일, 값) 반환"""
+    for back in range(10):
+        d = day - dt.timedelta(days=back)
+        if d.weekday() >= 5:
+            continue
+        rows = fetch(endpoint, d.strftime("%Y%m%d"), key)
+        if rows:
+            return d, {r.get("IDX_NM", ""): num(r.get("CLSPRC_IDX")) for r in rows}
+        time.sleep(0.25)
+    return None, {}
+
+
+def chg(now, then):
+    return round((now / then - 1) * 100, 2) if now and then else None
+
+
 def update_sectors(key, day):
     out = {"source": "한국거래소(KRX) Open API", "d": day.isoformat()}
     for mkt in ("kospi", "kosdaq"):
         rows = fetch(SERIES[mkt][0], day.strftime("%Y%m%d"), key)
         names = [r.get("IDX_NM", "") for r in rows]
         print(f"{mkt} 지수 시리즈 {len(names)}개: " + ", ".join(names))
-        sec = [{"name": r["IDX_NM"], "close": num(r.get("CLSPRC_IDX")), "pct": num(r.get("FLUC_RT"))}
+        # 1주·1개월 등락: 7일·1개월 전(휴장이면 그 직전 거래일) 종가와 비교
+        w_day, w_close = closes_on_or_before(SERIES[mkt][0], day - dt.timedelta(days=7), key)
+        m_day, m_close = closes_on_or_before(SERIES[mkt][0], day - dt.timedelta(days=30), key)
+        out[mkt + "_base"] = {"w1": w_day and w_day.isoformat(), "m1": m_day and m_day.isoformat()}
+        sec = [{"name": r["IDX_NM"], "close": num(r.get("CLSPRC_IDX")), "pct": num(r.get("FLUC_RT")),
+                "w1": chg(num(r.get("CLSPRC_IDX")), w_close.get(r["IDX_NM"])),
+                "m1": chg(num(r.get("CLSPRC_IDX")), m_close.get(r["IDX_NM"]))}
                for r in rows if is_sector(r.get("IDX_NM", "")) and num(r.get("FLUC_RT")) is not None]
         out[mkt] = sorted(sec, key=lambda x: x["pct"], reverse=True)
         print(f"{mkt} 업종 {len(sec)}개 선택: " + ", ".join(x["name"] for x in sec))

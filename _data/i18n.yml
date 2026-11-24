@@ -79,6 +79,12 @@ en:
 
   # 데이터 탭 (data.html, _includes/econ-calendar.html, tv-calendar.html) · 매크로 탭 (macro.html, _includes/macro.html)
   data.title: Data
+  sheat.title: 'Sector Heatmap <span class="krx-sub">as of {d}</span>'
+  sheat.d1: 1D
+  sheat.w1: 1W
+  sheat.m1: 1M
+  sheat.note_d1: "Change vs. previous trading day · Source: Korea Exchange (KRX) Open API"
+  sheat.note_base: "Change vs. close on {b} · Source: Korea Exchange (KRX) Open API"
   data.intro: Indicators and schedules one level deeper than the home page summary.
   ecal.title: Economic Calendar
   ecal.prev: Previous month
