@@ -135,7 +135,7 @@ wide: true
       var h = '<h2>' + esc(t('st.insider', '내부자 매매')) + ' <span class="krx-sub">Form 4</span></h2>';
       if (d.insider && d.insider.length) {
         h += '<div class="st-table-wrap"><table class="st-table"><thead><tr><th>' + [t('st.c_date', '거래일'), t('st.c_who', '이름 · 직위'), t('st.c_type', '구분'), t('st.c_sh', '주식 수'), t('st.c_px', '가격($)'), t('st.c_after', '거래 후 보유')].map(esc).join('</th><th>') + '</th></tr></thead><tbody>';
-        d.insider.forEach(function (r) {
+        d.insider.slice(0, 15).forEach(function (r) {
           var cls = r.code === 'P' ? 'up' : r.code === 'S' ? 'down' : '';
           h += '<tr><td>' + esc(r.d) + '</td><td>' + esc(r.name) + (r.title ? '<br><span class="krx-sub">' + esc(r.title) + '</span>' : '') + '</td>' +
             '<td class="' + cls + '">' + esc(codeTxt(r.code)) + '</td><td class="num">' + (r.ad === 'D' ? '−' : '+') + shTxt(r.sh) + '</td>' +
