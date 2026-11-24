@@ -141,7 +141,42 @@ def insider(cik):
         if len(out) >= INSIDER_N:
             break
     out.sort(key=lambda r: (r["d"], r["filed"]), reverse=True)
-    return sub.get("name"), out[:INSIDER_N]
+    return sub, out[:INSIDER_N]
+
+
+SKIP_FORMS = {"3", "4", "5", "3/A", "4/A", "5/A", "144", "144/A", "SC 13G", "SC 13G/A", "SC 13D", "SC 13D/A"}
+
+
+def profile(sub):
+    """기업 개요: SEC 제출 정보(업종 SIC, 설립 주, 회계연도 말, 본사, 상장 거래소)."""
+    biz = (sub.get("addresses") or {}).get("business") or {}
+    fy = sub.get("fiscalYearEnd") or ""
+    return {
+        "name": sub.get("name"), "tickers": sub.get("tickers") or [], "exchanges": sub.get("exchanges") or [],
+        "sic": sub.get("sic"), "sic_desc": sub.get("sicDescription"),
+        "state": sub.get("stateOfIncorporationDescription") or sub.get("stateOfIncorporation"),
+        "fy_end": f"{fy[:2]}/{fy[2:]}" if len(fy) == 4 else fy,
+        "city": " ".join(x for x in [(biz.get("city") or "").title(), biz.get("stateOrCountryDescription") or biz.get("stateOrCountry") or ""] if x),
+        "phone": sub.get("phone") or "", "website": sub.get("website") or "",
+        "former": [f.get("name") for f in (sub.get("formerNames") or [])][:2],
+    }
+
+
+def filings(sub, cik, n=15):
+    """최근 SEC 공시(내부자·대량보유 신고 제외): [날짜, 서식, 설명, 8-K 항목, 원문 주소]."""
+    rec = sub["filings"]["recent"]
+    out = []
+    for form, acc, filed, doc, desc, items in zip(rec["form"], rec["accessionNumber"], rec["filingDate"],
+                                                  rec["primaryDocument"], rec.get("primaryDocDescription") or [""] * len(rec["form"]),
+                                                  rec.get("items") or [""] * len(rec["form"])):
+        if form in SKIP_FORMS:
+            continue
+        url = f"https://www.sec.gov/Archives/edgar/data/{cik}/{acc.replace('-', '')}/{doc}" if doc else \
+            f"https://www.sec.gov/Archives/edgar/data/{cik}/{acc.replace('-', '')}/"
+        out.append([filed, form, (desc or "").strip(), items or "", url])
+        if len(out) >= n:
+            break
+    return out
 
 
 # ---------- 13F ----------
@@ -278,12 +313,13 @@ def main():
             print(f"{t['ticker']}: CIK를 찾지 못함")
             continue
         try:
-            name, ins = insider(cik)
+            sub, ins = insider(cik)
         except Exception as e:
             print(f"{t['ticker']}: Form 4 실패 {e}")
             continue
         path = os.path.join(OUT, t["ticker"] + ".json")
-        out = {"source": "SEC EDGAR", "ticker": t["ticker"], "cik": cik, "name": name,
+        out = {"source": "SEC EDGAR", "ticker": t["ticker"], "cik": cik, "name": sub.get("name"),
+               "profile": profile(sub), "filings": filings(sub, cik),
                "insider": ins, "inst": inst.get(t.get("cusip") or "")}
         old = load(path, {})
         if {k: v for k, v in old.items() if k != "updated_at"} != out:
