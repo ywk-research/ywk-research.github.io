@@ -202,6 +202,12 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .tvo-quotes .tradingview-widget-container, .tvo-chart .tradingview-widget-container { height: 100%; }
 .tvo-credit { margin-top: -4px; }
 @media (max-width: 560px) { .tvo-chart { height: 360px; } }
+/* 두 위젯 묶음을 나란히(FX 상단: 왼쪽 달러, 오른쪽 원화), 좁으면 위아래 */
+@media (min-width: 1000px) {
+  .tv-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .tv-pair > .krx { margin-top: 0; }
+  .tv-pair { margin-top: 28px; }
+}
 .tv-box { height: 560px; padding: 4px 2px; background: var(--soft); border-radius: 12px; overflow: hidden; }
 .tv-heat { height: 480px; margin-bottom: 0; }
 #tv-sectors { height: 430px; }
