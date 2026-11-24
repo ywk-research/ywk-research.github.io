@@ -1,0 +1,46 @@
+{% assign sc = site.data.krx_sectors %}
+{% if sc and sc.kospi.size > 0 %}
+<div class="sectors">
+  <div class="krx-head sub">
+    <h3>업종별 등락 <span class="krx-sub">{{ sc.d | date: "%m.%d" }} 기준</span></h3>
+    <div class="krx-range sector-tabs">
+      <button type="button" data-mkt="kospi" class="on">코스피</button>
+      <button type="button" data-mkt="kosdaq">코스닥</button>
+    </div>
+  </div>
+  <div class="sector-box"><canvas id="sector-chart" aria-label="업종별 등락률 막대 차트"></canvas></div>
+  <script>
+    (function () {
+      var SC = {{ sc | jsonify }};
+      var css = getComputedStyle(document.documentElement);
+      function c(n) { return css.getPropertyValue(n).trim(); }
+      var chart, box = document.querySelector('.sector-box');
+      function draw(mkt) {
+        var rows = SC[mkt] || [];
+        box.style.height = Math.max(160, rows.length * 22 + 30) + 'px';
+        if (chart) chart.destroy();
+        chart = new Chart(document.getElementById('sector-chart'), {
+          type: 'bar',
+          data: { labels: rows.map(function (r) { return r.name; }),
+            datasets: [{ data: rows.map(function (r) { return r.pct; }),
+              backgroundColor: rows.map(function (r) { return r.pct >= 0 ? c('--up') : c('--down'); }),
+              borderRadius: 3, barPercentage: 0.8, categoryPercentage: 0.9 }] },
+          options: { indexAxis: 'y', animation: false, maintainAspectRatio: false,
+            plugins: { legend: { display: false },
+              tooltip: { callbacks: { label: function (x) { return (x.parsed.x > 0 ? '+' : '') + x.parsed.x.toFixed(2) + '%'; } } } },
+            scales: {
+              x: { ticks: { color: c('--muted'), callback: function (v) { return v + '%'; } }, grid: { color: c('--line') } },
+              y: { ticks: { color: c('--text'), autoSkip: false, font: { size: 12 } }, grid: { display: false } } } }
+        });
+      }
+      document.querySelectorAll('.sector-tabs button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('.sector-tabs button').forEach(function (x) { x.classList.toggle('on', x === b); });
+          draw(b.dataset.mkt);
+        });
+      });
+      draw('kospi');
+    })();
+  </script>
+</div>
+{% endif %}

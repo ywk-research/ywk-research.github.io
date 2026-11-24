@@ -18,6 +18,7 @@ import urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_PATH = os.path.join(ROOT, "_data", "krx_index.json")
 MOVERS_PATH = os.path.join(ROOT, "_data", "krx_movers.json")
+SECTORS_PATH = os.path.join(ROOT, "_data", "krx_sectors.json")
 BASE = "https://data-dbg.krx.co.kr/svc/apis/"
 KST = dt.timezone(dt.timedelta(hours=9))
 BACKFILL_DAYS = int(os.environ.get("BACKFILL_DAYS", "400"))
@@ -122,6 +123,49 @@ def update_index(key, today):
     return added
 
 
+# 업종지수가 아닌 시리즈(시장 대표·규모별·테마 지수)를 걸러내는 단어
+NON_SECTOR = ("코스피", "코스닥", "KOSPI", "KOSDAQ", "KRX", "대형", "중형", "소형", "배당", "우량", "지배구조",
+              "벤처", "글로벌", "기술주", "프리미어", "레버리지", "인버스", "선물", "변동성", "TR", "외국인", "동일가중")
+
+
+def is_sector(nm):
+    return bool(nm) and not any(w in nm for w in NON_SECTOR) and not any(c.isdigit() for c in nm)
+
+
+def last_trading_day(key, today):
+    for back in range(10):
+        day = today - dt.timedelta(days=back)
+        if day.weekday() < 5 and fetch(SERIES["kospi"][0], day.strftime("%Y%m%d"), key):
+            return day
+    return None
+
+
+def update_sectors(key, day):
+    out = {"source": "한국거래소(KRX) Open API", "d": day.isoformat()}
+    for mkt in ("kospi", "kosdaq"):
+        rows = fetch(SERIES[mkt][0], day.strftime("%Y%m%d"), key)
+        names = [r.get("IDX_NM", "") for r in rows]
+        print(f"{mkt} 지수 시리즈 {len(names)}개: " + ", ".join(names))
+        sec = [{"name": r["IDX_NM"], "close": num(r.get("CLSPRC_IDX")), "pct": num(r.get("FLUC_RT"))}
+               for r in rows if is_sector(r.get("IDX_NM", "")) and num(r.get("FLUC_RT")) is not None]
+        out[mkt] = sorted(sec, key=lambda x: x["pct"], reverse=True)
+        print(f"{mkt} 업종 {len(sec)}개 선택: " + ", ".join(x["name"] for x in sec))
+    return write_if_changed(SECTORS_PATH, out)
+
+
+def write_if_changed(path, out):
+    old = None
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            old = json.load(f)
+    strip = lambda o: {k: v for k, v in (o or {}).items() if k != "updated_at"}
+    if strip(old) == strip(out):
+        return 0
+    out["updated_at"] = now_str()
+    save(path, out)
+    return 1
+
+
 def is_common_stock(r):
     code, name = r.get("ISU_CD", ""), r.get("ISU_NM", "")
     if not code.endswith("0"):  # 우선주(끝자리 5·7·9 등) 제외
@@ -145,24 +189,10 @@ def slim(r):
     }
 
 
-def update_movers(key, today):
-    # 직전 거래일 찾기: 오늘부터 거꾸로 최대 10일
-    out = {"source": "한국거래소(KRX) Open API", "rules": {}, "updated_at": None}
-    found_day = None
+def update_movers(key, day):
+    out = {"source": "한국거래소(KRX) Open API", "d": day.isoformat(), "rules": {}}
+    bas_dd = day.strftime("%Y%m%d")
     try:
-        for back in range(10):
-            day = today - dt.timedelta(days=back)
-            if day.weekday() >= 5:
-                continue
-            bas_dd = day.strftime("%Y%m%d")
-            first_ep = STOCKS["kospi"][0]
-            if fetch(first_ep, bas_dd, key):
-                found_day = day
-                break
-        if not found_day:
-            print("종목 시세: 최근 거래일 데이터를 찾지 못했습니다.")
-            return 0
-        bas_dd = found_day.strftime("%Y%m%d")
         for mkt, (endpoint, min_cap) in STOCKS.items():
             rows = [r for r in fetch(endpoint, bas_dd, key) if is_common_stock(r)]
             big = [r for r in rows if (num(r.get("MKTCAP")) or 0) >= min_cap and num(r.get("FLUC_RT")) is not None]
@@ -178,18 +208,7 @@ def update_movers(key, today):
     except NotApproved as e:
         print(f"건너뜀 — KRX API 인증 실패({e}): 유가증권·코스닥 일별매매정보 이용 승인 여부를 확인하세요.")
         return 0
-
-    out["d"] = found_day.isoformat()
-    out["updated_at"] = now_str()
-    old = None
-    if os.path.exists(MOVERS_PATH):
-        with open(MOVERS_PATH, encoding="utf-8") as f:
-            old = json.load(f)
-    if old and {k: v for k, v in old.items() if k != "updated_at"} == {k: v for k, v in out.items() if k != "updated_at"}:
-        return 0
-    save(MOVERS_PATH, out)
-    print(f"종목 시세: {out['d']} 기준 저장")
-    return 1
+    return write_if_changed(MOVERS_PATH, out)
 
 
 def main():
@@ -198,8 +217,13 @@ def main():
         sys.exit("KRX_API_KEY 환경변수가 없습니다. 저장소 Settings → Secrets에 등록하세요.")
     today = dt.datetime.now(KST).date()
     added = update_index(key, today)
-    moved = update_movers(key, today)
-    print(f"지수 추가 {added}건, 종목 시세 {'갱신' if moved else '변경 없음'}")
+    day = last_trading_day(key, today)
+    if not day:
+        print("최근 거래일을 찾지 못했습니다.")
+        return
+    sec = update_sectors(key, day)
+    moved = update_movers(key, day)
+    print(f"{day} 기준 · 지수 추가 {added}건, 업종 {'갱신' if sec else '변경 없음'}, 종목 {'갱신' if moved else '변경 없음'}")
 
 
 if __name__ == "__main__":
