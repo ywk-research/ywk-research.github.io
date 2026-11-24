@@ -253,9 +253,10 @@ def update_etf(key, day):
         eok = round((num(r.get("ACC_TRDVAL")) or 0) / 1e8)
         nav_eok = round((num(r.get("INVSTASST_NETASST_TOTAMT")) or 0) / 1e8)
         top.append({"name": r.get("ISU_NM", ""), "code": r.get("ISU_CD", ""),
-                    "close": num(r.get("TDD_CLSPRC")), "pct": num(r.get("FLUC_RT")),
+                    "close": num(r.get("TDD_CLSPRC")), "close_txt": f"{int(num(r.get('TDD_CLSPRC')) or 0):,}",
+                    "pct": num(r.get("FLUC_RT")),
                     "value": eok, "value_txt": won_txt(eok).strip(),
-                    "aum_txt": won_txt(nav_eok).strip() if nav_eok else "",
+                    "aum": nav_eok, "aum_txt": won_txt(nav_eok).strip() if nav_eok else "",
                     "index": r.get("IDX_IND_NM", "")})
     total = round(sum(num(r.get("ACC_TRDVAL")) or 0 for r in rows) / 1e8)
     out = {"source": "한국거래소(KRX) Open API", "d": day.isoformat(), "count": len(rows),
