@@ -338,10 +338,10 @@
  "inst": {
   "period": "2026-06-30",
   "prev_period": "2026-03-31",
-  "holders": 3274,
-  "prev_holders": 3023,
-  "shares": 799739255.0,
-  "prev_shares": 762107050.0,
+  "holders": 3406,
+  "prev_holders": 3158,
+  "shares": 832823640.0,
+  "prev_shares": 799600792.0,
   "top": [
    {
     "name": "BlackRock, Inc.",
@@ -379,6 +379,11 @@
     "chg": -542758.0
    },
    {
+    "name": "PRICE T ROWE ASSOCIATES INC /MD/",
+    "sh": 20622890.0,
+    "chg": -3287457.0
+   },
+   {
     "name": "Capital International Investors",
     "sh": 18310646.0,
     "chg": -908763.0
@@ -387,13 +392,8 @@
     "name": "VANGUARD PORTFOLIO MANAGEMENT LLC",
     "sh": 16789108.0,
     "chg": 638378.0
-   },
-   {
-    "name": "JPMORGAN CHASE & CO",
-    "sh": 16287180.0,
-    "chg": null
    }
   ]
  },
- "updated_at": "2026-11-24 17:15 KST"
+ "updated_at": "2026-11-24 18:08 KST"
 }

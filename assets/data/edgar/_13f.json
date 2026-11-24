@@ -1,0 +1,254 @@
+{
+ "sets": [
+  "https://www.sec.gov/files/datastandardsinnovation/data/form-13f-data-sets/01jun2026-31aug2026_form13f.zip",
+  "https://www.sec.gov/files/structureddata/data/form-13f-data-sets/01mar2026-31may2026_form13f.zip"
+ ],
+ "cusips": [
+  "247361702",
+  "29444U700",
+  "369604301",
+  "893641100"
+ ],
+ "by_cusip": {
+  "247361702": {
+   "period": "2026-06-30",
+   "prev_period": "2026-03-31",
+   "holders": 1503,
+   "prev_holders": 1322,
+   "shares": 584118767.0,
+   "prev_shares": 568892919.0,
+   "top": [
+    {
+     "name": "Berkshire Hathaway Inc",
+     "sh": 57320000.0,
+     "chg": 17510544.0
+    },
+    {
+     "name": "BlackRock, Inc.",
+     "sh": 45106139.0,
+     "chg": 981365.0
+    },
+    {
+     "name": "VANGUARD CAPITAL MANAGEMENT LLC",
+     "sh": 41307000.0,
+     "chg": -637003.0
+    },
+    {
+     "name": "FMR LLC",
+     "sh": 33187319.0,
+     "chg": 5683286.0
+    },
+    {
+     "name": "Sanders Capital, LLC",
+     "sh": 29129629.0,
+     "chg": -337526.0
+    },
+    {
+     "name": "VANGUARD PORTFOLIO MANAGEMENT LLC",
+     "sh": 26329259.0,
+     "chg": -1053825.0
+    },
+    {
+     "name": "STATE STREET CORP",
+     "sh": 24129558.0,
+     "chg": 669444.0
+    },
+    {
+     "name": "Capital International Investors",
+     "sh": 20689945.0,
+     "chg": 119654.0
+    },
+    {
+     "name": "GEODE CAPITAL MANAGEMENT, LLC",
+     "sh": 18511900.0,
+     "chg": 541325.0
+    },
+    {
+     "name": "PRIMECAP MANAGEMENT CO/CA/",
+     "sh": 17521167.0,
+     "chg": -27400.0
+    }
+   ]
+  },
+  "29444U700": {
+   "period": "2026-06-30",
+   "prev_period": "2026-03-31",
+   "holders": 1353,
+   "prev_holders": 1271,
+   "shares": 97190659.0,
+   "prev_shares": 91677186.0,
+   "top": [
+    {
+     "name": "BlackRock, Inc.",
+     "sh": 11444924.0,
+     "chg": 313356.0
+    },
+    {
+     "name": "VANGUARD CAPITAL MANAGEMENT LLC",
+     "sh": 6444422.0,
+     "chg": 57102.0
+    },
+    {
+     "name": "VANGUARD PORTFOLIO MANAGEMENT LLC",
+     "sh": 6102138.0,
+     "chg": 98047.0
+    },
+    {
+     "name": "STATE STREET CORP",
+     "sh": 6026104.0,
+     "chg": -52292.0
+    },
+    {
+     "name": "FMR LLC",
+     "sh": 2874355.0,
+     "chg": 55781.0
+    },
+    {
+     "name": "GEODE CAPITAL MANAGEMENT, LLC",
+     "sh": 2547307.0,
+     "chg": 68353.0
+    },
+    {
+     "name": "COHEN & STEERS, INC.",
+     "sh": 2191196.0,
+     "chg": -640214.0
+    },
+    {
+     "name": "PRINCIPAL FINANCIAL GROUP INC",
+     "sh": 1902047.0,
+     "chg": -78450.0
+    },
+    {
+     "name": "JPMORGAN CHASE & CO",
+     "sh": 1758552.0,
+     "chg": null
+    },
+    {
+     "name": "NORTHERN TRUST CORP",
+     "sh": 1546438.0,
+     "chg": 45879.0
+    }
+   ]
+  },
+  "369604301": {
+   "period": "2026-06-30",
+   "prev_period": "2026-03-31",
+   "holders": 3406,
+   "prev_holders": 3158,
+   "shares": 832823640.0,
+   "prev_shares": 799600792.0,
+   "top": [
+    {
+     "name": "BlackRock, Inc.",
+     "sh": 89158626.0,
+     "chg": -1586292.0
+    },
+    {
+     "name": "VANGUARD CAPITAL MANAGEMENT LLC",
+     "sh": 68137128.0,
+     "chg": 1705060.0
+    },
+    {
+     "name": "FMR LLC",
+     "sh": 49021400.0,
+     "chg": -2604767.0
+    },
+    {
+     "name": "TCI FUND MANAGEMENT LTD",
+     "sh": 47428233.0,
+     "chg": -82198.0
+    },
+    {
+     "name": "STATE STREET CORP",
+     "sh": 46497628.0,
+     "chg": 1160584.0
+    },
+    {
+     "name": "Capital Research Global Investors",
+     "sh": 30942708.0,
+     "chg": -3781920.0
+    },
+    {
+     "name": "GEODE CAPITAL MANAGEMENT, LLC",
+     "sh": 24828857.0,
+     "chg": -542758.0
+    },
+    {
+     "name": "PRICE T ROWE ASSOCIATES INC /MD/",
+     "sh": 20622890.0,
+     "chg": -3287457.0
+    },
+    {
+     "name": "Capital International Investors",
+     "sh": 18310646.0,
+     "chg": -908763.0
+    },
+    {
+     "name": "VANGUARD PORTFOLIO MANAGEMENT LLC",
+     "sh": 16789108.0,
+     "chg": 638378.0
+    }
+   ]
+  },
+  "893641100": {
+   "period": "2026-06-30",
+   "prev_period": "2026-03-31",
+   "holders": 1143,
+   "prev_holders": 1094,
+   "shares": 53870012.0,
+   "prev_shares": 51961607.0,
+   "top": [
+    {
+     "name": "Capital International Investors",
+     "sh": 5062682.0,
+     "chg": -432013.0
+    },
+    {
+     "name": "BlackRock, Inc.",
+     "sh": 4871505.0,
+     "chg": 270253.0
+    },
+    {
+     "name": "Capital World Investors",
+     "sh": 4274109.0,
+     "chg": -392382.0
+    },
+    {
+     "name": "VANGUARD CAPITAL MANAGEMENT LLC",
+     "sh": 3653511.0,
+     "chg": -16218.0
+    },
+    {
+     "name": "Capital Research Global Investors",
+     "sh": 3119490.0,
+     "chg": -24019.0
+    },
+    {
+     "name": "VANGUARD PORTFOLIO MANAGEMENT LLC",
+     "sh": 2580994.0,
+     "chg": 7907.0
+    },
+    {
+     "name": "STATE STREET CORP",
+     "sh": 2559096.0,
+     "chg": 42490.0
+    },
+    {
+     "name": "PRINCIPAL FINANCIAL GROUP INC",
+     "sh": 1709129.0,
+     "chg": -304655.0
+    },
+    {
+     "name": "GEODE CAPITAL MANAGEMENT, LLC",
+     "sh": 1286385.0,
+     "chg": 9941.0
+    },
+    {
+     "name": "FMR LLC",
+     "sh": 1091534.0,
+     "chg": -267005.0
+    }
+   ]
+  }
+ }
+}

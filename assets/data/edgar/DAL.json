@@ -338,10 +338,10 @@
  "inst": {
   "period": "2026-06-30",
   "prev_period": "2026-03-31",
-  "holders": 1427,
-  "prev_holders": 1250,
-  "shares": 569341265.0,
-  "prev_shares": 556550516.0,
+  "holders": 1503,
+  "prev_holders": 1322,
+  "shares": 584118767.0,
+  "prev_shares": 568892919.0,
   "top": [
    {
     "name": "Berkshire Hathaway Inc",
@@ -395,5 +395,5 @@
    }
   ]
  },
- "updated_at": "2026-11-24 17:15 KST"
+ "updated_at": "2026-11-24 18:08 KST"
 }

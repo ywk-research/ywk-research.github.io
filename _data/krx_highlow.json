@@ -347,7 +347,7 @@
   {
    "d": "2026-11-06",
    "kospi_hi": 3,
-   "kospi_lo": 157,
+   "kospi_lo": 158,
    "kosdaq_hi": 2,
    "kosdaq_lo": 397
   },
@@ -434,45 +434,55 @@
  "low": [
   {
    "name": "LG에너지솔루션",
-   "mkt": "kospi"
+   "mkt": "kospi",
+   "code": "373220"
   },
   {
    "name": "현대차",
-   "mkt": "kospi"
+   "mkt": "kospi",
+   "code": "005380"
   },
   {
    "name": "기아",
-   "mkt": "kospi"
+   "mkt": "kospi",
+   "code": "000270"
   },
   {
    "name": "한화에어로스페이스",
-   "mkt": "kospi"
+   "mkt": "kospi",
+   "code": "012450"
   },
   {
    "name": "두산에너빌리티",
-   "mkt": "kospi"
+   "mkt": "kospi",
+   "code": "034020"
   },
   {
    "name": "HD현대중공업",
-   "mkt": "kospi"
+   "mkt": "kospi",
+   "code": "329180"
   },
   {
    "name": "NAVER",
-   "mkt": "kospi"
+   "mkt": "kospi",
+   "code": "035420"
   },
   {
    "name": "POSCO홀딩스",
-   "mkt": "kospi"
+   "mkt": "kospi",
+   "code": "005490"
   },
   {
    "name": "한국전력",
-   "mkt": "kospi"
+   "mkt": "kospi",
+   "code": "015760"
   },
   {
    "name": "고려아연",
-   "mkt": "kospi"
+   "mkt": "kospi",
+   "code": "010130"
   }
  ],
  "low_total": 777,
- "updated_at": "2026-11-24 17:09 KST"
+ "updated_at": "2026-11-24 17:43 KST"
 }

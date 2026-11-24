@@ -338,10 +338,10 @@
  "inst": {
   "period": "2026-06-30",
   "prev_period": "2026-03-31",
-  "holders": 1080,
-  "prev_holders": 1034,
-  "shares": 51677876.0,
-  "prev_shares": 50640159.0,
+  "holders": 1143,
+  "prev_holders": 1094,
+  "shares": 53870012.0,
+  "prev_shares": 51961607.0,
   "top": [
    {
     "name": "Capital International Investors",
@@ -395,5 +395,5 @@
    }
   ]
  },
- "updated_at": "2026-11-24 17:15 KST"
+ "updated_at": "2026-11-24 18:08 KST"
 }

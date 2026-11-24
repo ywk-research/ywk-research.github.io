@@ -338,10 +338,10 @@
  "inst": {
   "period": "2026-06-30",
   "prev_period": "2026-03-31",
-  "holders": 1270,
-  "prev_holders": 1193,
-  "shares": 91732081.0,
-  "prev_shares": 85018146.0,
+  "holders": 1353,
+  "prev_holders": 1271,
+  "shares": 97190659.0,
+  "prev_shares": 91677186.0,
   "top": [
    {
     "name": "BlackRock, Inc.",
@@ -374,6 +374,11 @@
     "chg": 68353.0
    },
    {
+    "name": "COHEN & STEERS, INC.",
+    "sh": 2191196.0,
+    "chg": -640214.0
+   },
+   {
     "name": "PRINCIPAL FINANCIAL GROUP INC",
     "sh": 1902047.0,
     "chg": -78450.0
@@ -387,13 +392,8 @@
     "name": "NORTHERN TRUST CORP",
     "sh": 1546438.0,
     "chg": 45879.0
-   },
-   {
-    "name": "COATUE MANAGEMENT LLC",
-    "sh": 1273517.0,
-    "chg": 182631.0
    }
   ]
  },
- "updated_at": "2026-11-24 17:15 KST"
+ "updated_at": "2026-11-24 18:08 KST"
 }
