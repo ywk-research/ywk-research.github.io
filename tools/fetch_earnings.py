@@ -165,18 +165,29 @@ def dart_list(key, start, end, ty):
     return rows
 
 
+KR_SKIP = []
 DATE_RE = re.compile(r"(20\d\d)\s*[-./년]\s*(\d{1,2})\s*[-./월]\s*(\d{1,2})")
 TIME_RE = re.compile(r"(\d{1,2})\s*[:시]\s*(\d{2})")
 
 
-def ir_detail(key, rcept_no):
-    """IR 개최 안내공시 본문에서 (개최일, 시각, 실적 관련 여부)."""
+def doc_text(key, rcept_no):
     raw = get("https://opendart.fss.or.kr/api/document.xml?" + urllib.parse.urlencode({"crtfc_key": key, "rcept_no": rcept_no}), binary=True)
     with zipfile.ZipFile(io.BytesIO(raw)) as z:
         text = " ".join(z.read(n).decode("utf-8", "replace") for n in z.namelist())
     text = re.sub(r"<[^>]+>", " ", text)
     text = re.sub(r"&[a-z]+;|&#\d+;", " ", text)
-    text = re.sub(r"\s+", " ", text)
+    time.sleep(0.3)
+    return re.sub(r"\s+", " ", text)
+
+
+def is_quarterly(text):
+    """잠정실적 공시가 분기·반기·연간 실적인지(월별 판매실적 등은 뺀다)."""
+    return bool(re.search(r"분기|반기|연간|사업연도|[1-4]\s*Q|당기", text))
+
+
+def ir_detail(key, rcept_no):
+    """IR 개최 안내공시 본문에서 (개최일, 시각, 실적 관련 여부)."""
+    text = doc_text(key, rcept_no)
     i = text.find("일시")
     seg = text[i: i + 200] if i >= 0 else ""
     m = DATE_RE.search(seg)
@@ -204,6 +215,7 @@ def kr_events(old):
         for i, (c, cap) in enumerate(top):
             rank[c] = (mkt, i + 1 if mkt == "kospi" else KR_TOP_KOSPI + i + 1)
     prev = {e["no"]: e for e in (old.get("events") or []) if e.get("c") == "kr"}
+    skip = set(old.get("kr_skip") or [])  # 본문을 읽고 뺀 공시(다시 읽지 않게)
     start = TODAY - dt.timedelta(days=DART_BACK)
     if prev:  # 이미 받은 기간은 최근 2주만 다시 본다(정정·늦은 반영)
         start = max(start, TODAY - dt.timedelta(days=14))
@@ -219,33 +231,36 @@ def kr_events(old):
         mkt, rk = rank[code]
         base = {"c": "kr", "sym": code, "name": r["corp_name"], "rank": rk, "mkt": mkt, "no": r["rcept_no"]}
         filed = f"{r['rcept_dt'][:4]}-{r['rcept_dt'][4:6]}-{r['rcept_dt'][6:]}"
-        if "영업(잠정)실적" in nm:
-            found[r["rcept_no"]] = {**base, "date": filed, "kind": "prelim"}
-        elif "기업설명회" in nm:
-            if r["rcept_no"] in prev:
-                found[r["rcept_no"]] = prev[r["rcept_no"]]
-                continue
-            try:
-                day, hhmm, earn = ir_detail(key, r["rcept_no"])
-            except Exception as e:
-                print(f"  IR 본문 실패 {r['corp_name']}: {e}")
-                continue
-            time.sleep(0.3)
-            if day and earn:
-                found[r["rcept_no"]] = {**base, "date": day.isoformat(), "time": hhmm, "kind": "ir", "filed": filed}
-    prev.update(found)
-    # 같은 회사·같은 날 잠정실적 공시가 있으면 IR 안내는 빼고 시각만 옮긴다
-    rows = list(prev.values())
-    pre = {(e["sym"], e["date"]): e for e in rows if e["kind"] == "prelim"}
-    out = []
-    for e in rows:
-        if e["kind"] == "ir" and (e["sym"], e["date"]) in pre:
-            p = pre[(e["sym"], e["date"])]
-            if e.get("time") and not p.get("time"):
-                p["time"] = e["time"]
+        if r["rcept_no"] in prev or r["rcept_no"] in skip:  # 이미 본 공시
             continue
-        out.append(e)
-    return out
+        title = re.sub(r"^\[[^\]]*\]", "", r["report_nm"]).strip()
+        try:
+            if "영업(잠정)실적" in nm:
+                if is_quarterly(doc_text(key, r["rcept_no"])):
+                    found[r["rcept_no"]] = {**base, "date": filed, "kind": "prelim", "title": title}
+                else:
+                    skip.add(r["rcept_no"])
+            elif "기업설명회" in nm:
+                day, hhmm, earn = ir_detail(key, r["rcept_no"])
+                if day and earn:
+                    found[r["rcept_no"]] = {**base, "date": day.isoformat(), "time": hhmm, "kind": "ir", "filed": filed, "title": title}
+                else:
+                    skip.add(r["rcept_no"])
+        except Exception as e:
+            print(f"  본문 실패 {r['corp_name']}: {e}")
+    prev.update(found)
+    # 같은 회사·같은 날은 하나로(자회사 실적을 지주사가 여러 건 내는 경우, IR 안내와 잠정실적이 같은 날인 경우).
+    # 잠정실적을 남기고, 시각은 IR 안내에서 가져온다
+    one = {}
+    for e in sorted(prev.values(), key=lambda e: (e["kind"] != "prelim", e["no"])):
+        k = (e["sym"], e["date"])
+        if k in one:
+            if e.get("time") and not one[k].get("time"):
+                one[k]["time"] = e["time"]
+            continue
+        one[k] = dict(e)
+    KR_SKIP[:] = sorted(skip)[-3000:]
+    return list(one.values())
 
 
 def kr_names_en(old, events):
@@ -307,7 +322,7 @@ def main():
     cut = (TODAY - dt.timedelta(days=KEEP_DAYS)).isoformat()
     events = sorted((e for e in events if e["date"] >= cut), key=lambda e: (e["date"], e.get("time") or "99", e["rank"]))
     out = {"source": "SEC EDGAR(8-K Item 2.02), 금융감독원 OpenDART", "names_en": kr_names_en(old, events),
-           "events": events}
+           "events": events, "kr_skip": KR_SKIP if "kr" in ok else old.get("kr_skip", [])}
     if {k: old.get(k) for k in out} == out:
         print("earnings: 변경 없음")
         return
