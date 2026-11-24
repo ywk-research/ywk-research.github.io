@@ -26,6 +26,7 @@
     <nav class="site-nav" aria-label="메뉴">
       <a href="{{ '/' | relative_url }}"{% if page.url == '/' or page.url contains '/briefing/' %} class="on" aria-current="page"{% endif %}>브리핑</a>
       <a href="{{ '/data/' | relative_url }}"{% if page.url contains '/data/' %} class="on" aria-current="page"{% endif %}>데이터</a>
+      <a href="{{ '/macro/' | relative_url }}"{% if page.url contains '/macro/' %} class="on" aria-current="page"{% endif %}>매크로</a>
       <a href="{{ '/watchlist/' | relative_url }}"{% if page.url contains '/watchlist/' %} class="on" aria-current="page"{% endif %}>관심종목</a>
       <a href="{{ '/about/' | relative_url }}"{% if page.url contains '/about/' %} class="on" aria-current="page"{% endif %}>소개</a>
     </nav>
