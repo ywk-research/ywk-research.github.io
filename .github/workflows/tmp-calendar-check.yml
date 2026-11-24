@@ -1,0 +1,13 @@
+name: 임시 캘린더 점검
+on:
+  push:
+    branches: [claude/project-thread-iv38jp]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python tools/fetch_calendar.py; head -c 3000 _data/econ_calendar.json
