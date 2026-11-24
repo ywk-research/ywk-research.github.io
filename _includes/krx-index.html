@@ -10,17 +10,18 @@
   </div>
 
   {% if krx and krx.kospi.size > 0 %}
-  <div class="krx-cards">
-    {% for key in "kospi,kosdaq" | split: "," %}
+  <div class="krx-cards{% if krx.vkospi.size > 0 %} three{% endif %}">
+    {% for key in "kospi,kosdaq,vkospi" | split: "," %}
       {% assign s = krx[key] %}
+      {% if s == nil or s.size == 0 %}{% continue %}{% endif %}
       {% assign last = s | last %}
       <div class="krx-card" data-series="{{ key }}">
-        <p class="krx-name">{% if key == "kospi" %}코스피{% else %}코스닥{% endif %}</p>
+        <p class="krx-name">{% if key == "kospi" %}코스피{% elsif key == "kosdaq" %}코스닥{% else %}VKOSPI <span class="krx-sub">변동성지수</span>{% endif %}</p>
         <p class="krx-close">{{ last.close | round: 2 }}</p>
         <p class="krx-chg {% if last.chg > 0 %}up{% elsif last.chg < 0 %}down{% else %}flat{% endif %}">
           {% if last.chg > 0 %}▲{% elsif last.chg < 0 %}▼{% endif %} {{ last.chg | abs | round: 2 }} ({{ last.pct | round: 2 }}%)
         </p>
-        <canvas class="krx-chart" height="140" aria-label="{% if key == 'kospi' %}코스피{% else %}코스닥{% endif %} 추이 차트"></canvas>
+        <canvas class="krx-chart" height="140" aria-label="{{ key | upcase }} 추이 차트"></canvas>
       </div>
     {% endfor %}
   </div>
@@ -62,7 +63,7 @@
         charts[key] = new Chart(canvas, cfg);
       }
 
-      function render(days) { ['kospi', 'kosdaq'].forEach(function (k) { if (DATA[k] && DATA[k].length) draw(k, days); }); }
+      function render(days) { ['kospi', 'kosdaq', 'vkospi'].forEach(function (k) { if (DATA[k] && DATA[k].length) draw(k, days); }); }
       document.querySelectorAll('.krx-range button').forEach(function (b) {
         b.addEventListener('click', function () {
           document.querySelectorAll('.krx-range button').forEach(function (x) { x.classList.remove('on'); });
@@ -73,6 +74,7 @@
       render(66);
     })();
   </script>
+  {% include krx-movers.html %}
   {% else %}
   <p class="note">지수 데이터를 준비하고 있어요. 첫 업데이트 후 코스피·코스닥 종가와 추이가 표시됩니다.</p>
   {% endif %}
