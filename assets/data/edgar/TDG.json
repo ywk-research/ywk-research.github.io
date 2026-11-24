@@ -338,16 +338,11 @@
  "inst": {
   "period": "2026-06-30",
   "prev_period": "2026-03-31",
-  "holders": 1145,
-  "prev_holders": 1097,
-  "shares": 166223590.0,
-  "prev_shares": 51967241.0,
+  "holders": 1080,
+  "prev_holders": 1034,
+  "shares": 51677876.0,
+  "prev_shares": 50640159.0,
   "top": [
-   {
-    "name": "CALIFORNIA STATE TEACHERS RETIREMENT SYSTEM",
-    "sh": 112352246.0,
-    "chg": 112258996.0
-   },
    {
     "name": "Capital International Investors",
     "sh": 5062682.0,
@@ -392,8 +387,13 @@
     "name": "GEODE CAPITAL MANAGEMENT, LLC",
     "sh": 1286385.0,
     "chg": 9941.0
+   },
+   {
+    "name": "FMR LLC",
+    "sh": 1091534.0,
+    "chg": -267005.0
    }
   ]
  },
- "updated_at": "2026-11-24 16:46 KST"
+ "updated_at": "2026-11-24 17:15 KST"
 }

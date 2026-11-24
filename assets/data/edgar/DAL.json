@@ -338,10 +338,10 @@
  "inst": {
   "period": "2026-06-30",
   "prev_period": "2026-03-31",
-  "holders": 1510,
-  "prev_holders": 1326,
-  "shares": 602901332.0,
-  "prev_shares": 568969985.0,
+  "holders": 1427,
+  "prev_holders": 1250,
+  "shares": 569341265.0,
+  "prev_shares": 556550516.0,
   "top": [
    {
     "name": "Berkshire Hathaway Inc",
@@ -384,16 +384,16 @@
     "chg": 119654.0
    },
    {
-    "name": "CALIFORNIA STATE TEACHERS RETIREMENT SYSTEM",
-    "sh": 18516676.0,
-    "chg": 18303318.0
-   },
-   {
     "name": "GEODE CAPITAL MANAGEMENT, LLC",
     "sh": 18511900.0,
     "chg": 541325.0
+   },
+   {
+    "name": "PRIMECAP MANAGEMENT CO/CA/",
+    "sh": 17521167.0,
+    "chg": -27400.0
    }
   ]
  },
- "updated_at": "2026-11-24 16:46 KST"
+ "updated_at": "2026-11-24 17:15 KST"
 }
