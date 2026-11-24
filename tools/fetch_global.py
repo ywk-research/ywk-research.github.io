@@ -4,7 +4,7 @@
 - Cboe 공식 CSV (키 불필요): VIX
 - 미 재무부 공식 CSV (키 불필요): 10년물 금리
 - FRED (FRED_API_KEY): S&P500, 나스닥, 다우, 닛케이225, WTI — 지표에 따라 1~수일 늦게 올라온다
-- Twelve Data (TWELVEDATA_API_KEY): 금, 원/달러
+- 한국은행 ECOS (ECOS_API_KEY): 원/달러 매매기준율(731Y001)
 키는 출력하지 않는다. 한 소스가 실패해도 나머지는 계속 받고, 실패한 지표는 이전 값을 유지한다.
 """
 import csv
@@ -32,8 +32,7 @@ SERIES = [
     ("nikkei", "닛케이225", "pt", "fred", "NIKKEI225", "FRED"),
     ("us10y", "美 10년물", "pct", "treasury", "10 Yr", "미 재무부"),
     ("wti", "WTI", "usd", "fred", "DCOILWTICO", "FRED"),
-    ("gold", "금", "usd", "td", "XAU/USD", "Twelve Data"),
-    ("usdkrw", "원/달러", "krw", "td", "USD/KRW", "Twelve Data"),
+    ("usdkrw", "원/달러", "krw", "ecos", "731Y001/0000001", "한국은행 ECOS"),
 ]
 
 
@@ -80,22 +79,26 @@ def from_treasury(col, start):
     return sorted(r for r in out if r[0] >= start)
 
 
-def from_td(sym, start):
-    key = os.environ["TWELVEDATA_API_KEY"].strip()
-    q = urllib.parse.urlencode({"symbol": sym, "interval": "1day", "outputsize": min(5000, DAYS), "timezone": "UTC"})
-    j = json.loads(get("https://api.twelvedata.com/time_series?" + q, {"Authorization": "apikey " + key}))
-    if j.get("status") != "ok":
-        raise RuntimeError(f"{j.get('code')} {j.get('message')}")
-    today_utc = dt.datetime.now(dt.timezone.utc).date()
-    rows = [(dt.date.fromisoformat(v["datetime"][:10]), float(v["close"])) for v in j["values"]]
-    # 진행 중인 오늘(UTC) 봉은 제외하고, 주말 봉도 제외
-    rows = [r for r in rows if r[0] < today_utc and r[0].weekday() < 5 and r[0] >= start]
-    time.sleep(8)  # 무료 플랜 분당 8회
-    return sorted(rows)
+def from_ecos(sid, start):
+    key = os.environ["ECOS_API_KEY"].strip()
+    table, item = sid.split("/")
+    end = dt.datetime.now(KST).date()
+    url = (f"https://ecos.bok.or.kr/api/StatisticSearch/{key}/json/kr/1/10000/{table}/D/"
+           f"{start:%Y%m%d}/{end:%Y%m%d}/{item}")
+    try:
+        j = json.loads(get(url))
+    except Exception as e:  # 오류 메시지에 키가 들어간 URL이 섞이지 않게
+        raise RuntimeError(type(e).__name__) from None
+    if "StatisticSearch" not in j:
+        r = j.get("RESULT", {})
+        raise RuntimeError(f"{r.get('CODE')} {r.get('MESSAGE')}")
+    rows = [(dt.datetime.strptime(r["TIME"], "%Y%m%d").date(), float(r["DATA_VALUE"]))
+            for r in j["StatisticSearch"]["row"] if r.get("DATA_VALUE") not in (None, "", "-")]
+    return sorted(r for r in rows if r[0] >= start)
 
 
 SOURCES = {"fred": (from_fred, "FRED_API_KEY"), "cboe": (from_cboe, None),
-           "treasury": (from_treasury, None), "td": (from_td, "TWELVEDATA_API_KEY")}
+           "treasury": (from_treasury, None), "ecos": (from_ecos, "ECOS_API_KEY")}
 
 
 def main():
@@ -122,6 +125,8 @@ def main():
             print(f"{label} ({credit} {sid}): {len(rows)}일, 최근 {rows[-1]['d'] if rows else '-'}")
         except Exception as e:  # 소스 하나가 실패해도 나머지는 계속
             entry = old.get(name)
+            if entry and entry.get("src") != credit:  # 출처가 바뀐 지표는 예전 값을 쓰지 않는다
+                entry = None
             print(f"실패 — {label} ({credit} {sid}): {str(e)[:120]}; 이전 값 유지" if entry else
                   f"실패 — {label} ({credit} {sid}): {str(e)[:120]}")
         if entry and entry.get("data"):
