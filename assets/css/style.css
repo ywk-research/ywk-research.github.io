@@ -190,3 +190,10 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 @media (max-width: 560px) { .tv-cal-box { height: 600px; } }
 .tv-news-box .tradingview-widget-container { height: 100%; }
 @media (max-width: 1000px) { .home-brief .tv-news { order: -1; margin-bottom: 8px; } }
+
+/* 데이터 탭: 관심종목 수익률 */
+.tv-wl { margin-top: 40px; }
+.wl-mix { margin: -4px 0 10px; color: var(--muted); font-size: 14px; }
+.tv-wl-box { height: 460px; }
+.tv-wl-chart { height: 480px; margin-top: 20px; }
+@media (max-width: 560px) { .tv-wl-box { height: 420px; } .tv-wl-chart { height: 380px; } }
