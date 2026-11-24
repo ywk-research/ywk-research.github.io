@@ -2,7 +2,7 @@
 import json, os, urllib.request, urllib.error
 key = os.environ["KRX_API_KEY"].strip()
 for ep in ["drv/fut_bydd_trd"]:
-    for d in ["20261123", "20261120"]:
+    for d in ["20261124"]:
         req = urllib.request.Request(f"https://data-dbg.krx.co.kr/svc/apis/{ep}?basDd={d}", headers={"AUTH_KEY": key})
         try:
             rows = json.loads(urllib.request.urlopen(req, timeout=30).read().decode()).get("OutBlock_1", [])
