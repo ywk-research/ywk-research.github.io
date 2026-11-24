@@ -77,7 +77,7 @@ en:
   news.title: World Market News
   news.note: 'Click a headline to open the story on TradingView · News widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
 
-  # 데이터 탭 (data.html, _includes/econ-calendar.html, tv-calendar.html, macro.html)
+  # 데이터 탭 (data.html, _includes/econ-calendar.html, tv-calendar.html) · 매크로 탭 (macro.html, _includes/macro.html)
   data.title: Data
   data.intro: Indicators and schedules one level deeper than the home page summary.
   ecal.title: Economic Calendar
@@ -88,7 +88,9 @@ en:
   ecal.note: "Korea time (KST). US data releases follow the official schedules of the Bureau of Labor Statistics (BLS) and Bureau of Economic Analysis (BEA); rate decisions follow the official meeting calendars of the Fed, Bank of Korea, Bank of Japan and ECB. The Bank of Japan and Bank of Korea don't fix an announcement time, so the time is left blank."
   tvcal.title: Indicator Details (Forecast &amp; Actual)
   tvcal.note: 'US, Korea, Japan, China and the euro area, medium importance and above. Times follow your device time zone (KST in Korea) · Calendar widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
-  mc.title: Macro
+  macro.title: Macro
+  macro.intro: US and Korean Treasury yield curves, term spreads, the Korea–US rate gap and Korean short-term rates.
+  mc.title: Korea–US Rates
   mc.us_curve: US Treasury Yield Curve
   mc.kr_curve: Korea Treasury Yield Curve
   mc.spread: Term Spread <span class="krx-sub">pp</span>
