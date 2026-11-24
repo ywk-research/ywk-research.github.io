@@ -10,7 +10,9 @@
     (function () {
       var GI = {{ gi | jsonify }};
       var KEEP = ['vix', 'us10y', 'usdkrw'];
-      GI.series = GI.series.filter(function (s) { return KEEP.indexOf(s.key) >= 0 && s.data.length; });
+      var ORDER = ['us10y', 'vix', 'usdkrw']; // 개장 전 중요도 순
+      GI.series = GI.series.filter(function (s) { return KEEP.indexOf(s.key) >= 0 && s.data.length; })
+        .sort(function (a, b) { return ORDER.indexOf(a.key) - ORDER.indexOf(b.key); });
       var css = getComputedStyle(document.documentElement);
       function c(n) { return css.getPropertyValue(n).trim(); }
       var wrap = document.getElementById('gl-cards');
