@@ -203,8 +203,10 @@ wide: true
           '<button type="button" data-days="260" class="on">' + esc(t('range.1y', '1년')) + '</button></div></div>' +
         '<div class="mc-box"><div class="st-kchart"><canvas id="st-price"></canvas></div><div class="st-kvol"><canvas id="st-vol"></canvas></div></div>' +
         '<p class="note" id="st-krx-note"></p>' +
+        '<section id="st-dart"></section>' +
         '<h2>' + esc(t('st.flow', '투자자별 수급')) + '</h2><p class="note">' + esc(t('st.flow_none', 'KRX Open API가 투자자별 거래실적(외국인·기관·개인)을 제공하지 않아서, 공식 출처가 생기면 붙일게요.')) + '</p>';
 
+      dart(code);
       Promise.all([getJSON(BASE + 'krx/h/' + code + '.json').catch(function () { return []; }),
                    getJSON(BASE + 'krx/recent.json').catch(function () { return {}; })]).then(function (r) {
         var seen = {}, bars = r[0].concat(r[1][code] || []).filter(function (b) { if (seen[b[0]]) return false; seen[b[0]] = 1; return true; });
@@ -220,6 +222,25 @@ wide: true
         });
       });
     });
+  }
+
+  function dart(code) {
+    var box = document.getElementById('st-dart');
+    getJSON(BASE + 'dart/recent.json').then(function (d) {
+      var rows = (d.by_code || {})[code] || [];
+      var h = '<h2>' + esc(t('st.dart', '최근 공시')) + ' <span class="krx-sub">DART</span></h2>';
+      if (rows.length) {
+        h += '<ul class="st-dart">' + rows.map(function (r) {
+          return '<li><span class="st-dart-d">' + esc(r[0].slice(5).replace('-', '/')) + '</span>' +
+            '<a href="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=' + encodeURIComponent(r[2]) + '" target="_blank" rel="noopener">' + esc(r[1]) + '</a>' +
+            '<span class="krx-sub">' + esc(r[3]) + '</span></li>';
+        }).join('') + '</ul>';
+      } else {
+        h += '<p class="note">' + esc(t('st.no_dart', '최근 90일 공시가 없어요.')) + '</p>';
+      }
+      h += '<p class="note">' + esc(t('st.dart_note', '최근 90일, 최대 20건 · 제목을 누르면 DART 원문이 열려요 · 자료: 금융감독원 전자공시시스템(DART) Open API · 업데이트 {u}', { u: d.updated_at })) + '</p>';
+      box.innerHTML = h;
+    }).catch(function () {});
   }
 
   var charts = {};

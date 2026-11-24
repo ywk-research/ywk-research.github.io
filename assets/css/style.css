@@ -314,3 +314,8 @@ a.mv-name:hover { color: var(--accent); text-decoration: none; }
 .st-table .up { color: var(--up); } .st-table .down { color: var(--down); }
 @media (max-width: 760px) { .st-grid { grid-template-columns: 1fr; } .st-kpis.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } .st-chart { height: 440px; } }
 @media (max-width: 560px) { .st-fin { height: 700px; } }
+.st-dart { list-style: none; margin: 0; padding: 0; }
+.st-dart li { display: flex; gap: 10px; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.st-dart a { flex: 1; min-width: 0; color: var(--text); }
+.st-dart a:hover { color: var(--accent); text-decoration: none; }
+.st-dart-d { flex: none; width: 3em; color: var(--muted); font-variant-numeric: tabular-nums; }

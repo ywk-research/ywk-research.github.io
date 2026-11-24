@@ -44,11 +44,25 @@ def save(path, obj):
         json.dump(obj, f, ensure_ascii=False, separators=(",", ":"))
 
 
+SKIPPED = []
+
+
+def safe_fetch(endpoint, day, key):
+    """가끔 빈 응답(JSON 아님)이 오면 잠깐 쉬고 다시. 끝내 안 되면 그날은 건너뛴다."""
+    for attempt in range(3):
+        try:
+            return fetch(endpoint, day.strftime("%Y%m%d"), key)
+        except ValueError:
+            time.sleep(5 * (attempt + 1))
+    SKIPPED.append(f"{endpoint} {day}")
+    return []
+
+
 def day_rows(key, day):
     """그날 두 시장 보통주 시세 {코드: (시장, 원본 행)}. 휴장이면 빈 dict."""
     out = {}
     for mkt, (endpoint, _) in MARKETS.items():
-        for r in fetch(endpoint, day.strftime("%Y%m%d"), key):
+        for r in safe_fetch(endpoint, day, key):
             if is_common_stock(r):  # 거래정지(종가 0)도 목록에는 남긴다
                 out[r["ISU_CD"]] = (mkt, r)
         time.sleep(0.2)
@@ -175,6 +189,8 @@ def main():
     if {k: v for k, v in old_index.items() if k != "updated_at"} != {k: v for k, v in index.items() if k != "updated_at"}:
         save(os.path.join(OUT, "index.json"), index)
     save(os.path.join(OUT, "recent.json"), {c: recent[c] for c in sorted(recent) if c in universe})
+    if SKIPPED:
+        print("빈 응답으로 건너뛴 날:", ", ".join(SKIPPED))
     print(f"{last} 기준 · 종목 {len(universe)}개(새 종목 {len(new)}), 받은 날 {fetched}일, 지난달 이관 {moved}개")
 
 

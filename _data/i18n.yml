@@ -12,7 +12,6 @@ en:
   nav.watchlist: Watchlist Backtest
   nav.about: About
   nav.macro: Macro
-  nav.stock: Stocks
   theme.aria: Toggle light/dark mode
   theme.to_light: Switch to light mode
   theme.to_dark: Switch to dark mode
@@ -158,6 +157,9 @@ en:
   st.close: Close
   st.ohl: Open {o} · High {h} · Low {l}
   st.krx_note: 'Daily prices as of the {d} close (not adjusted for splits) · Source: Korea Exchange (KRX) Open API'
+  st.dart: Recent Filings
+  st.no_dart: No filings in the last 90 days.
+  st.dart_note: 'Last 90 days, up to 20 filings. Titles open the original filing on DART (in Korean) · Source: Financial Supervisory Service DART Open API · Updated {u}'
   st.flow: Investor Flows
   st.flow_none: The KRX Open API doesn't provide trading by investor type (foreign, institutional, retail). We'll add it if an official source becomes available.
 

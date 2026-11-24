@@ -195,12 +195,27 @@ def f13_holdings(url, cusips):
         if (r.get("PUTCALL") or "").strip() or (r.get("SSHPRNAMTTYPE") or "SH").upper() != "SH":
             continue
         sh = fnum(r.get("SSHPRNAMT")) or 0
+        val = fnum(r.get("VALUE")) or 0
         who = cover[r["ACCESSION_NUMBER"]]
-        out[c][who] = out[c].get(who, 0) + sh
+        a = out[c].setdefault(who, [0, 0])
+        a[0] += sh
+        a[1] += val
         issuer[c] = r.get("NAMEOFISSUER")
+    # 단가(평가액 ÷ 주식 수)가 다른 기관들과 3배 넘게 다르면 입력 오류로 보고 뺀다
+    # (예: 평가액을 주식 수 칸에 적은 보고서)
+    clean = {}
     for c in cusips:
-        print(f"  13F {period} {c} {issuer.get(c)}: 기관 {len(out[c])}곳")
-    return period, out
+        px = sorted(v / s for s, v in out[c].values() if s and v)
+        mid = px[len(px) // 2] if px else 0
+        ok, bad = {}, []
+        for who, (s, v) in out[c].items():
+            if mid and s and (v / s < mid / 3 or v / s > mid * 3):
+                bad.append(who)
+            else:
+                ok[who] = s
+        clean[c] = ok
+        print(f"  13F {period} {c} {issuer.get(c)}: 기관 {len(ok)}곳, 단가 이상치 제외 {len(bad)}곳 {bad[:5]}")
+    return period, clean
 
 
 def to_date(p):
