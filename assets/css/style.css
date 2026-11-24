@@ -181,3 +181,9 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 /* 테마 전환 버튼 */
 .theme-toggle { margin-left: 14px; padding: 2px 6px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); font-size: 14px; line-height: 1.4; cursor: pointer; vertical-align: middle; }
 .theme-toggle:hover { border-color: var(--muted); }
+
+/* 세계 시장 뉴스 (오른쪽 칸, 최신 브리핑 아래) */
+.tv-news h2 { margin-top: 32px; }
+.tv-news-box { height: 420px; }
+.tv-news-box .tradingview-widget-container { height: 100%; }
+@media (max-width: 1000px) { .home-brief .tv-news { order: -1; margin-bottom: 8px; } }
