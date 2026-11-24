@@ -14,7 +14,10 @@ jobs:
           python tools/fetch_calendar.py
           python -c "import json;[print('EV',e['date'],e['time'],e['s'],e['t']) for e in json.load(open('_data/econ_calendar.json'))['events']]"
           python -c "
-          import sys; sys.path.insert(0,'tools'); import fetch_calendar as f
+          import sys, urllib.request; sys.path.insert(0,'tools'); import fetch_calendar as f
           for s,u in f.SOURCES.items():
-              print('SUM', s, sorted({e.get('SUMMARY',('',))[0][:90] for e in f.parse_ics(f.get(u))})[:400])
+              try:
+                  print('SUM', s, sorted({e.get('SUMMARY',('',))[0][:90] for e in f.parse_ics(f.get(u))}))
+              except urllib.error.HTTPError as e:
+                  print('ERR', s, e.code, e.headers.get('Server'), e.read()[:300])
           "

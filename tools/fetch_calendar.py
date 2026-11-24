@@ -18,7 +18,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_PATH = os.path.join(ROOT, "_data", "econ_calendar.json")
 KST = ZoneInfo("Asia/Seoul")
 ET = ZoneInfo("America/New_York")
-UA = {"User-Agent": "Mozilla/5.0 (ywk-research.github.io data job)", "Accept": "text/calendar,*/*"}
+UA = {"User-Agent": "ywk-research.github.io economic calendar (+https://ywk-research.github.io/data/)", "Accept": "text/calendar,*/*"}
 
 SOURCES = {
     "bls": "https://www.bls.gov/schedule/news_release/bls.ics",
