@@ -1,0 +1,23 @@
+name: 빌드 확인
+# 작업 브랜치·PR에서 GitHub Pages와 같은 방식으로 빌드만 해 보고, 결과(_site)를 아티팩트로 남긴다. 배포는 하지 않는다.
+on:
+  push:
+    branches: ['claude/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site
+          retention-days: 3
