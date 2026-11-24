@@ -3,6 +3,132 @@
  "ticker": "TDG",
  "cik": 1260221,
  "name": "TransDigm Group INC",
+ "profile": {
+  "name": "TransDigm Group INC",
+  "tickers": [
+   "TDG"
+  ],
+  "exchanges": [
+   "NYSE"
+  ],
+  "sic": "3728",
+  "sic_desc": "Aircraft Parts & Auxiliary Equipment, NEC",
+  "state": "DE",
+  "fy_end": "09/30",
+  "city": "Cleveland OH",
+  "phone": "216 706 2960",
+  "website": "",
+  "former": [
+   "TD HOLDING CORP"
+  ]
+ },
+ "filings": [
+  [
+   "2026-11-13",
+   "SCHEDULE 13G/A",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000142284826000149/xslSCHEDULE_13G_X02/primary_doc.xml"
+  ],
+  [
+   "2026-11-10",
+   "10-K",
+   "10-K",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000077/tdg-20260930.htm"
+  ],
+  [
+   "2026-11-10",
+   "8-K",
+   "8-K",
+   "2.02,9.01",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000073/tdg-20261110.htm"
+  ],
+  [
+   "2026-09-29",
+   "8-K",
+   "8-K",
+   "1.01,2.03,9.01",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000119312526406037/d317756d8k.htm"
+  ],
+  [
+   "2026-09-28",
+   "8-K",
+   "8-K",
+   "8.01,9.01",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000064/tdg-20260928.htm"
+  ],
+  [
+   "2026-09-21",
+   "8-K",
+   "8-K",
+   "8.01",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000062/tdg-20260921.htm"
+  ],
+  [
+   "2026-09-14",
+   "8-K",
+   "8-K",
+   "7.01",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000059/tdg-20260914.htm"
+  ],
+  [
+   "2026-09-14",
+   "8-K",
+   "8-K",
+   "7.01",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000057/tdg-20260914.htm"
+  ],
+  [
+   "2026-09-14",
+   "8-K",
+   "8-K",
+   "7.01",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000056/tdg-20260914.htm"
+  ],
+  [
+   "2026-08-04",
+   "10-Q",
+   "10-Q",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000053/tdg-20260627.htm"
+  ],
+  [
+   "2026-08-04",
+   "8-K",
+   "8-K",
+   "2.02,9.01",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000052/tdg-20260804.htm"
+  ],
+  [
+   "2026-07-27",
+   "8-K",
+   "8-K",
+   "8.01,9.01",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000048/tdg-20260727.htm"
+  ],
+  [
+   "2026-07-24",
+   "8-K",
+   "8-K",
+   "5.02",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000046/tdg-20260722.htm"
+  ],
+  [
+   "2026-07-13",
+   "8-K",
+   "8-K",
+   "8.01",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000044/tdg-20260710.htm"
+  ],
+  [
+   "2026-05-15",
+   "SD",
+   "SD",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000042/formsd-tdg12312025.htm"
+  ]
+ ],
  "insider": [
   {
    "d": "2026-10-15",
@@ -395,5 +521,5 @@
    }
   ]
  },
- "updated_at": "2026-11-24 18:08 KST"
+ "updated_at": "2026-11-24 19:52 KST"
 }

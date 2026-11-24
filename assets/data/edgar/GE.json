@@ -3,6 +3,130 @@
  "ticker": "GE",
  "cik": 40545,
  "name": "GENERAL ELECTRIC CO",
+ "profile": {
+  "name": "GENERAL ELECTRIC CO",
+  "tickers": [
+   "GE"
+  ],
+  "exchanges": [
+   "NYSE"
+  ],
+  "sic": "3600",
+  "sic_desc": "Electronic & Other Electrical Equipment (No Computer Equip)",
+  "state": "NY",
+  "fy_end": "12/31",
+  "city": "Evendale OH",
+  "phone": "513-243-2000",
+  "website": "",
+  "former": []
+ },
+ "filings": [
+  [
+   "2026-10-22",
+   "13F-HR",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000066/xslForm13F_X02/primary_doc.xml"
+  ],
+  [
+   "2026-10-20",
+   "10-Q",
+   "10-Q",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000064/ge-20260930.htm"
+  ],
+  [
+   "2026-10-20",
+   "8-K",
+   "8-K",
+   "2.02,9.01",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000063/ge-20261020.htm"
+  ],
+  [
+   "2026-09-22",
+   "8-K",
+   "8-K",
+   "5.02,8.01,9.01",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000059/ge-20260921.htm"
+  ],
+  [
+   "2026-09-08",
+   "8-K",
+   "FORM 8-K",
+   "7.01,8.01,9.01",
+   "https://www.sec.gov/Archives/edgar/data/40545/000095014226002501/eh260827362_8k.htm"
+  ],
+  [
+   "2026-08-25",
+   "N-PX",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000056/xslN-PX_X01/primary_doc.xml"
+  ],
+  [
+   "2026-07-23",
+   "13F-HR",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000053/xslForm13F_X02/primary_doc.xml"
+  ],
+  [
+   "2026-07-16",
+   "S-8",
+   "S-8",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000051/geaerospace-formsx8globale.htm"
+  ],
+  [
+   "2026-07-16",
+   "10-Q",
+   "10-Q",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000049/ge-20260630.htm"
+  ],
+  [
+   "2026-07-16",
+   "8-K",
+   "8-K",
+   "2.02,9.01",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000047/ge-20260716.htm"
+  ],
+  [
+   "2026-06-25",
+   "8-K",
+   "8-K",
+   "5.03,9.01",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000042/ge-20260625.htm"
+  ],
+  [
+   "2026-06-11",
+   "8-K",
+   "8-K",
+   "5.02,9.01",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000039/ge-20260608.htm"
+  ],
+  [
+   "2026-06-10",
+   "11-K",
+   "11-K",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000037/ge-20260609.htm"
+  ],
+  [
+   "2026-05-29",
+   "SD",
+   "SD",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000034/ge2025formsd.htm"
+  ],
+  [
+   "2026-05-07",
+   "8-K",
+   "8-K",
+   "5.02,5.07",
+   "https://www.sec.gov/Archives/edgar/data/40545/000004054526000032/ge-20260505.htm"
+  ]
+ ],
  "insider": [
   {
    "d": "2026-11-17",
@@ -395,5 +519,5 @@
    }
   ]
  },
- "updated_at": "2026-11-24 18:08 KST"
+ "updated_at": "2026-11-24 19:52 KST"
 }

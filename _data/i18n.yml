@@ -326,12 +326,24 @@ en:
   st.intro: Charts and key information for US and Korean stocks on one page.
   st.ph: Ticker (AAPL) or Korean stock name/code (005930)
   st.go: View
+  st.jump: Stock lookup
+  st.jump_aria: Search stocks
   st.picks: Quick picks
   st.empty: Search or pick a stock above. Clicking a stock on the Watchlist or in the home page movers list also brings you here.
   st.ta: Technical Summary
   st.profile: Company Profile
   st.fin: Financials
-  st.news: Stock News
+  st.filings: Recent SEC Filings
+  st.filings_note: Last 15 filings, excluding insider and beneficial-ownership reports. Titles open the original filing on SEC.gov
+  st.no_edgar_short: SEC EDGAR data is collected only for stocks in the Backtest (watchlist).
+  st.p_name: Company
+  st.p_ticker: Ticker · Exchange
+  st.p_sic: Industry (SIC)
+  st.p_hq: Headquarters
+  st.p_state: Incorporated in
+  st.p_fy: Fiscal year end
+  st.p_web: Website
+  st.p_former: Former names
   st.tv_note: 'Delayed quotes, US colors (green up). Not investment advice · Widgets: '
   st.insider: Insider Trading
   st.insider_inst: Insider Trading · Institutional Holdings
@@ -351,7 +363,7 @@ en:
   st.inst_note: 13F filings as of {p} (vs. {q}). Only managers with over $100M must file each quarter, due 45 days after quarter-end, so the data lags. Shares only, options excluded.
   st.no_inst: No 13F summary for this stock yet.
   st.edgar_note: 'Source: U.S. SEC EDGAR · Updated {u}'
-  st.no_edgar: SEC EDGAR data is collected daily for Watchlist stocks only. This stock isn't covered yet.
+  st.no_edgar: SEC EDGAR data is collected daily for Backtest (watchlist) stocks only. This stock isn't covered yet.
   st.krx_none: Korean stock charts are available only for stocks listed on this site (movers, moving-average crosses, 52-week highs/lows, Korean backtest). This stock isn't on those lists right now.
   st.k_cap: Market cap
   st.k_vol: Volume

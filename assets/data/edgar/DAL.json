@@ -3,6 +3,132 @@
  "ticker": "DAL",
  "cik": 27904,
  "name": "DELTA AIR LINES, INC.",
+ "profile": {
+  "name": "DELTA AIR LINES, INC.",
+  "tickers": [
+   "DAL"
+  ],
+  "exchanges": [
+   "NYSE"
+  ],
+  "sic": "4512",
+  "sic_desc": "Air Transportation, Scheduled",
+  "state": "DE",
+  "fy_end": "12/31",
+  "city": "Atlanta GA",
+  "phone": "4047152191",
+  "website": "",
+  "former": [
+   "DELTA AIR LINES INC /DE/"
+  ]
+ },
+ "filings": [
+  [
+   "2026-11-16",
+   "SCHEDULE 13G/A",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000119312526464189/xslSCHEDULE_13G_X02/primary_doc.xml"
+  ],
+  [
+   "2026-11-13",
+   "13F-HR",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000168316826008706/xslForm13F_X02/primary_doc.xml"
+  ],
+  [
+   "2026-11-06",
+   "8-K",
+   "8-K",
+   "1.01,8.01,9.01",
+   "https://www.sec.gov/Archives/edgar/data/27904/000119312526451940/d164939d8k.htm"
+  ],
+  [
+   "2026-11-05",
+   "SCHEDULE 13D/A",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000168316826008357/xslSCHEDULE_13D_X02/primary_doc.xml"
+  ],
+  [
+   "2026-11-05",
+   "424B5",
+   "424B5",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000119312526449991/d302291d424b5.htm"
+  ],
+  [
+   "2026-11-04",
+   "FWP",
+   "FWP",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000119312526447475/d915461dfwp.htm"
+  ],
+  [
+   "2026-11-04",
+   "424B5",
+   "424B5",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000119312526446344/d302291d424b5.htm"
+  ],
+  [
+   "2026-10-09",
+   "10-Q",
+   "10-Q",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000002790426000038/dal-20260930.htm"
+  ],
+  [
+   "2026-10-09",
+   "8-K",
+   "8-K",
+   "2.02,9.01",
+   "https://www.sec.gov/Archives/edgar/data/27904/000002790426000035/dal-20261009.htm"
+  ],
+  [
+   "2026-08-28",
+   "N-PX",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000168316826006781/xslN-PX_X01/primary_doc.xml"
+  ],
+  [
+   "2026-08-14",
+   "SCHEDULE 13G/A",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000119312526352910/xslSCHEDULE_13G_X02/primary_doc.xml"
+  ],
+  [
+   "2026-08-14",
+   "13F-HR",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000168316826006483/xslForm13F_X02/primary_doc.xml"
+  ],
+  [
+   "2026-08-06",
+   "SCHEDULE 13G",
+   "",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000031506626002003/xslSCHEDULE_13G_X02/primary_doc.xml"
+  ],
+  [
+   "2026-07-10",
+   "S-3ASR",
+   "SHELF REGISTRATION STATEMENT",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000168316826005455/delta_s3asr.htm"
+  ],
+  [
+   "2026-07-10",
+   "10-Q",
+   "10-Q",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/27904/000002790426000031/dal-20260630.htm"
+  ]
+ ],
  "insider": [
   {
    "d": "2026-11-12",
@@ -395,5 +521,5 @@
    }
   ]
  },
- "updated_at": "2026-11-24 18:08 KST"
+ "updated_at": "2026-11-24 19:52 KST"
 }

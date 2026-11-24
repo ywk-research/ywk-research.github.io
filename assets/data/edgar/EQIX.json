@@ -3,6 +3,130 @@
  "ticker": "EQIX",
  "cik": 1101239,
  "name": "EQUINIX INC",
+ "profile": {
+  "name": "EQUINIX INC",
+  "tickers": [
+   "EQIX"
+  ],
+  "exchanges": [
+   "Nasdaq"
+  ],
+  "sic": "6798",
+  "sic_desc": "Real Estate Investment Trusts",
+  "state": "DE",
+  "fy_end": "12/31",
+  "city": "Redwood City CA",
+  "phone": "(650) 598-6000",
+  "website": "",
+  "former": []
+ },
+ "filings": [
+  [
+   "2026-11-16",
+   "CERT",
+   "EQIX NOVEMBER 2026 CERT",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000135445726001076/EQIX_8A_Cert_1101239.pdf"
+  ],
+  [
+   "2026-11-10",
+   "8-A12B",
+   "FORM 8-A12B",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926124628/tm2628000d10_8a12b.htm"
+  ],
+  [
+   "2026-11-09",
+   "8-K",
+   "FORM 8-K",
+   "8.01,9.01",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926124509/tm2628000d9_8k.htm"
+  ],
+  [
+   "2026-11-04",
+   "424B2",
+   "424B2",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926122752/tm2628000-4_424b2.htm"
+  ],
+  [
+   "2026-11-03",
+   "FWP",
+   "FWP",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926122039/tm2628000d5_fwp.htm"
+  ],
+  [
+   "2026-11-03",
+   "424B5",
+   "424B5",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926121650/tm2628000-3_424b2.htm"
+  ],
+  [
+   "2026-10-28",
+   "S-3ASR",
+   "S-3ASR",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926119687/tm2628001-1_s3asr.htm"
+  ],
+  [
+   "2026-10-28",
+   "S-3ASR",
+   "S-3ASR",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926119683/tm2628000-1_s3asr.htm"
+  ],
+  [
+   "2026-10-28",
+   "10-Q",
+   "10-Q",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110123926000180/eqix-20260930.htm"
+  ],
+  [
+   "2026-10-28",
+   "8-K",
+   "8-K",
+   "2.02,9.01",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110123926000178/eqix-20261028.htm"
+  ],
+  [
+   "2026-08-06",
+   "8-K",
+   "FORM 8-K",
+   "8.01,9.01",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926092009/tm2622384d1_8k.htm"
+  ],
+  [
+   "2026-07-31",
+   "424B2",
+   "424B2",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926089246/tm2621537-2_424b2.htm"
+  ],
+  [
+   "2026-07-31",
+   "FWP",
+   "FWP",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926088885/tm2621537d3_fwp.htm"
+  ],
+  [
+   "2026-07-30",
+   "424B5",
+   "424B5",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110465926088496/tm2621537-1_424b5.htm"
+  ],
+  [
+   "2026-07-29",
+   "8-K",
+   "8-K",
+   "1.01,1.02,2.03,9.01",
+   "https://www.sec.gov/Archives/edgar/data/1101239/000110123926000148/eqix-20260727.htm"
+  ]
+ ],
  "insider": [
   {
    "d": "2026-11-16",
@@ -395,5 +519,5 @@
    }
   ]
  },
- "updated_at": "2026-11-24 18:08 KST"
+ "updated_at": "2026-11-24 19:52 KST"
 }

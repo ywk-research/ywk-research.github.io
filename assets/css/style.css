@@ -357,10 +357,15 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 
 
 /* 종목 상세 탭 (stock.html) */
-a.mv-name { color: var(--text); }
-a.mv-name:hover { color: var(--accent); text-decoration: none; }
-.wl-table td a, .mv-name a { color: var(--text); }
-.wl-table td a:hover, .mv-name a:hover { color: var(--accent); text-decoration: none; }
+/* 종목 이름 링크: 눌러서 종목 상세로 간다는 걸 보이게 */
+a.mv-name, .mv-name a, .wl-table td a { color: var(--text); text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a.mv-name:hover, .mv-name a:hover, .wl-table td a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.st-search.st-jump { align-items: center; margin: 16px 0 4px; }
+.st-jump-label { flex: none; font-size: 14px; font-weight: 700; color: var(--muted); }
+.st-jump input { max-width: 420px; }
+@media (max-width: 560px) { .st-jump-label { display: none; } }
+.st-kv th { width: 9em; background: transparent; }
+.st-form { flex: none; min-width: 4.8em; font-size: 12px; font-weight: 700; color: var(--muted); }
 .st-search { display: flex; gap: 8px; margin-top: 20px; }
 .st-search input { flex: 1; min-width: 0; font: inherit; font-size: 15px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); color: var(--text); }
 .st-search input:focus { outline: none; border-color: var(--accent); }

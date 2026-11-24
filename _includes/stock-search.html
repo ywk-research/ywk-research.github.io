@@ -1,0 +1,6 @@
+<!-- 종목 상세(/stock/)로 가는 검색창. 해외는 티커, 국내는 6자리 코드나 종목명(종목 상세 페이지가 코드로 바꿈) -->
+<form class="st-search st-jump" action="{{ '/stock/' | relative_url }}" method="get" role="search">
+  <span class="st-jump-label" data-i18n="st.jump">종목 상세</span>
+  <input name="s" type="search" placeholder="AAPL, NYSE:TDG, 005930, 삼성전자" aria-label="종목 검색" data-i18n-aria="st.jump_aria" required>
+  <button type="submit" data-i18n="st.go">보기</button>
+</form>
