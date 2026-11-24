@@ -4,15 +4,17 @@
 {% if ne and ne.us or ne and ne.kr %}
 {% assign nus = ne.us.items | default: empty %}
 {% assign nkr = ne.kr.items | default: empty %}
-<section class="krx etf ne" id="new-etf">
+{% assign ne_m = include.market | default: "" %}
+<section class="krx etf ne" id="new-etf{% if ne_m != "" %}-{{ ne_m }}{% endif %}">
   <div class="krx-head">
     <h2 data-i18n="ne.title">신규 상장 ETF</h2>
-    <div class="krx-range ne-tab">
+    <div class="krx-range ne-tab"{% if ne_m != "" %} hidden{% endif %}>
       <button type="button" data-k="us" class="on" data-i18n="ne.us">미국</button>
       <button type="button" data-k="kr" data-i18n="ne.kr">한국</button>
     </div>
   </div>
 
+  {% if ne_m != "kr" %}
   <div class="ne-pane" data-k="us">
     {% assign pd = ne.us.prev_day %}
     {% assign today_list = nus | where: "ld", pd %}
@@ -72,8 +74,10 @@
     {% endif %}
     <p class="note" data-i18n="ne.note_us" data-n="{{ nus.size }}">ETF를 거래소에 상장하려면 운용사가 SEC에 Form 8-A(증권거래법 12(b) 등록)를 내요. 보통 첫 거래 전 영업일에 내므로 제출일 다음 거래일을 상장일로 추정했어요. 실제 첫 거래일과 하루 다를 수 있고, 티커는 SEC 펀드 목록에 등록된 뒤에 채워져요. 텍사스 거래소 교차상장은 뺐어요 · 자료: SEC EDGAR</p>
   </div>
+  {% endif %}
 
-  <div class="ne-pane" data-k="kr" hidden>
+  {% if ne_m != "us" %}
+  <div class="ne-pane" data-k="kr"{% if ne_m != "kr" %} hidden{% endif %}>
     {% if nkr.size > 0 %}
     <div class="etf-wrap ne-wrap">
       <table class="etf-table">
@@ -97,10 +101,11 @@
     {% else %}<p class="note" data-i18n="ne.none">최근 신규 상장이 없어요.</p>{% endif %}
     <p class="note" data-i18n="ne.note_kr" data-n="{{ nkr.size }}" data-total="{{ ne.kr.listed }}">최근 45일 {{ nkr.size }}개 · 상장 ETF 전체 {{ ne.kr.listed }}개. 전 거래일 목록에 없던 종목코드가 처음 나타난 날을 상장일로 봤어요 · 자료: 한국거래소(KRX) Open API</p>
   </div>
+  {% endif %}
 
   <script>
     (function () {
-      var root = document.getElementById('new-etf');
+      var root = document.currentScript.closest('section');
       var tabs = root.querySelectorAll('.ne-tab button');
       tabs.forEach(function (b) {
         b.addEventListener('click', function () {

@@ -134,36 +134,48 @@
   </script>
   {% if page.wide and page.url != '/' %}
   <script>
-    // 긴 페이지: 소개 아래에 섹션 바로가기 칩을 만든다(섹션 3개 이상일 때). 스크롤하면 위에 붙어 따라오고, 지금 보는 섹션이 강조된다
+    // 긴 페이지: 섹션 바로가기 칩(보이는 섹션 3개 이상일 때). 스크롤하면 위에 붙어 따라오고, 지금 보는 섹션이 강조된다.
+    // 기본 위치는 소개 아래, 페이지에 [data-chips-anchor]가 있으면 그 아래. 시장 탭처럼 숨긴 칸(hidden) 안의 섹션은 빼고,
+    // 탭을 바꾸면 'panes-changed' 이벤트로 다시 만든다
     (function () {
       var main = document.querySelector('main'), intro = main && main.querySelector('.intro');
       if (!intro) return;
-      var secs = [].filter.call(main.querySelectorAll('section[id]'), function (s) { return s.querySelector('h2') && !s.closest('.home-grid'); });
-      if (secs.length < 3) return;
-      var nav = document.createElement('nav');
-      nav.className = 'sec-chips';
-      nav.setAttribute('aria-label', t('nav.sections', '섹션 바로가기'));
-      secs.forEach(function (s) {
-        var h = s.querySelector('h2').cloneNode(true);
-        h.querySelectorAll('.krx-sub').forEach(function (x) { x.remove(); });
-        var a = document.createElement('a');
-        a.href = '#' + s.id; a.textContent = h.textContent.trim();
-        nav.appendChild(a);
-      });
-      intro.after(nav);
-      var links = nav.querySelectorAll('a');
-      if (!('IntersectionObserver' in window)) return;
-      var io = new IntersectionObserver(function (es) {
-        es.forEach(function (e) {
-          if (!e.isIntersecting) return;
-          links.forEach(function (a) {
-            var on = a.getAttribute('href') === '#' + e.target.id;
-            a.classList.toggle('on', on);
-            if (on && nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: a.offsetLeft - 20, behavior: 'smooth' });
-          });
+      var nav = null, io = null;
+      function build() {
+        if (nav) nav.remove();
+        if (io) io.disconnect();
+        nav = io = null;
+        var secs = [].filter.call(main.querySelectorAll('section[id]'), function (s) {
+          return s.querySelector('h2') && !s.closest('.home-grid') && !s.closest('[hidden]');
         });
-      }, { rootMargin: '-45% 0px -50% 0px' });
-      secs.forEach(function (s) { io.observe(s); });
+        if (secs.length < 3) return;
+        nav = document.createElement('nav');
+        nav.className = 'sec-chips';
+        nav.setAttribute('aria-label', t('nav.sections', '섹션 바로가기'));
+        secs.forEach(function (s) {
+          var h = s.querySelector('h2').cloneNode(true);
+          h.querySelectorAll('.krx-sub').forEach(function (x) { x.remove(); });
+          var a = document.createElement('a');
+          a.href = '#' + s.id; a.textContent = h.textContent.trim();
+          nav.appendChild(a);
+        });
+        (main.querySelector('[data-chips-anchor]') || intro).after(nav);
+        var links = nav.querySelectorAll('a'), bar = nav;
+        if (!('IntersectionObserver' in window)) return;
+        io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            links.forEach(function (a) {
+              var on = a.getAttribute('href') === '#' + e.target.id;
+              a.classList.toggle('on', on);
+              if (on && bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: a.offsetLeft - 20, behavior: 'smooth' });
+            });
+          });
+        }, { rootMargin: '-45% 0px -50% 0px' });
+        secs.forEach(function (s) { io.observe(s); });
+      }
+      build();
+      document.addEventListener('panes-changed', build);
     })();
   </script>
   {% endif %}
