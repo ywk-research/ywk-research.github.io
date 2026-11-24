@@ -16,6 +16,7 @@
 """
 import datetime as dt
 import html
+import io
 import json
 import os
 import re
@@ -105,10 +106,15 @@ def us_business_days(today, n_cal):
     return out
 
 
-def _cell_text(h):
-    h = re.sub(r"(?i)<br\s*/?>|</p>|</div>", "\n", h)
-    h = html.unescape(re.sub(r"<[^>]+>", " ", h))
-    return [re.sub(r"\s+", " ", x).strip() for x in h.split("\n") if x.strip()]
+EXCH_FULL = re.compile(
+    r"(?i)(the\s+)?nasdaq\s+stock\s+market,?\s*(llc|inc\.?)?|nasdaq\s+(global|capital)\s+(select\s+)?market,?\s*(llc)?"
+    r"|nyse\s*arca,?\s*(inc\.?|llc)?|nyse\s+american,?\s*(llc)?|cboe\s+bzx\s+exchange,?\s*(inc\.?)?"
+    r"|(the\s+)?new\s+york\s+stock\s+exchange,?\s*(llc|inc\.?)?|(the\s+)?nyse,?\s+llc")
+EIN = re.compile(r"\(?\b\d{2}\s*-\s*\d{7}\b\)?")
+HEAD_END = re.compile(r"(?i)(to\s+be\s+(so\s+)?registered|identification\s+(no\.?|number)\)?)\s*")
+GENERIC = re.compile(r"(?i)\b(common\s+)?shares?\s+of\s+(beneficial\s+interest|common\s+stock)[,;:]?(\s+(of|in)\s+(the\s+)?)?"
+                     r"|[,;]?\s*(no|\$?[\d.]+)\s+par\s+value(\s+per\s+share)?[,;:]?(\s+(of|in)\s+(the\s+)?)?"
+                     r"|^\s*shares\s+of\s+")
 
 
 def exch_of(text):
@@ -120,44 +126,94 @@ def exch_of(text):
     return best[1] if best else ""
 
 
-GENERIC = re.compile(r"(?i)^(common\s+)?shares?\b.*?(beneficial interest|par value|common stock)[^A-Za-z0-9]*"
-                     r"((no|\$?[\d.]+)\s+par value( per share)?)?[,;:]?\s*((of|in)\s+)?(the\s+)?")
-SKIP = re.compile(r"(?i)title of|name of (each )?exchange|employer identification|^\(?[\d-]{9,11}\)?$|^none\.?$|^n/?a$")
-
-
 def fund_name(txt):
-    txt = GENERIC.sub("", txt).strip(" ,;:-–")
-    txt = re.sub(r"\s*\(?\d{2}-\d{7}\)?\s*$", "", txt)  # 끝에 붙은 IRS 번호
-    return txt.strip(" ,;:-–")
+    txt = re.sub(r"(?i)^\s*(and|each|per)\b", "", txt)
+    txt = GENERIC.sub(" ", txt)
+    txt = re.sub(r"\s+", " ", txt).strip(" ,;:-–•*")
+    txt = re.sub(r"(?i)^(the\s+)", "", txt) if not re.match(r"(?i)the\s+\w+\s+(etf|fund)$", txt) else txt
+    return txt
 
 
 def parse_8a(txt):
-    """제출 원문(.txt)에서 회사 이름, SIC, 표지 표의 펀드 이름·거래소를 뽑는다.
-    8-A 머리말에는 시리즈·티커 정보가 없어서, 표지의 '등록할 증권 / 거래소' 표를 읽는다."""
+    """제출 원문(.txt)에서 회사 이름, SIC, 표지의 '등록할 증권 / 거래소' 칸에서 펀드 이름·거래소를 뽑는다.
+    (8-A 머리말에는 시리즈·티커 정보가 없다)"""
     head, _, body = txt.partition("</SEC-HEADER>")
     m = re.search(r"COMPANY CONFORMED NAME:\s*(.+)", head)
     company = m.group(1).strip() if m else ""
     m = re.search(r"STANDARD INDUSTRIAL CLASSIFICATION:.*?\[(\d{4})\]", head)
     sic = m.group(1) if m else ""
-    body = body[:400000]
+    text = html.unescape(re.sub(r"<[^>]+>", " ", body[:400000]))
+    text = re.sub(r"[\s\u200b]+", " ", text)
     funds = []
-    for row in re.findall(r"(?is)<tr\b.*?</tr>", body):
-        cells = [_cell_text(c) for c in re.findall(r"(?is)<t[dh]\b.*?</t[dh]>", row)]
-        flat = " ".join(" ".join(c) for c in cells)
-        ex = exch_of(flat)
-        if not ex or re.search(r"(?i)title of", flat):
-            continue
-        for c in cells:
-            if exch_of(" ".join(c)):
-                continue
-            for line in c:
-                if SKIP.search(line):
-                    continue
-                nm = fund_name(line)
-                if len(nm) >= 3 and re.search(r"[A-Za-z]", nm):
+    m = re.search(r"(?i)securities\s+to\s+be\s+registered\s+pursuant\s+to\s+section\s+12\s*\(b\)(.*?)"
+                  r"(if\s+this\s+form\s+relates|securities\s+act\s+registration)", text)
+    if m:
+        region = m.group(1)
+        # 머리글('Title of each class ... registered', 'Name of each exchange ... registered', 'I.R.S. ... Number') 뒤부터
+        hm = list(HEAD_END.finditer(region[:600]))
+        if hm:
+            region = region[hm[-1].end():]
+        region = re.sub(r"(?i)\(?(title of (each )?class|name of (each )?exchange)[^)]*\)?", " ", region)
+        last_ex = exch_of(region)
+        pos, chunks = 0, []
+        for mm in EXCH_FULL.finditer(region):
+            chunks.append((region[pos:mm.start()], exch_of(mm.group(0))))
+            pos = mm.end()
+        tail = region[pos:]
+        for seg, ex in chunks or [(tail, last_ex)]:
+            for piece in EIN.split(seg):
+                nm = fund_name(piece)
+                if len(nm) >= 3 and re.search(r"[A-Za-z]{2}", nm):
                     funds.append({"name": nm, "exchange": ex})
-    text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", body)))
+    if os.environ.get("DEBUG") and not funds:
+        i = text.lower().find("12(b)")
+        print("    [본문]", text[max(i, 0):max(i, 0) + 700])
     return company, sic, funds, exch_of(text)
+
+
+# ── 티커: SEC 투자회사 시리즈·클래스 목록(연간 CSV, 수시 갱신)과 company_tickers_mf.json ──
+SERIES_CSV = "https://www.sec.gov/files/investment/data/other/investment-company-series-class-information/investment-company-series-class-{y}.csv"
+_tick = None
+
+
+def norm(s):
+    return re.sub(r"[^a-z0-9]", "", s.lower().replace("&", "and"))
+
+
+def ticker_table(year):
+    """(CIK, 시리즈 이름 정규화) → [(클래스 이름, 티커)]"""
+    global _tick
+    if _tick is not None:
+        return _tick
+    _tick = {}
+    try:
+        mf = json.loads(sec_get("https://www.sec.gov/files/company_tickers_mf.json") or "{}")
+        by_class = {r[2]: r[3] for r in mf.get("data", [])}
+        raw = sec_get(SERIES_CSV.format(y=year)) or sec_get(SERIES_CSV.format(y=year - 1)) or ""
+        import csv
+        for r in csv.DictReader(io.StringIO(raw.lstrip("\ufeff").lstrip("ï»¿"))):
+            cik = (r.get("CIK Number") or "").lstrip("0")
+            tk = (r.get("Class Ticker") or "").strip() or by_class.get(r.get("Class ID", ""), "")
+            _tick.setdefault((cik, norm(r.get("Series Name", ""))), []).append((r.get("Class Name", ""), tk))
+        print(f"티커 표: 시리즈 {len(_tick):,}개")
+    except Exception as e:
+        print(f"티커 표 실패: {type(e).__name__}: {e}")
+    return _tick
+
+
+def find_ticker(cik, name, year):
+    tab = ticker_table(year)
+    cik = cik.lstrip("0")
+    base, _, cls = name.partition(":")
+    for key in (norm(name), norm(base)):
+        rows = tab.get((cik, key))
+        if rows:
+            if cls:
+                rows = [r for r in rows if norm(cls) in norm(r[0])] or rows
+            ticks = [t for _, t in rows if t]
+            if ticks:
+                return ticks[0] if not cls else ticks[-1]
+    return ""
 
 
 def is_fund_filer(company, sic):
@@ -214,11 +270,14 @@ def update_us(today, prev):
                 key = (cik + ":" + f["name"].lower()) if f["name"] else acc
                 if key in items:  # 같은 펀드가 다시 8-A를 내면 처음 날짜를 남긴다
                     continue
-                items[key] = {"key": key, "d": d.isoformat(), "name": f["name"], "ticker": "",
+                items[key] = {"key": key, "d": d.isoformat(), "name": f["name"], "ticker": "", "cik": cik,
                               "issuer": clean_company(company), "exchange": f["exchange"] or exch, "url": url}
         print(f"미국 {d}: 누적 {len(items)}건")
     keep = sorted((it for it in items.values() if it["d"] >= cutoff.isoformat()),
                   key=lambda it: (it["d"], it["issuer"], it["name"]), reverse=True)
+    for it in keep:  # 시리즈 등록이 늦게 반영되므로 티커가 빈 펀드는 매번 다시 찾는다
+        if not it.get("ticker") and it.get("name") and it.get("cik"):
+            it["ticker"] = find_ticker(it["cik"], it["name"], today.year)
     save(SEEN, sorted(seen)[-5000:], compact=True)
     return {"source": "SEC EDGAR Form 8-A12B", "updated": today.isoformat(),
             "days": sorted(x for x in done if x >= cutoff.isoformat()), "items": keep}

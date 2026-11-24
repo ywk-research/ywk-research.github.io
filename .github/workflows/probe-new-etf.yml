@@ -18,12 +18,4 @@ jobs:
           DEBUG: "1"
           NEW_ETF_BACKFILL: "12"
         run: |
-          python tools/fetch_new_etf.py
-          cd tools && python - <<'PY'
-          import fetch_new_etf as f
-          for u in ["https://www.sec.gov/files/company_tickers_mf.json",
-                    "https://www.sec.gov/files/investment/data/other/investment-company-series-class-information/investment-company-series-class-2026.csv",
-                    "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0002025968&scd=series&count=100"]:
-              t = f.sec_get(u)
-              print("#####", u, None if t is None else len(t)); print((t or "")[:1500])
-          PY
+          python tools/fetch_new_etf.py && cat _data/new_etf.json | head -c 6000
