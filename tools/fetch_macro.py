@@ -164,7 +164,13 @@ def us_monthly(start):
 
 
 def krw_fx(start):
-    return {name: sorted([d, v] for d, v in ecos("731Y001", code, start).items()) for name, code in KRW_FX}
+    out = {name: sorted([d, v] for d, v in ecos("731Y001", code, start).items()) for name, code in KRW_FX}
+    # 서울 외환시장 원/달러 종가(15:30, 731Y003) — 개장 전 브리핑(tools/make_briefing.py)이 쓴다
+    try:
+        out["usd_close"] = sorted([d, v] for d, v in ecos("731Y003", "0000003", start).items())
+    except Exception as e:
+        print(f"  실패 — usd_close: {str(e)[:100]}")
+    return out
 
 
 def kr_monthly(start):
