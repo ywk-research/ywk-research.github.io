@@ -1,0 +1,79 @@
+{% assign krx = site.data.krx_index %}
+<section class="krx" id="krx-index">
+  <div class="krx-head">
+    <h2>국내 지수</h2>
+    <div class="krx-range" role="group" aria-label="기간">
+      <button type="button" data-days="22">1개월</button>
+      <button type="button" data-days="66" class="on">3개월</button>
+      <button type="button" data-days="260">1년</button>
+    </div>
+  </div>
+
+  {% if krx and krx.kospi.size > 0 %}
+  <div class="krx-cards">
+    {% for key in "kospi,kosdaq" | split: "," %}
+      {% assign s = krx[key] %}
+      {% assign last = s | last %}
+      <div class="krx-card" data-series="{{ key }}">
+        <p class="krx-name">{% if key == "kospi" %}코스피{% else %}코스닥{% endif %}</p>
+        <p class="krx-close">{{ last.close | round: 2 }}</p>
+        <p class="krx-chg {% if last.chg > 0 %}up{% elsif last.chg < 0 %}down{% else %}flat{% endif %}">
+          {% if last.chg > 0 %}▲{% elsif last.chg < 0 %}▼{% endif %} {{ last.chg | abs | round: 2 }} ({{ last.pct | round: 2 }}%)
+        </p>
+        <canvas class="krx-chart" height="140" aria-label="{% if key == 'kospi' %}코스피{% else %}코스닥{% endif %} 추이 차트"></canvas>
+      </div>
+    {% endfor %}
+  </div>
+  {% assign lk = krx.kospi | last %}
+  <p class="note">{{ lk.d }} 종가 기준 · 자료: 한국거래소(KRX) Open API · 업데이트 {{ krx.updated_at }}</p>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    (function () {
+      var DATA = {{ krx | jsonify }};
+      var charts = {};
+      var css = getComputedStyle(document.documentElement);
+      function color(name) { return css.getPropertyValue(name).trim(); }
+
+      function draw(key, days) {
+        var s = DATA[key].slice(-days);
+        var first = s[0].close, last = s[s.length - 1].close;
+        var line = last >= first ? color('--up') : color('--down');
+        var cfg = {
+          type: 'line',
+          data: {
+            labels: s.map(function (r) { return r.d.slice(5).replace('-', '/'); }),
+            datasets: [{ data: s.map(function (r) { return r.close; }), borderColor: line, borderWidth: 1.8,
+              pointRadius: 0, tension: 0.15, fill: false }]
+          },
+          options: {
+            animation: false, maintainAspectRatio: false,
+            plugins: { legend: { display: false },
+              tooltip: { callbacks: { label: function (c) { return c.parsed.y.toLocaleString('ko-KR', { minimumFractionDigits: 2 }); } } } },
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+              x: { ticks: { maxTicksLimit: 5, color: color('--muted') }, grid: { display: false } },
+              y: { ticks: { maxTicksLimit: 4, color: color('--muted') }, grid: { color: color('--line') } }
+            }
+          }
+        };
+        var canvas = document.querySelector('.krx-card[data-series="' + key + '"] canvas');
+        if (charts[key]) charts[key].destroy();
+        charts[key] = new Chart(canvas, cfg);
+      }
+
+      function render(days) { ['kospi', 'kosdaq'].forEach(function (k) { if (DATA[k] && DATA[k].length) draw(k, days); }); }
+      document.querySelectorAll('.krx-range button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('.krx-range button').forEach(function (x) { x.classList.remove('on'); });
+          b.classList.add('on');
+          render(+b.dataset.days);
+        });
+      });
+      render(66);
+    })();
+  </script>
+  {% else %}
+  <p class="note">지수 데이터를 준비하고 있어요. 첫 업데이트 후 코스피·코스닥 종가와 추이가 표시됩니다.</p>
+  {% endif %}
+</section>

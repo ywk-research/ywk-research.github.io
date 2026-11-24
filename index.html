@@ -7,6 +7,8 @@ title: 브리핑
   <p>{{ site.description }}. 미국·아시아 증시, 금리·환율·원자재, 전일 주요 뉴스와 오늘 일정을 한 장에 정리합니다.</p>
 </section>
 
+{% include krx-index.html %}
+
 {% assign latest = site.posts | first %}
 {% if latest %}
 <section class="latest">
