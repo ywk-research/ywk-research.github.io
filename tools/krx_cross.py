@@ -1,6 +1,8 @@
 """이동평균선 골든크로스·데드크로스 종목을 추린다. tools/fetch_krx.py가 부른다.
 
-- 과거 종가: tools/state/krx_closes/YYYY-MM-DD.json (빌드 제외 폴더, 날짜별 파일)
+- 과거 종가: tools/state/krx_closes/YYYY-MM-DD.json (날짜별 파일)
+  KRX 원본이라 저장소에는 커밋하지 않는다(.gitignore). 워크플로가 GitHub Actions 캐시로 실행 사이에 넘긴다.
+  캐시가 지워졌으면(7일 미사용 등) 아래 2)의 과거 채우기가 KRX에서 KEEP거래일을 다시 받는다(약 650회 호출).
   {"c": {종목코드: 종가}, "a": {종목코드: 보정비율}} — 보통주만, 거래량 0(거래정지)은 뺀다.
   KRX 일별 종가는 수정주가가 아니어서, 그날 기준가(종가 − 전일 대비)가 전날 저장 종가와 다르면
   (액면분할·무상증자 등) 그 비율을 "a"에 적어 두고, 계산할 때 그 전 종가에 곱해 보정한다.
@@ -21,6 +23,7 @@ PAIRS = [(50, 200), (20, 60)]
 KEEP = 310        # 저장할 거래일 수: 200일선 + 크로스 여유, 52주 신고가(250) + 추이 60일(tools/krx_highlow.py)
 LOOKBACK = 5      # 최근 몇 거래일 안의 크로스를 보여 줄지
 MAX_BACKFILL_CAL_DAYS = 480  # 과거 채우기 한도(달력일)
+MIN_DAYS = 260    # 이보다 적으면 결과를 갱신하지 않는다(200일선·52주 신고가 계산에 필요)
 
 
 def _num(v):
@@ -175,13 +178,14 @@ def build(days, universe, latest):
                     ms, ml = _ma(vals, s, n - 1), _ma(vals, l, n - 1)
                     res[kind].append({
                         "name": info["name"], "code": code, "mkt": info["mkt"], "d": ser[i][0],
-                        "close": days[dates[-1]]["c"].get(code), "pct": info["pct"],
-                        "gap": round((ms / ml - 1) * 100, 2), "cap": info["cap"],
-                        "cap_txt": _won_txt(info["cap"] / 1e8),
+                        "pct": info["pct"], "gap": round((ms / ml - 1) * 100, 2),
+                        "cap_txt": _won_txt(info["cap"] / 1e8), "_cap": info["cap"],
                     })
                     break
         for kind in ("golden", "dead"):
-            res[kind].sort(key=lambda x: (x["d"], x["cap"]), reverse=True)
+            res[kind].sort(key=lambda x: (x["d"], x["_cap"]), reverse=True)
+            for x in res[kind]:
+                del x["_cap"]
         out["pairs"].append(res)
         print(f"이평선 {s}/{l}: 골든 {len(res['golden'])}, 데드 {len(res['dead'])} (데이터 부족 {res['skipped']})")
     return out

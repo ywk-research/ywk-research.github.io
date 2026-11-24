@@ -25,10 +25,26 @@ jobs:
         with:
           python-version: "3.12"
 
+      # KRX 과거 종가 원본(tools/state/)은 저장소에 커밋하지 않고 Actions 캐시로만 넘긴다(KRX 약관: 제3자 제공 금지).
+      # 캐시는 7일 동안 안 쓰면 지워지는데, 그때는 fetch_krx.py가 KRX에서 다시 채운다(약 650회 호출, 10~15분).
+      - name: KRX 과거 종가 캐시 불러오기
+        uses: actions/cache/restore@v4
+        with:
+          path: tools/state
+          key: krx-state-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: krx-state-
+
       - name: KRX 지수·종목 받아오기 (이평선 크로스 포함)
         env:
           KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
         run: python tools/fetch_krx.py
+
+      - name: KRX 과거 종가 캐시 저장
+        if: always() && hashFiles('tools/state/krx_closes/*.json') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: tools/state
+          key: krx-state-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: 해외 지수·금리·원자재·환율 받아오기
         continue-on-error: true
@@ -51,7 +67,7 @@ jobs:
       - name: 변경분 커밋
         id: commit
         run: |
-          git add _data/ tools/state/
+          git add _data/
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
