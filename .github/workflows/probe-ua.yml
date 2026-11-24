@@ -1,0 +1,11 @@
+name: probe-ua
+on: { push: { branches: [claude/project-thread-jgq9bc], paths: [.github/workflows/probe-ua.yml] } }
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          B="https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/auctions_query"
+          curl -sg "$B?filter=auction_date:gte:2026-10-01&sort=-auction_date&page[size]=40&fields=auction_date,security_type,security_term,high_yield,bid_to_cover_ratio,record_date" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d.get('meta',{}).get('total-count'));[print(r) for r in d['data']]"
+          echo ---; curl -sg "$B?sort=-record_date&page[size]=3&fields=record_date,auction_date,security_type" 
+          echo ---; curl -sg "$B?filter=security_type:in:(Note,Bond,TIPS),auction_date:gte:2024-11-24&sort=-auction_date&page[size]=300&fields=auction_date" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d['meta']['total-count'], d['data'][0], d['data'][-1])"
