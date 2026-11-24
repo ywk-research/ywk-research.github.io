@@ -1,0 +1,399 @@
+{
+ "source": "SEC EDGAR",
+ "ticker": "GE",
+ "cik": 40545,
+ "name": "GENERAL ELECTRIC CO",
+ "insider": [
+  {
+   "d": "2026-11-17",
+   "filed": "2026-11-18",
+   "name": "Procacci Riccardo",
+   "title": "Senior Vice President",
+   "code": "M",
+   "ad": "A",
+   "sh": 2023.0,
+   "px": 90.01,
+   "after": 34054.0
+  },
+  {
+   "d": "2026-11-17",
+   "filed": "2026-11-18",
+   "name": "Procacci Riccardo",
+   "title": "Senior Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 2023.0,
+   "px": 324.84,
+   "after": 32031.0
+  },
+  {
+   "d": "2026-11-11",
+   "filed": "2026-11-12",
+   "name": "CULP H LAWRENCE JR",
+   "title": "Chairman and CEO",
+   "code": "S",
+   "ad": "D",
+   "sh": 679.0,
+   "px": 338.29,
+   "after": 1007583.0
+  },
+  {
+   "d": "2026-11-11",
+   "filed": "2026-11-12",
+   "name": "CULP H LAWRENCE JR",
+   "title": "Chairman and CEO",
+   "code": "S",
+   "ad": "D",
+   "sh": 7321.0,
+   "px": 337.25,
+   "after": 1000262.0
+  },
+  {
+   "d": "2026-11-04",
+   "filed": "2026-11-05",
+   "name": "Giglietti Robert M.",
+   "title": "Vice President",
+   "code": "M",
+   "ad": "A",
+   "sh": 14796.0,
+   "px": 52.38,
+   "after": 34997.0
+  },
+  {
+   "d": "2026-11-04",
+   "filed": "2026-11-05",
+   "name": "Giglietti Robert M.",
+   "title": "Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 3780.0,
+   "px": 332.12,
+   "after": 31217.0
+  },
+  {
+   "d": "2026-11-04",
+   "filed": "2026-11-05",
+   "name": "Giglietti Robert M.",
+   "title": "Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 11016.0,
+   "px": 332.69,
+   "after": 20201.0
+  },
+  {
+   "d": "2026-08-11",
+   "filed": "2026-08-12",
+   "name": "Giglietti Robert M.",
+   "title": "Vice President",
+   "code": "M",
+   "ad": "A",
+   "sh": 10242.0,
+   "px": 36.65,
+   "after": 30443.0
+  },
+  {
+   "d": "2026-08-11",
+   "filed": "2026-08-12",
+   "name": "Giglietti Robert M.",
+   "title": "Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 5344.0,
+   "px": 369.88,
+   "after": 25099.0
+  },
+  {
+   "d": "2026-08-11",
+   "filed": "2026-08-12",
+   "name": "Giglietti Robert M.",
+   "title": "Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 4898.0,
+   "px": 369.97,
+   "after": 20201.0
+  },
+  {
+   "d": "2026-07-24",
+   "filed": "2026-07-28",
+   "name": "Ali Mohamed",
+   "title": "Senior Vice President",
+   "code": "M",
+   "ad": "A",
+   "sh": 3035.0,
+   "px": 90.01,
+   "after": 23701.0
+  },
+  {
+   "d": "2026-07-24",
+   "filed": "2026-07-28",
+   "name": "Ali Mohamed",
+   "title": "Senior Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 1769.0,
+   "px": 353.75,
+   "after": 21932.0
+  },
+  {
+   "d": "2026-07-24",
+   "filed": "2026-07-28",
+   "name": "Ali Mohamed",
+   "title": "Senior Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 1266.0,
+   "px": 353.74,
+   "after": 20666.0
+  },
+  {
+   "d": "2026-07-24",
+   "filed": "2026-07-28",
+   "name": "Ali Mohamed",
+   "title": "Senior Vice President",
+   "code": "M",
+   "ad": "A",
+   "sh": 5061.0,
+   "px": 69.55,
+   "after": 25727.0
+  },
+  {
+   "d": "2026-07-24",
+   "filed": "2026-07-28",
+   "name": "Ali Mohamed",
+   "title": "Senior Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 2782.0,
+   "px": 353.72,
+   "after": 22945.0
+  },
+  {
+   "d": "2026-07-24",
+   "filed": "2026-07-28",
+   "name": "Ali Mohamed",
+   "title": "Senior Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 2279.0,
+   "px": 353.64,
+   "after": 20666.0
+  },
+  {
+   "d": "2026-07-23",
+   "filed": "2026-07-27",
+   "name": "Procacci Riccardo",
+   "title": "Senior Vice President",
+   "code": "M",
+   "ad": "A",
+   "sh": 1517.0,
+   "px": 146.33,
+   "after": 33548.0
+  },
+  {
+   "d": "2026-07-23",
+   "filed": "2026-07-27",
+   "name": "Procacci Riccardo",
+   "title": "Senior Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 1026.0,
+   "px": 347.93,
+   "after": 32522.0
+  },
+  {
+   "d": "2026-07-23",
+   "filed": "2026-07-27",
+   "name": "Procacci Riccardo",
+   "title": "Senior Vice President",
+   "code": "S",
+   "ad": "D",
+   "sh": 491.0,
+   "px": 347.9,
+   "after": 32031.0
+  },
+  {
+   "d": "2026-06-24",
+   "filed": "2026-06-25",
+   "name": "Althoff Judson",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 517.0,
+   "px": 0.0,
+   "after": 517.0
+  },
+  {
+   "d": "2026-05-05",
+   "filed": "2026-05-07",
+   "name": "McDew Darren W",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 678.0,
+   "px": 0.0,
+   "after": 2830.0
+  },
+  {
+   "d": "2026-05-05",
+   "filed": "2026-05-07",
+   "name": "LESJAK CATHERINE A",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 678.0,
+   "px": 0.0,
+   "after": 2823.0
+  },
+  {
+   "d": "2026-05-05",
+   "filed": "2026-05-07",
+   "name": "HORTON THOMAS W",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 678.0,
+   "px": 0.0,
+   "after": 2823.0
+  },
+  {
+   "d": "2026-05-05",
+   "filed": "2026-05-07",
+   "name": "Goren Isabella D",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 678.0,
+   "px": 0.0,
+   "after": 2830.0
+  },
+  {
+   "d": "2026-05-05",
+   "filed": "2026-05-07",
+   "name": "Enders Thomas",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 678.0,
+   "px": 0.0,
+   "after": 2830.0
+  },
+  {
+   "d": "2026-05-05",
+   "filed": "2026-05-07",
+   "name": "BUSH WESLEY G",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 678.0,
+   "px": 0.0,
+   "after": 941.0
+  },
+  {
+   "d": "2026-05-05",
+   "filed": "2026-05-07",
+   "name": "Billson Margaret S",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 678.0,
+   "px": 0.0,
+   "after": 2830.0
+  },
+  {
+   "d": "2026-05-05",
+   "filed": "2026-05-07",
+   "name": "Bazin Sebastien",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 678.0,
+   "px": 0.0,
+   "after": 2830.0
+  },
+  {
+   "d": "2026-05-01",
+   "filed": "2026-05-05",
+   "name": "Procacci Riccardo",
+   "title": "Senior Vice President",
+   "code": "M",
+   "ad": "A",
+   "sh": 966.0,
+   "px": 0.0,
+   "after": 32447.0
+  },
+  {
+   "d": "2026-05-01",
+   "filed": "2026-05-05",
+   "name": "Procacci Riccardo",
+   "title": "Senior Vice President",
+   "code": "F",
+   "ad": "D",
+   "sh": 416.0,
+   "px": 286.51,
+   "after": 32031.0
+  }
+ ],
+ "inst": {
+  "period": "2026-06-30",
+  "prev_period": "2026-03-31",
+  "holders": 3416,
+  "prev_holders": 3165,
+  "shares": 1428215005.0,
+  "prev_shares": 800902452.0,
+  "top": [
+   {
+    "name": "CALIFORNIA STATE TEACHERS RETIREMENT SYSTEM",
+    "sh": 594835395.0,
+    "chg": 593223330.0
+   },
+   {
+    "name": "BlackRock, Inc.",
+    "sh": 89158626.0,
+    "chg": -1586292.0
+   },
+   {
+    "name": "VANGUARD CAPITAL MANAGEMENT LLC",
+    "sh": 68137128.0,
+    "chg": 1705060.0
+   },
+   {
+    "name": "FMR LLC",
+    "sh": 49021400.0,
+    "chg": -2604767.0
+   },
+   {
+    "name": "TCI FUND MANAGEMENT LTD",
+    "sh": 47428233.0,
+    "chg": -82198.0
+   },
+   {
+    "name": "STATE STREET CORP",
+    "sh": 46497628.0,
+    "chg": 1160584.0
+   },
+   {
+    "name": "Capital Research Global Investors",
+    "sh": 30942708.0,
+    "chg": -3781920.0
+   },
+   {
+    "name": "GEODE CAPITAL MANAGEMENT, LLC",
+    "sh": 24828857.0,
+    "chg": -542758.0
+   },
+   {
+    "name": "PRICE T ROWE ASSOCIATES INC /MD/",
+    "sh": 20622890.0,
+    "chg": -3287457.0
+   },
+   {
+    "name": "Capital International Investors",
+    "sh": 18310646.0,
+    "chg": -908763.0
+   }
+  ]
+ },
+ "updated_at": "2026-11-24 16:46 KST"
+}

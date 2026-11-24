@@ -1,0 +1,399 @@
+{
+ "source": "SEC EDGAR",
+ "ticker": "TDG",
+ "cik": 1260221,
+ "name": "TransDigm Group INC",
+ "insider": [
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "M",
+   "ad": "A",
+   "sh": 4100.0,
+   "px": 284.97,
+   "after": 7700.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 20.0,
+   "px": 1112.265,
+   "after": 7680.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 100.0,
+   "px": 1113.5836,
+   "after": 7580.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 100.0,
+   "px": 1114.8205,
+   "after": 7480.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 50.0,
+   "px": 1116.024,
+   "after": 7430.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 60.0,
+   "px": 1117.11,
+   "after": 7370.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 100.0,
+   "px": 1119.0135,
+   "after": 7270.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 30.0,
+   "px": 1120.3033,
+   "after": 7240.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 60.0,
+   "px": 1121.5767,
+   "after": 7180.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 131.0,
+   "px": 1123.0856,
+   "after": 7049.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 306.0,
+   "px": 1124.0,
+   "after": 6743.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 600.0,
+   "px": 1125.0009,
+   "after": 6143.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 278.0,
+   "px": 1125.8595,
+   "after": 5865.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 305.0,
+   "px": 1127.0115,
+   "after": 5560.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 120.0,
+   "px": 1127.9018,
+   "after": 5440.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 150.0,
+   "px": 1129.3783,
+   "after": 5290.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 100.0,
+   "px": 1130.056,
+   "after": 5190.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 130.0,
+   "px": 1131.3268,
+   "after": 5060.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 210.0,
+   "px": 1132.2985,
+   "after": 4850.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 317.0,
+   "px": 1133.8868,
+   "after": 4533.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 495.0,
+   "px": 1134.9967,
+   "after": 4038.0
+  },
+  {
+   "d": "2026-10-15",
+   "filed": "2026-10-16",
+   "name": "Reiss Joel",
+   "title": "Co-Chief Operating Officer",
+   "code": "S",
+   "ad": "D",
+   "sh": 438.0,
+   "px": 1135.9542,
+   "after": 3600.0
+  },
+  {
+   "d": "2026-09-18",
+   "filed": "2026-09-21",
+   "name": "Palmer Peter",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 34.0,
+   "px": 1085.0,
+   "after": 4064.0
+  },
+  {
+   "d": "2026-09-18",
+   "filed": "2026-09-21",
+   "name": "Howley W Nicholas",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 126.0,
+   "px": 1085.0,
+   "after": 239.0
+  },
+  {
+   "d": "2026-09-18",
+   "filed": "2026-09-21",
+   "name": "Krasik Irina Igorevna",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 13.0,
+   "px": 1085.0,
+   "after": 13.0
+  },
+  {
+   "d": "2026-09-18",
+   "filed": "2026-09-21",
+   "name": "SMALL ROBERT J",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 52.0,
+   "px": 1085.0,
+   "after": 5677.0
+  },
+  {
+   "d": "2026-09-18",
+   "filed": "2026-09-21",
+   "name": "Santana Michele",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 34.0,
+   "px": 1085.0,
+   "after": 805.0
+  },
+  {
+   "d": "2026-09-18",
+   "filed": "2026-09-21",
+   "name": "MCCULLOUGH GARY E",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 41.0,
+   "px": 1085.0,
+   "after": 993.0
+  },
+  {
+   "d": "2026-09-18",
+   "filed": "2026-09-21",
+   "name": "HENNESSY SEAN P",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 46.0,
+   "px": 1085.0,
+   "after": 33836.09
+  },
+  {
+   "d": "2026-09-18",
+   "filed": "2026-09-21",
+   "name": "Graff Michael",
+   "title": "Director",
+   "code": "A",
+   "ad": "A",
+   "sh": 34.0,
+   "px": 1085.0,
+   "after": 1717.0
+  }
+ ],
+ "inst": {
+  "period": "2026-06-30",
+  "prev_period": "2026-03-31",
+  "holders": 1145,
+  "prev_holders": 1097,
+  "shares": 166223590.0,
+  "prev_shares": 51967241.0,
+  "top": [
+   {
+    "name": "CALIFORNIA STATE TEACHERS RETIREMENT SYSTEM",
+    "sh": 112352246.0,
+    "chg": 112258996.0
+   },
+   {
+    "name": "Capital International Investors",
+    "sh": 5062682.0,
+    "chg": -432013.0
+   },
+   {
+    "name": "BlackRock, Inc.",
+    "sh": 4871505.0,
+    "chg": 270253.0
+   },
+   {
+    "name": "Capital World Investors",
+    "sh": 4274109.0,
+    "chg": -392382.0
+   },
+   {
+    "name": "VANGUARD CAPITAL MANAGEMENT LLC",
+    "sh": 3653511.0,
+    "chg": -16218.0
+   },
+   {
+    "name": "Capital Research Global Investors",
+    "sh": 3119490.0,
+    "chg": -24019.0
+   },
+   {
+    "name": "VANGUARD PORTFOLIO MANAGEMENT LLC",
+    "sh": 2580994.0,
+    "chg": 7907.0
+   },
+   {
+    "name": "STATE STREET CORP",
+    "sh": 2559096.0,
+    "chg": 42490.0
+   },
+   {
+    "name": "PRINCIPAL FINANCIAL GROUP INC",
+    "sh": 1709129.0,
+    "chg": -304655.0
+   },
+   {
+    "name": "GEODE CAPITAL MANAGEMENT, LLC",
+    "sh": 1286385.0,
+    "chg": 9941.0
+   }
+  ]
+ },
+ "updated_at": "2026-11-24 16:46 KST"
+}
