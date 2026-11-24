@@ -115,7 +115,7 @@ en:
   gl.nky: Nikkei 225 <span class="krx-sub">Prev. close</span>
   gl.hsi: Hang Seng <span class="krx-sub">Prev. close</span>
   gl.sse: Shanghai Composite <span class="krx-sub">Prev. close</span>
-  gl.note: 'US indices are not available in the widget, so tracking ETFs are shown instead: SPY (S&amp;P 500), QQQ (Nasdaq-100), DIA (Dow), SOXX (semiconductors). Nikkei 225, Hang Seng and Shanghai Composite are the indices themselves; gold and WTI are spot and front-month. Delayed quotes, 3-month charts. · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  gl.note: 'US indices are not available in the widget, so tracking ETFs are shown instead. Nikkei 225, Hang Seng and Shanghai Composite show the previous close; gold and WTI are spot and front-month. Delayed quotes, 3-month chart by default. Widget colours are US style (green up, red down)'
   sec.title: S&amp;P 500 Sectors
   sec.heat_note: 'S&amp;P 500 heatmap grouped by sector. Block size is market cap, color is the change from the previous close (delayed quotes)'
   sec.note: 'The 11 SPDR sector ETFs, change from the previous close (delayed quotes) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
@@ -195,7 +195,7 @@ en:
   equity.intro: Sector trends, stock activity, disclosures and newly listed ETFs in the US and Korean equity markets.
   eq.tabs_aria: Market
   fx.usd_title: US Dollar
-  fx.usd_note: "The Dollar Index (DXY) is not available in the widget, so its tracking ETF (UUP) is shown instead. Delayed quotes, last 12 months"
+  fx.usd_note: "The Dollar Index (DXY) is not available in the widget, so its tracking ETF (UUP) is shown instead. Delayed quotes, 1-year chart by default"
   eq.tab_kr: Korea
   eq.tab_us: US
   eq.lead_kr: 'Sources: Korea Exchange (KRX) Open API, FSS DART'
@@ -205,11 +205,11 @@ en:
   fx.title: FX
   fx.intro: The US dollar and Korean won, currency futures positioning and foreign capital flows.
   fx.tv_title: Korean Won FX
-  fx.tv_note: Delayed quotes, last 1 year
+  fx.tv_note: Delayed quotes, 1-year chart by default
   cmd.title: Commodity
   cmd.intro: Price trends for energy, metals and agriculture.
   cmd.tv_title: Commodities
-  cmd.tv_note: Spot / front-month delayed quotes, last 1 year
+  cmd.tv_note: Spot / front-month delayed quotes, 1-year chart by default
   cm.energy_title: Energy Spot Prices
   cm.oil: Crude oil <span class="krx-sub">USD/bbl</span>
   cm.gas: Natural gas (Henry Hub) <span class="krx-sub">USD/MMBtu</span>

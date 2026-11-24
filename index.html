@@ -14,9 +14,9 @@ wide: true
 <div class="home-grid">
 <div class="home-data">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-{% include tv-global.html parts="indices" %}
+{% include tv-minis.html id="global-index" title="해외 지수·원자재" title_key="gl.title" items="AMEX:SPY|S&P500 ETF (SPY)|S&P 500 ETF (SPY);NASDAQ:QQQ|나스닥100 ETF (QQQ)|Nasdaq-100 ETF (QQQ);AMEX:DIA|다우 ETF (DIA)|Dow ETF (DIA);NASDAQ:SOXX|반도체 ETF (SOXX)|Semiconductor ETF (SOXX);TVC:USOIL|WTI (달러/배럴)|WTI (USD/bbl);TVC:GOLD|금 (달러/온스)|Gold (USD/oz);INDEX:NKY|닛케이225|Nikkei 225;HSI:HSI|항셍지수|Hang Seng;SSE:000001|상하이종합지수|Shanghai Composite" range="3M" note="미국 지수는 위젯 제공이 막혀 있어 추종 ETF로 대신 보여 줘요. 닛케이225·항셍·상하이종합은 전일 종가, 금·WTI는 현물·근월 기준. 지연 시세, 차트 기본 3개월. 위젯 색은 미국식(상승 초록·하락 빨강)" note_key="gl.note" %}
 {% include global-index.html %}
-{% include tv-global.html parts="sectors" %}
+{% include tv-global.html %}
 {% include krx-index.html %}
 </div>
 
