@@ -1,0 +1,20 @@
+name: 위젯 점검 (임시)
+on:
+  push:
+    branches: [claude/project-thread-1vzn6o]
+    paths: [".github/workflows/tv-check.yml"]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm i playwright@1.47.2 && npx playwright install chromium
+      - run: |
+          cat > c.js <<'JS'
+          const { chromium } = require('playwright');
+          (async () => {
+            const b = await chromium.launch(); const p = await b.newPage({viewport:{width:500,height:1500}});
+            for (const u of ["https://www.tradingview-widget.com/embed-widget/timeline/?locale=kr#%7B%22feedMode%22%3A%22all_symbols%22%2C%22isTransparent%22%3Afalse%2C%22displayMode%22%3A%22regular%22%2C%22width%22%3A%22100%25%22%2C%22height%22%3A%22100%25%22%2C%22colorTheme%22%3A%22light%22%2C%22locale%22%3A%22kr%22%7D", "https://www.tradingview-widget.com/embed-widget/timeline/?locale=en#%7B%22feedMode%22%3A%22all_symbols%22%2C%22isTransparent%22%3Afalse%2C%22displayMode%22%3A%22regular%22%2C%22width%22%3A%22100%25%22%2C%22height%22%3A%22100%25%22%2C%22colorTheme%22%3A%22light%22%2C%22locale%22%3A%22en%22%7D"]) { await p.goto(u); await p.waitForTimeout(12000); console.log("RES", u.slice(0,70), (await p.innerText("body")).slice(0,2500).replace(/\n/g," | ")); }
+            await b.close();
+          })();
+          JS
+          node c.js
