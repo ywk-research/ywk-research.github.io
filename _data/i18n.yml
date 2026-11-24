@@ -118,9 +118,25 @@ en:
   fx.tv_title: Korean Won FX
   fx.tv_note: Delayed quotes, last 1 year
   cmd.title: Commodity
-  cmd.intro: Price trends for metals and energy.
+  cmd.intro: Price trends for energy, metals and agriculture.
   cmd.tv_title: Commodities
   cmd.tv_note: Spot / front-month delayed quotes, last 1 year
+  cm.energy_title: Energy Spot Prices
+  cm.oil: Crude oil <span class="krx-sub">USD/bbl</span>
+  cm.gas: Natural gas (Henry Hub) <span class="krx-sub">USD/MMBtu</span>
+  cm.oil_aria: WTI and Brent spot prices
+  cm.gas_aria: Henry Hub natural gas spot price
+  cm.energy_note: 'As of {d} (US date). The U.S. Energy Information Administration (EIA) publishes daily spot prices once a week, so data can lag by up to a week; see the charts above for live moves. Card changes vs. one week earlier · Source: U.S. Energy Information Administration (EIA)'
+  cm.gold_title: Korea Gold Price
+  cm.gold_aria: KRX gold market closing price
+  cm.gold_note: 'As of {d}. Closing price of KRX Gold Market {n} (KRW per gram) · Source: Korea Exchange (KRX) Open API'
+  cm.month_title: 'Monthly Commodity Prices <span class="krx-sub">{m} average</span>'
+  cm.col_item: Item
+  cm.col_price: Price
+  cm.col_mom: MoM
+  cm.col_yoy: YoY
+  cm.col_trend: 3Y trend
+  cm.month_note: 'Monthly average prices in US dollars. The World Bank publishes the previous month early each month (latest release {p}). Source: World Bank Commodity Price Data (The Pink Sheet), CC BY 4.0'
   cal.title: Calendar
   cal.intro: This month's major economic releases and rate decisions, with results.
   tv.credit: Quote widget

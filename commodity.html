@@ -7,7 +7,9 @@ wide: true
 ---
 <section class="intro">
   <h1 data-i18n="cmd.title">Commodity</h1>
-  <p data-i18n="cmd.intro">금속·에너지 원자재 가격 흐름을 모아 둡니다.</p>
+  <p data-i18n="cmd.intro">에너지·금속·농산물 원자재 가격 흐름을 모아 둡니다.</p>
 </section>
 
 {% include tv-minis.html id="cmd-tv" title="원자재" title_key="cmd.tv_title" items="TVC:GOLD|금 (달러/온스)|Gold (USD/oz);TVC:SILVER|은 (달러/온스)|Silver (USD/oz);TVC:USOIL|WTI (달러/배럴)|WTI (USD/bbl);TVC:UKOIL|브렌트 (달러/배럴)|Brent (USD/bbl)" range="12M" note="현물·근월 기준 지연 시세, 최근 1년" note_key="cmd.tv_note" %}
+
+{% include commodity-data.html %}
