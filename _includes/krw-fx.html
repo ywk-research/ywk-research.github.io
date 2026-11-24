@@ -1,0 +1,39 @@
+<!-- 원화 환율: 원/달러·원/100엔·원/위안·원/유로 매매기준율. 데이터: _data/krw_fx.json (tools/fetch_macro.py) -->
+{% assign fx = site.data.krw_fx %}
+{% if fx and fx.series %}
+{% include mc-common.html %}
+<section class="krx macro" id="krw-fx">
+  <div class="krx-head">
+    <h2 data-i18n="fx.title">원화 환율</h2>
+    <div class="krx-range" id="fx-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-months="3" data-i18n="range.3m">3개월</button>
+      <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>
+    </div>
+  </div>
+  <div class="gl-cards fx-cards" id="fx-cards"></div>
+  <div class="mc-grid">
+    <div class="mc-box mc-wide"><p class="krx-name" data-i18n="fx.index">기간 첫날 = 100으로 맞춘 추이 <span class="krx-sub">위로 갈수록 원화 약세</span></p><div class="mc-chart"><canvas id="fx-index" aria-label="원화 환율 지수화 추이"></canvas></div></div>
+  </div>
+  {% assign fx_last = fx.series.usd | last %}
+  <p class="note" data-i18n="fx.note" data-d="{{ fx_last[0] }}" data-u="{{ fx.updated_at }}">{{ fx_last[0] }} 매매기준율(서울외환시장 고시, 원/엔은 100엔당). 카드 변동은 전 영업일 대비 · 자료: 한국은행 ECOS · 업데이트 {{ fx.updated_at }}</p>
+  <script>
+    (function () {
+      var F = {{ fx.series | jsonify }};
+      var LIST = [['원/달러', 'usd', 0], ['원/100엔', 'jpy100', 1], ['원/위안', 'cny', 2], ['원/유로', 'eur', 3]];
+      var wrap = document.getElementById('fx-cards');
+      function f(v, d) { return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+      LIST.forEach(function (x) {
+        var s = F[x[1]]; if (!s || !s.length) return;
+        var last = s[s.length - 1], prev = s.length > 1 ? s[s.length - 2][1] : last[1];
+        var ch = last[1] - prev, pct = prev ? ch / prev * 100 : 0;
+        MC.card(wrap, { label: x[0], date: last[0].slice(5).replace('-', '/'), value: f(last[1], 2) + (window.LANG === 'en' ? '' : '원'),
+          chg: (ch > 0 ? '▲ ' : ch < 0 ? '▼ ' : '') + f(Math.abs(ch), 2) + ' (' + (pct > 0 ? '+' : pct < 0 ? '−' : '') + f(Math.abs(pct), 2) + '%)', dir: ch });
+      });
+      MC.range(document.getElementById('fx-range'), function (months) {
+        MC.line(document.getElementById('fx-index'), LIST.filter(function (x) { return F[x[1]]; }).map(function (x) { return [x[0], F[x[1]], x[2]]; }),
+          { months: months, base100: true, zeroAt: 100 });
+      });
+    })();
+  </script>
+</section>
+{% endif %}

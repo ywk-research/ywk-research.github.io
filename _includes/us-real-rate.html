@@ -1,0 +1,47 @@
+<!-- 미국 실질금리·기대인플레이션(BEI). 데이터: _data/macro.json의 us, us_real (tools/fetch_macro.py) -->
+{% assign mc = site.data.macro %}
+{% if mc and mc.us and mc.us_real %}
+{% include mc-common.html %}
+<section class="krx macro" id="us-real">
+  <div class="krx-head">
+    <h2 data-i18n="rr.title">美 실질금리·기대인플레이션</h2>
+    <div class="krx-range" id="rr-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-months="3" data-i18n="range.3m">3개월</button>
+      <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>
+    </div>
+  </div>
+  <div class="gl-cards" id="rr-cards"></div>
+  <div class="mc-grid">
+    <div class="mc-box"><p class="krx-name" data-i18n="rr.split">10년물 = 실질금리 + 기대인플레이션 <span class="krx-sub">%</span></p><div class="mc-chart"><canvas id="rr-split" aria-label="미국 10년물 명목·실질금리와 BEI"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="rr.bei">기대인플레이션(BEI) <span class="krx-sub">%</span></p><div class="mc-chart"><canvas id="rr-bei" aria-label="미국 5년·10년 BEI"></canvas></div></div>
+  </div>
+  {% assign rr_last = mc.us_real | last %}
+  <p class="note" data-i18n="rr.note" data-d="{{ rr_last[0] }}" data-u="{{ mc.updated_at }}">{{ rr_last[0] }} 기준(미국 날짜). 실질금리는 미 재무부가 고시하는 물가연동국채(TIPS) 수익률이고, 기대인플레이션(BEI)은 같은 만기 명목 국채 수익률에서 실질금리를 뺀 값이에요. 카드 변동은 전일 대비 bp · 자료: 미 재무부 · 업데이트 {{ mc.updated_at }}</p>
+  <script>
+    (function () {
+      var M = {{ mc | jsonify }};
+      function col(rows, i) { return rows.filter(function (r) { return r[1][i] != null; }).map(function (r) { return [r[0], r[1][i]]; }); }
+      function diff(a, b) {
+        var m = {}; b.forEach(function (p) { m[p[0]] = p[1]; });
+        return a.filter(function (p) { return p[0] in m; }).map(function (p) { return [p[0], Math.round((p[1] - m[p[0]]) * 1000) / 1000]; });
+      }
+      var n5 = col(M.us, M.us_tenors.indexOf('5Y')), n10 = col(M.us, M.us_tenors.indexOf('10Y'));
+      var r5 = col(M.us_real, M.us_real_tenors.indexOf('5Y')), r10 = col(M.us_real, M.us_real_tenors.indexOf('10Y'));
+      var b5 = diff(n5, r5), b10 = diff(n10, r10);
+
+      var wrap = document.getElementById('rr-cards');
+      [['美 10년 실질금리', r10], ['美 10년 BEI', b10], ['美 5년 BEI', b5]].forEach(function (x) {
+        var s = x[1]; if (!s.length) return;
+        var last = s[s.length - 1], prev = s.length > 1 ? s[s.length - 2][1] : last[1];
+        var bp = Math.round((last[1] - prev) * 100);
+        MC.card(wrap, { label: x[0], date: last[0].slice(5).replace('-', '/'), value: last[1].toFixed(2) + '%',
+          chg: (bp > 0 ? '▲ ' : bp < 0 ? '▼ ' : '') + Math.abs(bp) + 'bp', dir: bp });
+      });
+      MC.range(document.getElementById('rr-range'), function (months) {
+        MC.line(document.getElementById('rr-split'), [['명목 10년', n10, 0], ['실질 10년', r10, 1], ['BEI 10년', b10, 2]], { months: months });
+        MC.line(document.getElementById('rr-bei'), [['BEI 5년', b5, 3], ['BEI 10년', b10, 2]], { months: months });
+      });
+    })();
+  </script>
+</section>
+{% endif %}
