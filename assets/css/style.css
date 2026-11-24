@@ -225,6 +225,9 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .ecal-cell.today .ecal-num { display: inline-block; align-self: flex-start; padding: 1px 6px; border-radius: 999px; background: var(--accent); color: var(--bg); }
 .ecal-ev { display: block; font-size: 12px; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ecal-ev b { font-weight: 500; margin-left: 3px; }
+.ecal-ev.minor { font-size: 11px; color: var(--muted); }
+.ecal-more { font-size: 11px; color: var(--muted); }
+.ecal-day li.minor { color: var(--muted); }
 .ecal-day { margin-top: 14px; padding: 12px 16px; background: var(--soft); border-radius: 12px; }
 .ecal-day h3 { margin: 0 0 6px; font-size: 16px; }
 .ecal-day ul { list-style: none; margin: 0; padding: 0; }
