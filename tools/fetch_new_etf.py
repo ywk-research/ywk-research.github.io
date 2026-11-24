@@ -169,6 +169,8 @@ def update_us(today, prev):
                 continue
             seen.add(acc)
             company, sic, funds, exch = parse_8a(txt)
+            if os.environ.get("DEBUG"):
+                print(f"  8-A {d} {company} sic={sic} series={len(funds)} exch={exch} etf={bool(funds) or is_etf_company(company, sic)}")
             cik = path.split("/")[2]
             url = f"https://www.sec.gov/Archives/edgar/data/{cik}/{acc.replace('-', '')}/{acc}-index.htm"
             if not funds and is_etf_company(company, sic):
