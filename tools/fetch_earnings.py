@@ -111,8 +111,8 @@ def us_events(old):
         for form, items, acc_t, acc in zip(rec["form"], rec["items"], rec["acceptanceDateTime"], rec["accessionNumber"]):
             if form != "8-K" or "2.02" not in (items or ""):
                 continue
-            # acceptanceDateTime은 'Z'가 붙어 있지만 실제로는 미 동부 시각이다
-            et = dt.datetime.fromisoformat(acc_t[:19]).replace(tzinfo=ET)
+            # acceptanceDateTime은 UTC(예: 애플 16:30 ET 발표 → 20:30Z)
+            et = dt.datetime.fromisoformat(acc_t[:19]).replace(tzinfo=dt.timezone.utc).astimezone(ET)
             if et.date().isoformat() < cut or et.date() in days:  # 같은 날 정정·추가 제출은 한 번만
                 continue
             days.add(et.date())
@@ -184,8 +184,11 @@ def ir_detail(key, rcept_no):
         return None, None, False
     day = dt.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
     tm = TIME_RE.search(seg[m.end(): m.end() + 60])
-    hhmm = f"{int(tm.group(1)):02d}:{tm.group(2)}" if tm and int(tm.group(1)) < 24 else None
-    return day, hhmm, "실적" in text
+    hhmm = f"{int(tm.group(1)):02d}:{tm.group(2)}" if tm and 0 < int(tm.group(1)) < 24 else None
+    # 실적 발표 IR만: '목적'·'내용' 칸에 실적·결산이 있어야 한다(해외 NDR·컨퍼런스 참가 안내는 뺀다)
+    j = max(text.find("목적"), text.find("내용"))
+    purpose = text[j: j + 160] if j >= 0 else ""
+    return day, hhmm, bool(re.search(r"실적|결산", purpose))
 
 
 def kr_events(old):
@@ -231,7 +234,18 @@ def kr_events(old):
             if day and earn:
                 found[r["rcept_no"]] = {**base, "date": day.isoformat(), "time": hhmm, "kind": "ir", "filed": filed}
     prev.update(found)
-    return list(prev.values())
+    # 같은 회사·같은 날 잠정실적 공시가 있으면 IR 안내는 빼고 시각만 옮긴다
+    rows = list(prev.values())
+    pre = {(e["sym"], e["date"]): e for e in rows if e["kind"] == "prelim"}
+    out = []
+    for e in rows:
+        if e["kind"] == "ir" and (e["sym"], e["date"]) in pre:
+            p = pre[(e["sym"], e["date"])]
+            if e.get("time") and not p.get("time"):
+                p["time"] = e["time"]
+            continue
+        out.append(e)
+    return out
 
 
 def kr_names_en(old, events):
@@ -246,8 +260,11 @@ def kr_names_en(old, events):
         raw = get("https://opendart.fss.or.kr/api/corpCode.xml?" + urllib.parse.urlencode({"crtfc_key": key}), binary=True)
         with zipfile.ZipFile(io.BytesIO(raw)) as z:
             xml = z.read(z.namelist()[0]).decode("utf-8", "replace")
-        for m in re.finditer(r"<corp_code>(\d+)</corp_code>.*?<stock_code>\s*(\d{6})\s*</stock_code>", xml, re.S):
-            corp[m.group(2)] = m.group(1)
+        for blk in re.findall(r"<list>(.*?)</list>", xml, re.S):  # 회사 하나씩
+            cc = re.search(r"<corp_code>(\d+)</corp_code>", blk)
+            sc = re.search(r"<stock_code>\s*(\d{6})\s*</stock_code>", blk)
+            if cc and sc:
+                corp[sc.group(1)] = cc.group(1)
     except Exception as e:
         print(f"  고유번호 목록 실패: {e}")
         return names

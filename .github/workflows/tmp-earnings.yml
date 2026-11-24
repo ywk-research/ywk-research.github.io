@@ -22,7 +22,7 @@ jobs:
           DART_API_KEY: ${{ secrets.DART_API_KEY }}
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
         run: |
-          ls -la tools/state | head
+          rm -f _data/earnings.json
           python tools/fetch_earnings.py
           python - <<'PY'
           import json, collections
@@ -37,4 +37,4 @@ jobs:
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add _data/earnings.json && git commit -m "실적발표 일정 첫 수집" && git push
+          git add _data/earnings.json && git commit -m "실적발표 일정 다시 수집" && git push

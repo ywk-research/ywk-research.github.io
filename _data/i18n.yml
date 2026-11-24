@@ -221,6 +221,24 @@ en:
   cm.month_note: 'Monthly average prices in US dollars. The World Bank publishes the previous month early each month (latest release {p}). Source: World Bank Commodity Price Data (The Pink Sheet), CC BY 4.0'
   cal.title: Calendar
   cal.intro: This month's major economic releases and rate decisions, with results.
+  cal.intro2: Major economic releases, rate decisions and results, plus earnings dates for major US and Korean companies.
+  cal.tabs_aria: Category
+  cal.tab_macro: Economic data
+  cal.tab_earn: Earnings
+  earn.title: Earnings Calendar
+  earn.pick_aria: Country
+  earn.all: All
+  earn.us: US
+  earn.kr: Korea
+  earn.est: Est.
+  earn.ir: IR scheduled
+  earn.prelim: Prelim. results
+  earn.filed: Earnings 8-K
+  earn.empty: No earnings releases.
+  earn.now_today: Today's earnings
+  earn.now_next: Next earnings
+  earn.more: tap a date in the calendar to see all
+  earn.note: "Korea time (KST). US covers about the 100 largest companies plus the watchlist; Korea covers the top 100 KOSPI and top 30 KOSDAQ companies by market cap. Reported dates are the SEC acceptance time of the earnings 8-K (Item 2.02) for the US and the DART preliminary-results filing date for Korea. Korean upcoming dates come from IR-meeting notices filed on DART that concern results. The US has no official free schedule of upcoming dates, so grey 'Est.' dates are estimated as 52 weeks (same weekday) after the same quarter a year ago and are replaced once the actual filing arrives. Sources: SEC EDGAR, FSS OpenDART · Updated {u}"
   tv.credit: Quote widget
   data.title: Data
   sheat.title: 'Sector Heatmap <span class="krx-sub">as of {d}</span>'

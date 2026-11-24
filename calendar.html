@@ -7,9 +7,15 @@ wide: true
 ---
 <section class="intro">
   <h1 data-i18n="cal.title">Calendar</h1>
-  <p data-i18n="cal.intro">이번 달 주요국 경제지표 발표와 금리 결정 일정, 그리고 지표 결과를 모아 둡니다.</p>
+  <p data-i18n="cal.intro2">주요국 경제지표 발표·금리 결정 일정과 지표 결과, 미국·한국 주요 기업의 실적발표 일정을 모아 둡니다.</p>
 </section>
 
+<div class="krx-range wl-tabs" id="cal-tabs" role="tablist" aria-label="분류" data-i18n-aria="cal.tabs_aria">
+  <button type="button" role="tab" data-tab="macro" class="on" data-i18n="cal.tab_macro">경제지표</button>
+  <button type="button" role="tab" data-tab="earnings" data-i18n="cal.tab_earn">Earnings</button>
+</div>
+
+<div class="cal-pane" data-pane="macro">
 {% include econ-calendar.html %}
 
 {% include tv-calendar.html %}
@@ -17,3 +23,22 @@ wide: true
 {% include us-monthly.html %}
 
 {% include kr-monthly.html %}
+</div>
+
+<div class="cal-pane" data-pane="earnings" hidden>
+{% include earnings-calendar.html %}
+</div>
+
+<script>
+  (function () {
+    var btns = document.querySelectorAll('#cal-tabs button'), panes = document.querySelectorAll('.cal-pane');
+    function show(k) {
+      btns.forEach(function (b) { var on = b.dataset.tab === k; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+      panes.forEach(function (p) { p.hidden = p.dataset.pane !== k; });
+    }
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () { show(b.dataset.tab); try { history.replaceState(null, '', b.dataset.tab === 'macro' ? location.pathname : '#earnings'); } catch (e) {} });
+    });
+    show(location.hash === '#earnings' ? 'earnings' : 'macro');
+  })();
+</script>
