@@ -345,3 +345,16 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .hl-chart { height: 260px; margin: 16px 0; }
 .hl-names { margin-top: 8px; }
 @media (max-width: 760px) { .gl-cards.hl-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Commodity: 직접 수집 데이터 */
+.cm-gold-chart { height: 260px; }
+.cm-table-wrap { overflow-x: auto; }
+.cm-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.cm-table th { text-align: left; font-weight: 500; color: var(--muted); font-size: 13px; padding: 8px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.cm-table td { padding: 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.cm-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.cm-table td.up { color: var(--up); } .cm-table td.down { color: var(--down); }
+.cm-table tr.cm-group th { color: var(--text); font-weight: 600; font-size: 13px; padding-top: 14px; border-bottom: 1px solid var(--line); }
+.cm-table th.cm-spark-h, .cm-table td.cm-spark-c { width: 130px; text-align: right; }
+.cm-spark { width: 120px; height: 28px; display: inline-block; vertical-align: middle; }
+@media (max-width: 560px) { .cm-table { font-size: 13px; } .cm-table td, .cm-table th { padding-left: 4px; padding-right: 4px; } .cm-table .num .krx-sub { display: block; font-size: 11px; } .cm-spark-h, .cm-spark-c { display: none; } }
