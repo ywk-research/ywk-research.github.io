@@ -19,6 +19,7 @@ import urllib.request
 
 import krx_backtest
 import krx_cross
+import krx_highlow
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_PATH = os.path.join(ROOT, "_data", "krx_index.json")
@@ -263,7 +264,18 @@ def update_cross(key, stocks, day):
                                      "cap": num(r.get("MKTCAP")), "pct": num(r.get("FLUC_RT"))}
     out = krx_cross.build(days, universe, day)
     out["rules"] = {mkt: rule_txt(min_cap) for mkt, (_, min_cap) in STOCKS.items()}
-    return write_if_changed(krx_cross.OUT_PATH, out)
+    changed = write_if_changed(krx_cross.OUT_PATH, out)
+    # 52주 신고가·신저가: 같은 과거 종가로, 시가총액 조건 없이 보통주 전체
+    try:
+        common = {}
+        for mkt in STOCKS:
+            for r in stocks[mkt]:
+                if is_common_stock(r):
+                    common[r["ISU_CD"]] = {"name": r["ISU_NM"], "mkt": mkt, "cap": num(r.get("MKTCAP"))}
+        changed |= write_if_changed(krx_highlow.OUT_PATH, krx_highlow.build(days, common, day))
+    except Exception as e:  # 신고가 계산이 실패해도 크로스 결과는 남긴다
+        print(f"52주 신고가·신저가 실패: {type(e).__name__}: {e}")
+    return changed
 
 
 def update_etf(key, day):
