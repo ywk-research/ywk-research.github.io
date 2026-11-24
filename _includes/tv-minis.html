@@ -1,8 +1,8 @@
 <!-- TradingView 시세표 + 큰 차트 (로고·링크는 약관상 지우지 않음)
      사용: include tv-minis.html id="fx-tv" title="환율" title_key="fx.tv_title" items="FX_IDC:USDKRW|원/달러|USD/KRW;..." range="12M" note="..." note_key="..."
-     items: 심볼|한국어 이름|영어 이름 을 ; 로 이어 쓴다. 왼쪽 표에서 값을 한눈에, 오른쪽 차트는 탭으로 종목을 바꿔 본다 -->
+     items: 심볼|한국어 이름|영어 이름 을 ; 로 이어 쓴다. 위 표에서 값을 한눈에, 아래 차트는 탭으로 종목을 바꿔 본다 -->
 {% assign items = include.items | split: ";" %}
-<section class="krx gl tvo-sec" id="{{ include.id }}">
+<section class="krx gl" id="{{ include.id }}">
   <div class="krx-head">
     <h2{% if include.title_key %} data-i18n="{{ include.title_key }}"{% endif %}>{{ include.title }}</h2>
   </div>
