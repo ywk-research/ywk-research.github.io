@@ -157,6 +157,27 @@ en:
   etf.value: Value traded
   etf.aum: Net assets
   etf.note: "{n} listed ETFs, total value traded ₩{total} (shown in Korean units) · Source: Korea Exchange (KRX) Open API. ETF names are shown in Korean."
+  ne.title: Newly listed ETFs
+  ne.us: US
+  ne.kr: Korea
+  ne.date_us: Listed (est.)
+  ne.prev_title: "US ETFs listed on the previous trading day ({d})"
+  ne.prev_none: No new ETFs listed on the previous trading day.
+  ne.all: Last 45 days
+  ne.src: Source
+  ne.unchecked: Not yet verified
+  ne.prev_ok: "Only funds whose first trade that day was confirmed by an issuer press release or notice ({n} 8-A candidates)."
+  ne.prev_cand: Not verified yet, so 8-A filing–based candidates are shown.
+  ne.date_kr: Listed
+  ne.ticker: Ticker
+  ne.fund: Fund
+  ne.issuer: Issuer / trust
+  ne.exch: Exchange
+  ne.close1: First-day close
+  ne.aum1: First-day net assets
+  ne.none: No new listings recently.
+  ne.note_us: "To list an ETF, the issuer files Form 8-A (Exchange Act Section 12(b) registration) with the SEC, usually on the business day before the first trade, so the listing date is estimated as the next trading day after the filing. It may be off by a day; tickers appear once the fund is registered in the SEC fund list. Cross-listings on the new Texas exchanges are excluded · Source: SEC EDGAR"
+  ne.note_kr: "{n} in the last 45 days · {total} ETFs listed in total. The listing date is the first day a code appears in KRX daily ETF data. ETF names are shown in Korean · Source: Korea Exchange (KRX) Open API"
   hl.title: '52-week Highs & Lows <span class="krx-sub">as of {d}</span>'
   hl.kospi_hi: KOSPI new highs
   hl.kospi_lo: KOSPI new lows
@@ -171,7 +192,7 @@ en:
   hl.note: "Based on closing prices: a stock makes a new high (low) when its close is above (below) every close of the previous {w} trading days (about 52 weeks), adjusted for splits. May differ from broker counts that use intraday highs and lows. Common stocks only, excluding those listed less than a year (KOSPI {a}, KOSDAQ {b} stocks). Lists show the 10 largest by market cap. Stock names are shown in Korean · Source: Korea Exchange (KRX) Open API"
   # 상위 탭 페이지 (equity·rate·fx·commodity·calendar.html)
   equity.title: Equity
-  equity.intro: "Sector trends and stock activity in the Korean equity market. Source: Korea Exchange (KRX) Open API"
+  equity.intro: "Sector trends and stock activity in the Korean equity market, plus newly listed US and Korean ETFs. Sources: Korea Exchange (KRX) Open API, SEC EDGAR"
   rate.title: Rate
   rate.intro: US and Korean Treasury yield curves, term spreads, the Korea–US rate gap and Korean short-term rates.
   fx.title: FX

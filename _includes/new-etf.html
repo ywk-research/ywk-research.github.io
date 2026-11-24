@@ -1,0 +1,120 @@
+<!-- 신규 상장 ETF (_data/new_etf.json, tools/fetch_new_etf.py)
+     미국: SEC EDGAR Form 8-A12B 제출일 기준 / 한국: KRX Open API ETF 일별매매정보에 처음 나타난 날 -->
+{% assign ne = site.data.new_etf %}
+{% if ne and ne.us or ne and ne.kr %}
+{% assign nus = ne.us.items | default: empty %}
+{% assign nkr = ne.kr.items | default: empty %}
+<section class="krx etf ne" id="new-etf">
+  <div class="krx-head">
+    <h2 data-i18n="ne.title">신규 상장 ETF</h2>
+    <div class="krx-range ne-tab">
+      <button type="button" data-k="us" class="on" data-i18n="ne.us">미국</button>
+      <button type="button" data-k="kr" data-i18n="ne.kr">한국</button>
+    </div>
+  </div>
+
+  <div class="ne-pane" data-k="us">
+    {% assign pd = ne.us.prev_day %}
+    {% assign today_list = nus | where: "ld", pd %}
+    {% assign cf = site.data.new_etf_confirmed[pd] %}
+    <div class="ne-prev">
+      {% if cf and cf.checked %}
+      {% assign ok = cf.etfs | default: empty %}
+      <p class="krx-name"><span data-i18n="ne.prev_title" data-d="{{ pd | date: '%b %-d' }}">전 거래일({{ pd | date: "%m.%d" }}) 상장 미국 ETF</span> <span class="krx-sub">{{ ok.size }}</span></p>
+      {% if ok.size > 0 %}
+      <ul class="ne-prev-list">
+        {% for r in ok %}
+        <li><span class="ne-tk">{{ r.ticker | default: "—" }}</span>
+          <span class="ne-pn">{{ r.name }}</span>
+          <span class="krx-sub">{{ r.issuer }}{% if r.exchange %} · {{ r.exchange }}{% endif %}</span>
+          {% if r.src %}<a class="ne-link" href="{{ r.src }}" target="_blank" rel="noopener" data-i18n="ne.src">출처</a>{% endif %}</li>
+        {% endfor %}
+      </ul>
+      {% else %}<p class="note" data-i18n="ne.prev_none">전 거래일에 새로 상장한 ETF가 없어요.</p>{% endif %}
+      <p class="note" data-i18n="ne.prev_ok" data-n="{{ today_list.size }}">운용사 보도자료·공지로 그날 첫 거래를 확인한 것만 넣었어요(8-A 후보 {{ today_list.size }}개 중).</p>
+      {% else %}
+      <p class="krx-name"><span data-i18n="ne.prev_title" data-d="{{ pd | date: '%b %-d' }}">전 거래일({{ pd | date: "%m.%d" }}) 상장 미국 ETF</span> <span class="ne-badge" data-i18n="ne.unchecked">확인 전</span></p>
+      {% if today_list.size > 0 %}
+      <ul class="ne-prev-list">
+        {% for r in today_list %}
+        <li><span class="ne-tk">{% if r.ticker != "" %}{{ r.ticker }}{% else %}—{% endif %}</span>
+          <span class="ne-pn">{{ r.name | default: r.issuer }}</span>
+          <span class="krx-sub">{{ r.issuer }}{% if r.exchange != "" %} · {{ r.exchange }}{% endif %}</span>
+          <a class="ne-link" href="{{ r.url }}" target="_blank" rel="noopener" title="SEC EDGAR">8-A</a></li>
+        {% endfor %}
+      </ul>
+      {% else %}<p class="note" data-i18n="ne.prev_none">전 거래일에 새로 상장한 ETF가 없어요.</p>{% endif %}
+      <p class="note" data-i18n="ne.prev_cand">아직 첫 거래 확인 전이라 8-A 제출 기준 후보를 보여 줘요.</p>
+      {% endif %}
+    </div>
+    {% if nus.size > 0 %}
+    <p class="krx-name ne-all" data-i18n="ne.all">최근 45일</p>
+    <div class="etf-wrap ne-wrap">
+      <table class="etf-table">
+        <thead><tr>
+          <th data-i18n="ne.date_us">상장일(추정)</th><th data-i18n="ne.ticker">티커</th><th data-i18n="ne.fund">펀드</th>
+          <th data-i18n="ne.issuer" class="etf-idx">운용사·신탁</th><th data-i18n="ne.exch" class="ne-exch">거래소</th><th></th>
+        </tr></thead>
+        <tbody>
+          {% for r in nus %}
+          <tr{% if forloop.index > 1 %}{% assign pi = forloop.index0 | minus: 1 %}{% if nus[pi].ld != r.ld %} class="ne-day"{% endif %}{% endif %}>
+            <td class="ne-d" data-dt="{{ r.ld }}">{{ r.ld | date: "%m.%d" }}</td>
+            <td class="ne-tk">{% if r.ticker != "" %}{{ r.ticker }}{% else %}<span class="krx-sub">—</span>{% endif %}</td>
+            <td class="etf-name ne-nm">{{ r.name | default: "—" }}</td>
+            <td class="etf-idx ne-is">{{ r.issuer }}</td>
+            <td class="ne-exch">{{ r.exchange }}</td>
+            <td class="num"><a class="ne-link" href="{{ r.url }}" target="_blank" rel="noopener" title="SEC EDGAR">8-A</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+    <p class="note" data-i18n="ne.note_us" data-n="{{ nus.size }}">ETF를 거래소에 상장하려면 운용사가 SEC에 Form 8-A(증권거래법 12(b) 등록)를 내요. 보통 첫 거래 전 영업일에 내므로 제출일 다음 거래일을 상장일로 추정했어요. 실제 첫 거래일과 하루 다를 수 있고, 티커는 SEC 펀드 목록에 등록된 뒤에 채워져요. 텍사스 거래소 교차상장은 뺐어요 · 자료: SEC EDGAR</p>
+  </div>
+
+  <div class="ne-pane" data-k="kr" hidden>
+    {% if nkr.size > 0 %}
+    <div class="etf-wrap ne-wrap">
+      <table class="etf-table">
+        <thead><tr>
+          <th data-i18n="ne.date_kr">상장일</th><th data-i18n="etf.name">종목</th><th data-i18n="etf.index" class="etf-idx">기초지수</th>
+          <th data-i18n="ne.close1" class="num etf-close">첫날 종가</th><th data-i18n="ne.aum1" class="num etf-aum">첫날 순자산</th>
+        </tr></thead>
+        <tbody>
+          {% for r in nkr %}
+          <tr{% if forloop.index > 1 %}{% assign pi = forloop.index0 | minus: 1 %}{% if nkr[pi].d != r.d %} class="ne-day"{% endif %}{% endif %}>
+            <td class="ne-d" data-dt="{{ r.d }}">{{ r.d | date: "%m.%d" }}</td>
+            <td class="etf-name ne-nm">{{ r.name }} <span class="krx-sub etf-code">{{ r.code }}</span></td>
+            <td class="etf-idx" data-tn="{{ r.index }}">{{ r.index }}</td>
+            <td class="num etf-close">{{ r.close_txt }}</td>
+            <td class="num etf-aum"{% if r.aum > 0 %} data-en="₩{{ r.aum | divided_by: 10.0 | round: 1 }}bn"{% endif %}>{{ r.aum_txt }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}<p class="note" data-i18n="ne.none">최근 신규 상장이 없어요.</p>{% endif %}
+    <p class="note" data-i18n="ne.note_kr" data-n="{{ nkr.size }}" data-total="{{ ne.kr.listed }}">최근 45일 {{ nkr.size }}개 · 상장 ETF 전체 {{ ne.kr.listed }}개. 전 거래일 목록에 없던 종목코드가 처음 나타난 날을 상장일로 봤어요 · 자료: 한국거래소(KRX) Open API</p>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.getElementById('new-etf');
+      var tabs = root.querySelectorAll('.ne-tab button');
+      tabs.forEach(function (b) {
+        b.addEventListener('click', function () {
+          tabs.forEach(function (x) { x.classList.toggle('on', x === b); });
+          root.querySelectorAll('.ne-pane').forEach(function (p) { p.hidden = p.dataset.k !== b.dataset.k; });
+        });
+      });
+      if (LANG !== 'en') return;
+      var M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      root.querySelectorAll('[data-dt]').forEach(function (el) {
+        var p = el.dataset.dt.split('-'); el.textContent = M[+p[1] - 1] + ' ' + +p[2];
+      });
+      root.querySelectorAll('[data-tn]').forEach(function (el) { el.textContent = tn(el.dataset.tn); });
+    })();
+  </script>
+</section>
+{% endif %}

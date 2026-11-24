@@ -7,7 +7,7 @@ wide: true
 ---
 <section class="intro">
   <h1 data-i18n="equity.title">Equity</h1>
-  <p data-i18n="equity.intro">국내 주식 시장의 업종 흐름과 종목 동향을 모아 둡니다. 자료: 한국거래소(KRX) Open API</p>
+  <p data-i18n="equity.intro">국내 주식 시장의 업종 흐름과 종목 동향, 미국·한국 신규 상장 ETF를 모아 둡니다. 자료: 한국거래소(KRX) Open API, SEC EDGAR</p>
 </section>
 
 {% include stock-search.html %}
@@ -17,6 +17,8 @@ wide: true
 {% include dart-disclosures.html %}
 
 {% include krx-highlow.html %}
+
+{% include new-etf.html %}
 
 {% include krx-etf.html %}
 
