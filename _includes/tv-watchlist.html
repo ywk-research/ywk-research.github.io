@@ -8,18 +8,19 @@
       <thead><tr><th data-i18n="wl.th_name">종목</th><th data-i18n="wl.th_ticker">티커</th><th data-i18n="wl.th_weight">비중</th><th data-i18n="wl.th_base" data-d="{{ wl.base_date | date: '%-m/%-d' }}">기준가 ({{ wl.base_date | date: '%-m/%-d' }} 종가)</th></tr></thead>
       <tbody>
         {%- for s in wl.stocks %}
-        <tr><td data-i18n-name>{{ s.name }}</td><td>{{ s.symbol | split: ":" | last }}</td><td class="num">{{ s.weight | times: 100.0 | divided_by: wl_total | round: 1 }}%</td><td class="num">${{ s.base_price }}</td></tr>
+        <tr><td data-i18n-name>{{ s.name }}</td><td>{{ s.symbol | split: ":" | last }}</td><td class="num">{{ s.weight | times: 100.0 | divided_by: wl_total | round: 1 }}%</td><td class="num" data-usd="{{ s.base_price }}">${{ s.base_price }}</td></tr>
         {%- endfor %}
       </tbody>
     </table>
     <div class="wl-periods">
       <p class="wl-sub" data-i18n="wl.periods">포트폴리오 기간별 수익률</p>
       <div class="wl-pgrid">
+        <div class="wl-p"><p class="krx-name" data-i18n="wl.p1w">1주</p><div class="tv-w" id="tv-wl-p5d"></div></div>
         <div class="wl-p"><p class="krx-name" data-i18n="wl.p1m">1개월</p><div class="tv-w" id="tv-wl-p1m"></div></div>
         <div class="wl-p"><p class="krx-name" data-i18n="wl.p3m">3개월</p><div class="tv-w" id="tv-wl-p3m"></div></div>
-        <div class="wl-p"><p class="krx-name" data-i18n="wl.p1y">1년</p><div class="tv-w" id="tv-wl-p1y"></div></div>
+        <div class="wl-p"><p class="krx-name" data-i18n="wl.p1y">1년</p><div class="tv-w" id="tv-wl-p12m"></div></div>
       </div>
-      <p class="note" data-i18n="wl.pnote">각 칸의 %가 그 기간 수익률이에요. 1주 수익률은 아래 차트의 5D 버튼으로 볼 수 있어요.</p>
+      <p class="note" data-i18n="wl.pnote">각 칸의 %가 그 기간의 포트폴리오 수익률이에요(일봉 종가 기준, 지연 시세).</p>
     </div>
   </div>
   <div class="tv-box tv-wl-box" id="tv-wl-overview"></div>
@@ -59,12 +60,19 @@
         dateRanges: ['5d|1D', '1m|1D', '3m|1D', '12m|1D']
       });
 
-      // 맨 위 기간별 수익률: 미니 위젯은 머리글의 %가 dateRange 기간 수익률 (1주 옵션은 없음)
-      [['tv-wl-p1m', '1M'], ['tv-wl-p3m', '3M'], ['tv-wl-p1y', '12M']].forEach(function (p) {
-        mount(p[0], 'mini-symbol-overview', {
-          symbol: formula, width: '100%', height: '100%', locale: TV_LOCALE, dateRange: p[1],
-          colorTheme: th, isTransparent: true, autosize: true, largeChartUrl: '', noTimeScale: true
+      // 맨 위 기간별 수익률: 기간 버튼이 하나뿐인 심볼 개요 위젯을 기간마다 하나씩. 머리글의 %가 그 기간 수익률
+      ['5d', '1m', '3m', '12m'].forEach(function (r) {
+        mount('tv-wl-p' + r, 'symbol-overview', {
+          symbols: [[t('wl.portfolio', '포트폴리오'), formula + '|1D']], dateRanges: [r + '|1D'],
+          chartOnly: false, width: '100%', height: '100%', autosize: true, locale: TV_LOCALE,
+          colorTheme: th, isTransparent: true, chartType: 'area', showVolume: false, noTimeScale: true,
+          hideMarketStatus: true, hideSymbolLogo: true
         });
+      });
+
+      // 기준가 표기: 1,121.80
+      document.querySelectorAll('.wl-table [data-usd]').forEach(function (el) {
+        el.textContent = '$' + Number(el.dataset.usd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       });
 
       // 종목별 % 비교: 포트폴리오 위에 종목·벤치마크를 같은 % 축으로 겹침
