@@ -26,7 +26,7 @@
 | `_layouts/default.html` | 헤더(브리핑·소개), 면책 문구 푸터, Pretendard 폰트, CSS 캐시 무효화 쿼리(`?v=site.time`). `page.wide: true`면 넓은 폭 |
 | `_layouts/post.html` | 개별 브리핑(좁은 폭 760px), 이전·다음 글 |
 | `index.html` | 첫 화면. `wide: true`. 데스크톱은 **왼쪽 데이터 / 오른쪽 브리핑(최신 + 지난 목록, 붙어서 따라옴)**. 1000px 이하에서는 최신 브리핑 → 데이터 → 지난 목록 |
-| `_includes/tv-global.html` | TradingView 무료 위젯: 해외 지수(추종 ETF SPY·QQQ·DIA·SOXX·EWJ·EWH, 상하이종합 SSE:000001)·금(TVC:GOLD)·WTI(TVC:USOIL) 미니 차트 + S&P500 섹터 ETF 11개. 원 지수·CFD 대신 ETF는 사용자 선택. TradingView 로고·링크는 약관상 유지. 위젯 색은 미국식(상승 초록) |
+| `_includes/tv-global.html` | TradingView 무료 위젯: 해외 지수(미국은 추종 ETF SPY·QQQ·DIA·SOXX, 닛케이 INDEX:NKY·항셍 HSI:HSI·상하이 SSE:000001은 원 지수)·금(TVC:GOLD)·WTI(TVC:USOIL) 미니 차트 + S&P500 섹터 ETF 11개. 원 지수·CFD 대신 ETF는 사용자 선택. TradingView 로고·링크는 약관상 유지. 위젯 색은 미국식(상승 초록) |
 | `_includes/global-index.html` | VIX·미 10년물·원/달러 카드 + 3개월 미니 차트('지연'은 미국 지표끼리 비교) |
 | `_includes/krx-index.html` | 코스피·코스닥·VKOSPI 카드 + 차트(1개월/3개월/1년), 아래에 업종·종목 include |
 | `_includes/krx-sectors.html` | 업종별 등락 가로 막대(코스피/코스닥 탭) |
@@ -83,7 +83,7 @@
    - 야간장은 **다음 거래일 날짜로** 기록됨. 예: '11/23 야간' = 금요일 11/20 밤 세션. 그런데 basDd=당일 데이터는 오후까지도 0건이라, 아침 8:30에는 '어젯밤 야간선물'을 받을 수 없음
    - 제안(결정 대기): 사이트에는 **정규장 최근월물 종가 + 베이시스(선물−현물) + 미결제약정**, 어젯밤 야간선물은 브리핑 본문에 한 줄로
 4. **투자자별 수급(외국인·기관·개인):** 사용자가 "투자자별 거래실적" 서비스의 영문 코드와 출력 항목을 보내 주면 붙임. 계획: 전일 순매수 막대 + 20일 누적 추이. 위치는 업종별 등락 위
-5. ~~S&P500·나스닥·WTI 지연~~ → TradingView 위젯으로 해결(FRED 지수·WTI 수집 제거). 위젯에서 원 지수(SP:SPX, NASDAQ:IXIC, DJ:DJI, TVC:NI225, TVC:HSI, SOX, DXY, COMEX·NYMEX 선물)는 막혀 있음
+5. ~~S&P500·나스닥·WTI 지연~~ → TradingView 위젯으로 해결(FRED 지수·WTI 수집 제거). 위젯에서 미국 원 지수(SP·CBOE·INDEX·TVC:SPX, NDX, IXIC, DJI, SOX, VIX, DXY, US10Y)와 TVC:NI225·TVC:HSI, 일본·홍콩 상장 ETF(TSE:1321, HKEX:2800 등), COMEX·NYMEX 선물은 막혀 있음. INDEX:NKY, HSI:HSI, OSE:NK2251!, SZSE:399001, SSE:000300은 됨
 6. **매일 자동 발행:** 예약 작업으로 매일 07:30 전에 글을 생성해 커밋. 결정할 것: 원/달러 기준(서울 종가 vs 역외 포함 종가. 11/24 글은 서울 종가, 11/16~11/23 백필은 Investing.com 역외 포함 종가), 뉴스·해외 시세를 어디서 읽을지(Investing.com은 사용자 PC의 내장 브라우저가 필요해 PC가 켜져 있어야 함)
 7. `about.md` 운영자 소개 작성
 8. (선택) 나만 보는 실시간 대시보드: 증권사 API(한국투자 KIS 등)로 PC에서 로컬 실행
