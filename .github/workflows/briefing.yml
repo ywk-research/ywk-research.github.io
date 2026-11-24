@@ -39,9 +39,14 @@ jobs:
       - name: 초안 작성·커밋
         id: commit
         if: steps.chk.outputs.exists == 'false'
+        env:
+          DESK_PVT_URL: ${{ secrets.DESK_PVT_URL }}
+          DESK_CLOSE_TOKEN: ${{ secrets.DESK_CLOSE_TOKEN }}
         run: |
+          python tools/fetch_close.py || echo "전일 종가 못 받음(있는 자료로 진행)"
+          git add _data/briefing_quotes.json 2>/dev/null || true
           python tools/make_briefing.py --prune
-          git add "${{ steps.chk.outputs.file }}"
+          git add "${{ steps.chk.outputs.file }}" _data/briefing_quotes.json
           git diff --cached --quiet && exit 0
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
