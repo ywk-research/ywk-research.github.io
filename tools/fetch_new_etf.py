@@ -245,18 +245,62 @@ def ticker_table(year):
     return _tick
 
 
-def find_ticker(cik, name, year):
-    tab = ticker_table(year)
+_series_pages = {}
+
+
+def series_page(cik):
+    """EDGAR 펀드 시리즈 목록(신탁별)에서 (시리즈 이름 정규화) → [(클래스 이름, 티커)]. 연간 CSV보다 최신이다."""
+    if cik in _series_pages:
+        return _series_pages[cik]
+    tab = {}
+    try:
+        for start in range(0, 1000, 100):
+            page = sec_get(f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={cik}&scd=series&count=100&start={start}")
+            if not page:
+                break
+            n, series = 0, ""
+            for row in re.findall(r"(?is)<tr\b.*?</tr>", page):
+                cells = [re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", c))).strip()
+                         for c in re.findall(r"(?is)<td\b.*?</td>", row)]
+                cells = [c for c in cells if c]
+                if any(re.fullmatch(r"S\d{9}", c) for c in cells):
+                    i = next(k for k, c in enumerate(cells) if re.fullmatch(r"S\d{9}", c))
+                    series = cells[i + 1] if i + 1 < len(cells) else ""
+                    n += 1
+                elif any(re.fullmatch(r"C\d{9}", c) for c in cells) and series:
+                    i = next(k for k, c in enumerate(cells) if re.fullmatch(r"C\d{9}", c))
+                    rest = cells[i + 1:]
+                    tab.setdefault(norm(series), []).append((rest[0] if rest else "", rest[1] if len(rest) > 1 else ""))
+            if n < 100:
+                break
+    except Exception as e:
+        print(f"시리즈 목록 실패({cik}): {type(e).__name__}: {e}")
+    _series_pages[cik] = tab
+    return tab
+
+
+def _pick(rows, cls):
+    if cls:
+        rows = [r for r in rows if norm(cls) in norm(r[0])] or rows
+    ticks = [t for _, t in rows if t and re.fullmatch(r"[A-Z0-9.]{1,6}", t)]
+    return (ticks[-1] if cls else ticks[0]) if ticks else ""
+
+
+def find_ticker(cik, name, year, recent=True):
     cik = cik.lstrip("0")
     base, _, cls = name.partition(":")
-    for key in (norm(name), norm(base)):
-        rows = tab.get((cik, key))
-        if rows:
-            if cls:
-                rows = [r for r in rows if norm(cls) in norm(r[0])] or rows
-            ticks = [t for _, t in rows if t]
-            if ticks:
-                return ticks[0] if not cls else ticks[-1]
+    keys = (norm(name), norm(base))
+    tab = ticker_table(year)
+    for key in keys:
+        t = _pick(tab.get((cik, key), []), cls)
+        if t:
+            return t
+    if recent:  # 연간 목록에 없으면 신탁의 최신 시리즈 목록에서
+        page = series_page(cik)
+        for key in keys:
+            t = _pick(page.get(key, []), cls)
+            if t:
+                return t
     return ""
 
 
@@ -337,7 +381,8 @@ def update_us(today, prev):
                   key=lambda it: (it["d"], it["issuer"], it["name"]), reverse=True)
     for it in keep:  # 시리즈 등록이 늦게 반영되므로 티커가 빈 펀드는 매번 다시 찾는다
         if not it.get("ticker") and it.get("name") and it.get("cik"):
-            it["ticker"] = find_ticker(it["cik"], it["name"], today.year)
+            it["ticker"] = find_ticker(it["cik"], it["name"], today.year,
+                                       recent=(today - dt.date.fromisoformat(it["d"])).days <= 21)
     save(SEEN, sorted(seen)[-5000:], compact=True)
     return {"source": "SEC EDGAR Form 8-A12B", "updated": today.isoformat(),
             "days": sorted(x for x in done if x >= cutoff.isoformat()), "items": keep}

@@ -15,11 +15,8 @@ jobs:
           python-version: "3.12"
       - env:
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+          KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
         run: |
-          cd tools && python - <<'PY'
-          import re, html, fetch_new_etf as f
-          for cik in ["2025968", "1976672"]:
-              t = f.sec_get(f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={cik}&scd=series&count=100")
-              t = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " | ", t or "")))
-              print("#####", cik); print(t[:4000])
-          PY
+          python tools/fetch_new_etf.py
+          python -c "import json;d=json.load(open('_data/new_etf.json'));[print('ROW',i['d'],i['ticker'] or '-','|',i['name'],'|',i['issuer'],'|',i['exchange']) for i in d['us']['items']]"
+          python -c "import json;print('JSON>'+json.dumps(json.load(open('_data/new_etf.json')),ensure_ascii=False))"
