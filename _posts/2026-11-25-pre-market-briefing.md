@@ -19,21 +19,26 @@ filled: true
 | S&P500 | 7,201.69 | <span class="down">−0.49%</span> |
 | 나스닥 | 23,733.54 | <span class="down">−1.48%</span> |
 | 다우 | 50,021.91 | <span class="up">+0.86%</span> |
+| 필라델피아 반도체(SOX) | 8,832.50 | <span class="down">−7.88%</span> |
+| VIX | 26.36 | <span class="down">−0.98%</span> |
 
-<p class="note">※ 다우가 처음으로 50,000선 위에서 마감했어요. 반도체·AI주 약세에 나스닥은 내렸어요. 필라델피아 반도체지수·VIX는 마감 수치를 확인하지 못해 뺐어요.</p>
+<p class="note">※ 다우가 처음으로 50,000선 위에서 마감했어요. 반도체·AI주 약세에 나스닥은 내렸어요.</p>
 
 ## 아시아 증시
 
 | 지표 | 기준일 | 종가 | 등락률 |
 |---|---|--:|--:|
 | 코스피 | 11/24 | 5,006.03 | <span class="up">+6.32%</span> |
+| 닛케이225 | 11/24 | 58,644.63 | <span class="up">+3.91%</span> |
 | 상하이종합 | 11/24 | 3,548.37 | <span class="up">+0.27%</span> |
+| 항셍 | 11/24 | 22,219.65 | <span class="down">−0.73%</span> |
 
 ## 금리 · 환율 · 원자재 (11/24)
 
 | 지표 | 수준 | 변동 |
 |---|--:|--:|
 | 미국 10년물 국채금리 | 4.91% | <span class="down">−1bp</span> |
+| 달러인덱스 | 103.83 | <span class="down">−0.47%</span> |
 | 원/달러 (서울 종가) | 1,342.4원 | <span class="down">−3.5원</span> |
 | WTI (1월물) | $82.05 | <span class="up">+2.35%</span> |
 | 금 (12월물) | $3,561.90 | <span class="down">−2.45%</span> |
@@ -66,4 +71,4 @@ filled: true
 
 > 26일(목) 미국 증시는 추수감사절로 휴장하고, 27일(금)은 조기 폐장해요.
 
-<p class="note">자료: 한국거래소(KRX) Open API, 한국은행 ECOS, Cboe, 미 재무부, SEC EDGAR 및 각 거래소·언론 보도 종합. 정보 정리 목적이며 투자 권유가 아닙니다.</p>
+<p class="note">자료: 한국거래소(KRX) Open API, 한국은행 ECOS, Cboe, 미 재무부, SEC EDGAR, Yahoo Finance(지수 종가) 및 각 거래소·언론 보도 종합. 정보 정리 목적이며 투자 권유가 아닙니다.</p>
