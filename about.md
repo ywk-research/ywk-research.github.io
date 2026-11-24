@@ -9,7 +9,7 @@ permalink: /about/
 
 # 소개
 
-**YWK Research**는 매일 아침 한국 증시 개장 전에 전일 글로벌 시장을 한 장으로 정리하는 브리핑입니다.
+**Desk Notes**는 매일 아침 한국 증시 개장 전에 전일 글로벌 시장을 한 장으로 정리하는 브리핑입니다.
 
 ## 무엇을 다루나요
 
@@ -33,7 +33,7 @@ permalink: /about/
 
 # About
 
-**YWK Research** is a one-page recap of the previous day's global markets, published every morning before the Korean stock market opens.
+**Desk Notes** is a one-page recap of the previous day's global markets, published every morning before the Korean stock market opens.
 
 ## What it covers
 
