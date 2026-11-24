@@ -15,20 +15,15 @@ jobs:
           python-version: "3.12"
       - env:
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+          DEBUG: "1"
+          NEW_ETF_BACKFILL: "12"
         run: |
+          python tools/fetch_new_etf.py
           cd tools && python - <<'PY'
-          import re, fetch_new_etf as f
-          idx = f.sec_get("https://www.sec.gov/Archives/edgar/daily-index/2026/QTR4/form.20261120.idx")
-          n = 0
-          for line in idx.splitlines():
-              if not line.startswith("8-A12B "): continue
-              path = re.search(r"(edgar/data/\S+\.txt)", line).group(1)
-              txt = f.sec_get("https://www.sec.gov/Archives/" + path)
-              head, _, body = txt.partition("</SEC-HEADER>")
-              if "STANDARD INDUSTRIAL" in head: continue
-              print("=====", path); print(head[:3000])
-              t = re.sub(r"<[^>]+>", " ", body); t = re.sub(r"&nbsp;|&#160;|&#xa0;|\s+", " ", t)
-              print("----- BODY"); print(t[:2500])
-              n += 1
-              if n >= 3: break
+          import fetch_new_etf as f
+          for u in ["https://www.sec.gov/files/company_tickers_mf.json",
+                    "https://www.sec.gov/files/investment/data/other/investment-company-series-class-information/investment-company-series-class-2026.csv",
+                    "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0002025968&scd=series&count=100"]:
+              t = f.sec_get(u)
+              print("#####", u, None if t is None else len(t)); print((t or "")[:1500])
           PY

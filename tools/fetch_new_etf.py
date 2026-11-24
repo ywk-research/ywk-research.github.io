@@ -15,6 +15,7 @@
 - 캐시가 없으면 최근 BACKFILL_DAYS일을 다시 훑어 기준 목록을 만든다.
 """
 import datetime as dt
+import html
 import json
 import os
 import re
@@ -30,7 +31,7 @@ STATE = os.path.join(ROOT, "tools", "state", "etf_codes.json")
 SEEN = os.path.join(ROOT, "tools", "state", "sec_8a_seen.json")
 KST = dt.timezone(dt.timedelta(hours=9))
 KEEP_DAYS = 45          # 사이트에 남겨 둘 기간(달력일)
-BACKFILL_DAYS = 45      # 처음 실행·캐시 유실 때 다시 훑는 기간(달력일)
+BACKFILL_DAYS = int(os.environ.get("NEW_ETF_BACKFILL", "45"))  # 처음 실행·캐시 유실 때 다시 훑는 기간(달력일)
 US_RESCAN = 5           # 미국: 매번 다시 보는 최근 영업일 수(EDGAR 색인이 늦게 올라오는 경우 대비)
 
 UA = os.environ.get("SEC_USER_AGENT", "").strip()
@@ -104,34 +105,65 @@ def us_business_days(today, n_cal):
     return out
 
 
+def _cell_text(h):
+    h = re.sub(r"(?i)<br\s*/?>|</p>|</div>", "\n", h)
+    h = html.unescape(re.sub(r"<[^>]+>", " ", h))
+    return [re.sub(r"\s+", " ", x).strip() for x in h.split("\n") if x.strip()]
+
+
+def exch_of(text):
+    best = None
+    for pat, label in EXCHANGES:
+        mm = re.search(pat, text)
+        if mm and (best is None or mm.start() < best[0]):
+            best = (mm.start(), label)
+    return best[1] if best else ""
+
+
+GENERIC = re.compile(r"(?i)^(common\s+)?shares?\b.*?(beneficial interest|par value|common stock)[^A-Za-z0-9]*"
+                     r"((no|\$?[\d.]+)\s+par value( per share)?)?[,;:]?\s*((of|in)\s+)?(the\s+)?")
+SKIP = re.compile(r"(?i)title of|name of (each )?exchange|employer identification|^\(?[\d-]{9,11}\)?$|^none\.?$|^n/?a$")
+
+
+def fund_name(txt):
+    txt = GENERIC.sub("", txt).strip(" ,;:-–")
+    txt = re.sub(r"\s*\(?\d{2}-\d{7}\)?\s*$", "", txt)  # 끝에 붙은 IRS 번호
+    return txt.strip(" ,;:-–")
+
+
 def parse_8a(txt):
-    """제출 원문(.txt)에서 회사 이름, SIC, 시리즈(펀드 이름·티커), 거래소를 뽑는다."""
+    """제출 원문(.txt)에서 회사 이름, SIC, 표지 표의 펀드 이름·거래소를 뽑는다.
+    8-A 머리말에는 시리즈·티커 정보가 없어서, 표지의 '등록할 증권 / 거래소' 표를 읽는다."""
     head, _, body = txt.partition("</SEC-HEADER>")
     m = re.search(r"COMPANY CONFORMED NAME:\s*(.+)", head)
     company = m.group(1).strip() if m else ""
     m = re.search(r"STANDARD INDUSTRIAL CLASSIFICATION:.*?\[(\d{4})\]", head)
     sic = m.group(1) if m else ""
+    body = body[:400000]
     funds = []
-    for s in re.findall(r"<SERIES>(.*?)</SERIES>", head, re.S):
-        nm = re.search(r"<SERIES-NAME>(.+)", s)
-        tick = re.findall(r"<CLASS-CONTRACT-TICKER-SYMBOL>(.+)", s)
-        funds.append({"name": nm.group(1).strip() if nm else "",
-                      "ticker": tick[0].strip() if tick else "",
-                      "series": (re.search(r"<SERIES-ID>(\S+)", s) or [None, ""])[1]})
-    # 본문 표의 '등록할 거래소' 칸에서 거래소 이름 찾기(태그 제거 후)
-    text = re.sub(r"<[^>]+>", " ", body[:200000])
-    text = re.sub(r"&nbsp;|&#160;|\s+", " ", text)
-    exch = ""
-    best = None
-    for pat, label in EXCHANGES:
-        mm = re.search(pat, text)
-        if mm and (best is None or mm.start() < best):
-            best, exch = mm.start(), label
-    return company, sic, funds, exch
+    for row in re.findall(r"(?is)<tr\b.*?</tr>", body):
+        cells = [_cell_text(c) for c in re.findall(r"(?is)<t[dh]\b.*?</t[dh]>", row)]
+        flat = " ".join(" ".join(c) for c in cells)
+        ex = exch_of(flat)
+        if not ex or re.search(r"(?i)title of", flat):
+            continue
+        for c in cells:
+            if exch_of(" ".join(c)):
+                continue
+            for line in c:
+                if SKIP.search(line):
+                    continue
+                nm = fund_name(line)
+                if len(nm) >= 3 and re.search(r"[A-Za-z]", nm):
+                    funds.append({"name": nm, "exchange": ex})
+    text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", body)))
+    return company, sic, funds, exch_of(text)
 
 
-def is_etf_company(company, sic):
-    return bool(re.search(r"\bETF\b", company, re.I)) or sic == "6221"
+def is_fund_filer(company, sic):
+    """운용사·펀드 신탁만 남긴다. 투자회사는 EDGAR에 SIC 코드가 없고, 상품 신탁(현물 코인·금 ETF)은 6221."""
+    return sic in ("", "6221") and not re.search(r"(?i)acquisition|\bspac\b", company) \
+        or bool(re.search(r"\bETF\b", company, re.I))
 
 
 def clean_company(name):
@@ -169,19 +201,21 @@ def update_us(today, prev):
                 continue
             seen.add(acc)
             company, sic, funds, exch = parse_8a(txt)
+            fund = is_fund_filer(company, sic)
             if os.environ.get("DEBUG"):
-                print(f"  8-A {d} {company} sic={sic} series={len(funds)} exch={exch} etf={bool(funds) or is_etf_company(company, sic)}")
+                print(f"  8-A {d} {company} sic={sic} fund={fund} exch={exch} -> {[f['name'] for f in funds][:12]}")
+            if not fund:
+                continue
             cik = path.split("/")[2]
             url = f"https://www.sec.gov/Archives/edgar/data/{cik}/{acc.replace('-', '')}/{acc}-index.htm"
-            if not funds and is_etf_company(company, sic):
-                funds = [{"name": clean_company(company), "ticker": "", "series": ""}]
-                company = ""
+            if not funds:  # 표를 못 읽으면 신탁 이름만
+                funds = [{"name": "", "exchange": exch}]
             for f in funds:
-                key = f["series"] or acc
+                key = (cik + ":" + f["name"].lower()) if f["name"] else acc
                 if key in items:  # 같은 펀드가 다시 8-A를 내면 처음 날짜를 남긴다
                     continue
-                items[key] = {"key": key, "d": d.isoformat(), "name": f["name"], "ticker": f["ticker"],
-                              "issuer": clean_company(company) if company else "", "exchange": exch, "url": url}
+                items[key] = {"key": key, "d": d.isoformat(), "name": f["name"], "ticker": "",
+                              "issuer": clean_company(company), "exchange": f["exchange"] or exch, "url": url}
         print(f"미국 {d}: 누적 {len(items)}건")
     keep = sorted((it for it in items.values() if it["d"] >= cutoff.isoformat()),
                   key=lambda it: (it["d"], it["issuer"], it["name"]), reverse=True)
