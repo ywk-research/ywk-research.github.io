@@ -11,7 +11,7 @@
 
 /* 기본 다크 (data-theme은 _layouts/default.html에서 설정) */
 :root[data-theme="dark"] {
-  color-scheme: dark;
+  /* color-scheme: dark를 두면 TradingView 위젯 iframe 배경이 하얗게 칠해져서 쓰지 않는다 */
   --text: #e8eaed;
   --muted: #9aa0a6;
   --line: #2e3238;
