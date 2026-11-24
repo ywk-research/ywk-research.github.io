@@ -39,7 +39,10 @@ UA = os.environ.get("SEC_USER_AGENT", "").strip()
 KRX_BASE = "https://data-dbg.krx.co.kr/svc/apis/"
 KRX_ETF = "etp/etf_bydd_trd"
 
-EXCHANGES = [  # 8-A 본문에서 찾는 거래소 이름 → 표시 이름(먼저 맞는 것)
+EXCHANGES = [  # 8-A 본문에서 찾는 거래소 이름 → 표시 이름(같은 위치면 앞의 것)
+    (r"Nasdaq\s+Texas|NASDAQ\s+Texas", "Nasdaq Texas"),
+    (r"NYSE\s+Texas", "NYSE Texas"),
+    (r"Texas\s+Stock\s+Exchange|TXSE", "TXSE"),
     (r"NYSE\s*Arca", "NYSE Arca"),
     (r"NYSE\s*American", "NYSE American"),
     (r"Nasdaq|NASDAQ", "Nasdaq"),
@@ -84,7 +87,10 @@ def sec_get(url):
             with urllib.request.urlopen(req, timeout=60) as r:
                 body = r.read()
             time.sleep(0.2)  # SEC 공정 접근 기준(초당 10건)보다 느리게
-            return body.decode("latin-1")
+            try:
+                return body.decode("utf-8")
+            except UnicodeDecodeError:
+                return body.decode("latin-1")
         except urllib.error.HTTPError as e:
             if e.code in (403, 404):
                 return None
@@ -106,8 +112,10 @@ def us_business_days(today, n_cal):
     return out
 
 
+TEXAS = ("Nasdaq Texas", "NYSE Texas", "TXSE")  # 2026년 새로 연 텍사스 거래소: 기존 ETF의 교차상장이 대부분이라 뺀다
 EXCH_FULL = re.compile(
-    r"(?i)(the\s+)?nasdaq\s+stock\s+market,?\s*(llc|inc\.?)?|nasdaq\s+(global|capital)\s+(select\s+)?market,?\s*(llc)?"
+    r"(?i)nasdaq\s+texas,?\s*(llc|inc\.?)?|nyse\s+texas,?\s*(llc|inc\.?)?|(the\s+)?texas\s+stock\s+exchange(\s*\(txse\))?,?\s*(llc|inc\.?)?|"
+    r"(the\s+)?nasdaq\s+stock\s+market,?\s*(llc|inc\.?)?|nasdaq\s+(global|capital)\s+(select\s+)?market,?\s*(llc)?"
     r"|nyse\s*arca,?\s*(inc\.?|llc)?|nyse\s+american,?\s*(llc)?|cboe\s+bzx\s+exchange,?\s*(inc\.?)?"
     r"|(the\s+)?new\s+york\s+stock\s+exchange,?\s*(llc|inc\.?)?|(the\s+)?nyse,?\s+llc")
 EIN = re.compile(r"\(?\b\d{2}\s*-\s*\d{7}\b\)?")
@@ -129,7 +137,16 @@ def exch_of(text):
     return best[1] if best else ""
 
 
+HDR_TAIL = re.compile(r"(?i).*(identification\s+(no\.?|number)|id\s+number|to\s+be\s+(so\s+)?registered|exchange\s+on\s+which)\)?[\s:_]*")
+PAR = re.compile(r"(?i)[,;]?\s*par\s+value(\s+per\s+share)?(\s+of)?\s*\$?[\d.]+(\s+per\s+share)?[,;:]?(\s+of\b:?)?")
+NOT_FUND = re.compile(r"(?i)common\s+stock|ordinary\s+shares|warrants?\b|notes?\s+due|preferred|depositary|\bunits?\b|^(nyse|nasdaq|cboe)\b")
+
+
 def fund_name(txt):
+    txt = HDR_TAIL.sub("", txt.strip())
+    txt = PAR.sub(" ", txt)
+    txt = re.sub(r"\s*[®Ò™]\s*", " ", txt).replace("_", " ")
+    txt = re.sub(r"^\s*Exchange\s+(?=\w)", "", txt)  # 머리글 'Name of each Exchange'의 남은 단어
     txt = GENERIC.sub(" ", txt.strip())
     txt = re.sub(r"\s+", " ", txt).strip(" ,;:-–•*")
     txt = re.sub(r"(?i)^(and|each|per|of)\b[\s:,]*", "", txt).strip(" ,;:-–•*")
@@ -144,7 +161,7 @@ def split_names(seg):
     for piece in EIN.split(seg):
         for nm in re.split(r"(?<=\bETF)\s+(?!Class\b|Shares\b)(?=[A-Z0-9])", fund_name(piece)):
             nm = fund_name(nm)
-            if len(nm) >= 4 and re.search(r"[A-Za-z]{2}", nm):
+            if len(nm) >= 4 and re.search(r"[A-Za-z]{2}", nm) and not NOT_FUND.search(nm):
                 out.append(nm)
     return out
 
@@ -249,9 +266,22 @@ def is_fund_filer(company, sic):
         or bool(re.search(r"\bETF\b", company, re.I))
 
 
+ROMAN = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"}
+SMALL = {"OF", "AND", "THE", "FOR", "INC", "CO", "LLC", "LP"}
+
+
 def clean_company(name):
-    name = re.sub(r"\s*/[A-Z]{2}/?\s*$", "", name)  # 'TRUST /DE/' 같은 주 표시 제거
-    return name.strip().title().replace("Etf", "ETF").replace("Ii", "II").replace("Iii", "III")
+    name = re.sub(r"\s*/[A-Z]{2}/?\s*$", "", name).strip()  # 'TRUST /DE/' 같은 주 표시 제거
+    if name != name.upper():
+        return name  # 대소문자가 섞여 있으면 등록 이름 그대로
+    out = []
+    for w in name.split():
+        core = w.strip(",.")
+        if core in ROMAN or core == "ETF" or (len(core) <= 3 and core not in SMALL and core.isalpha()):
+            out.append(w)
+        else:
+            out.append(w.capitalize() if core != "LLC" else w)
+    return " ".join(out)
 
 
 def update_us(today, prev):
@@ -293,6 +323,9 @@ def update_us(today, prev):
             url = f"https://www.sec.gov/Archives/edgar/data/{cik}/{acc.replace('-', '')}/{acc}-index.htm"
             if not funds:  # 표를 못 읽으면 신탁 이름만
                 funds = [{"name": "", "exchange": exch}]
+            funds = [f for f in funds if f["exchange"] not in TEXAS]
+            if not funds and exch in TEXAS:
+                continue
             for f in funds:
                 key = (cik + ":" + f["name"].lower()) if f["name"] else acc
                 if key in items:  # 같은 펀드가 다시 8-A를 내면 처음 날짜를 남긴다
