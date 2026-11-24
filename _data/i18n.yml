@@ -1,0 +1,31 @@
+# 한/영 전환용 영어 문자열 (헤더 EN 버튼, _layouts/default.html)
+# 페이지는 한국어로 빌드되고, 영어 모드일 때만 스크립트가 바꾼다.
+#  - en: 템플릿의 data-i18n="키" 요소와 스크립트의 t('키', '한국어')가 쓰는 문장. {이름}은 요소의 data-이름 값으로 채움
+#  - names: 데이터 파일(_data/*.json, *.yml)에서 오는 한국어 이름 → 영어. 목록에 없으면 한국어 그대로 보임
+# 브리핑 글 본문은 번역하지 않는다(영어 모드에서는 한국어 안내 문구만 보임).
+
+en:
+  # 공통: 헤더·푸터
+  nav.aria: Menu
+  nav.briefing: Briefing
+  nav.data: Data
+  nav.watchlist: Watchlist
+  nav.about: About
+  theme.aria: Toggle light/dark mode
+  theme.to_light: Switch to light mode
+  theme.to_dark: Switch to dark mode
+  footer.disclaimer: This site organizes public information for reference only and is not investment advice. Investment decisions and their outcomes are the investor's own responsibility.
+  brief.korean_only: Briefings are written in Korean for now. An English edition is planned.
+
+  # 홈
+  home.title: Pre-market Briefing
+  home.intro: A daily recap of global markets, read before the Korean market opens. US and Asian equities, rates, FX and commodities, key overnight news and today's schedule on one page.
+  home.latest: Latest briefing
+  home.read_more: Read full briefing →
+  home.archive: Past briefings
+
+  # 브리핑 글
+  post.kicker: Pre-market Briefing
+  post.meta: Published {d} · All figures as of the previous close
+  post.prev: ← {d} briefing
+  post.next: "{d} briefing →"

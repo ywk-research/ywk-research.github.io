@@ -251,3 +251,11 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .mc-wide { grid-column: 1 / -1; }
 .mc-chart { position: relative; height: 240px; margin-top: 6px; }
 @media (max-width: 560px) { .mc-grid { grid-template-columns: 1fr; } }
+
+/* 한/영 전환 (헤더 EN 버튼) */
+.head-tools { display: inline-flex; gap: 6px; align-items: center; }
+.lang-toggle { min-width: 30px; font-size: 12px; font-weight: 700; color: var(--muted); }
+.lang-toggle:hover { color: var(--text); }
+/* 언어별로만 보이는 블록: 영어 안내 문구, 소개 페이지 영어판 */
+:root:not([data-lang="en"]) .en-only { display: none !important; }
+:root[data-lang="en"] .ko-only { display: none !important; }
