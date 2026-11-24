@@ -1,4 +1,6 @@
-<!-- 해외 지수·원자재·섹터: TradingView 무료 위젯 (로고·링크는 약관상 지우지 않음) -->
+<!-- 해외 지수·원자재·섹터: TradingView 무료 위젯 (로고·링크는 약관상 지우지 않음)
+     include 인자 parts="sectors": 해외 지수 미니 차트 없이 S&P500 섹터(히트맵·섹터 ETF)만 -->
+{% unless include.parts == "sectors" %}
 <section class="krx gl" id="global-index">
   <div class="krx-head">
     <h2 data-i18n="gl.title">해외 지수·원자재</h2>
@@ -16,6 +18,7 @@
   </div>
   <p class="note" data-i18n="gl.note">미국 지수는 위젯 제공이 막혀 있어 추종 ETF로 대신 보여 줘요: SPY(S&amp;P500), QQQ(나스닥100), DIA(다우), SOXX(반도체). 닛케이225·항셍·상하이종합은 지수 그대로, 금·WTI는 현물·근월 기준. 지연 시세, 차트는 최근 3개월. 위젯 색은 미국식(상승 초록·하락 빨강) · 시세 위젯: <a href="https://kr.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a></p>
 </section>
+{% endunless %}
 
 <section class="krx gl" id="us-sectors">
   <div class="krx-head">
@@ -74,7 +77,10 @@
         });
       }
   
-      render();
+      // 시장 탭 등으로 숨겨진 칸 안에 있으면, 보일 때 처음 그린다(숨긴 채로 붙이면 위젯 크기가 0으로 잡힘)
+      var sec = document.currentScript && document.currentScript.closest('section');
+      function go() { if (sec && sec.closest('[hidden]')) return false; render(); return true; }
+      if (!go()) document.addEventListener('panes-changed', function h() { if (go()) document.removeEventListener('panes-changed', h); });
     })();
   </script>
 </section>
