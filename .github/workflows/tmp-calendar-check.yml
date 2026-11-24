@@ -10,4 +10,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python tools/fetch_calendar.py; head -c 3000 _data/econ_calendar.json
+      - run: |
+          python tools/fetch_calendar.py
+          python -c "import json;[print('EV',e['date'],e['time'],e['s'],e['t']) for e in json.load(open('_data/econ_calendar.json'))['events']]"
+          python -c "
+          import sys; sys.path.insert(0,'tools'); import fetch_calendar as f
+          for s,u in f.SOURCES.items():
+              print('SUM', s, sorted({e.get('SUMMARY',('',))[0][:90] for e in f.parse_ics(f.get(u))})[:400])
+          "

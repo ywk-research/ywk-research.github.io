@@ -24,16 +24,16 @@ SOURCES = {
     "bls": "https://www.bls.gov/schedule/news_release/bls.ics",
     "bea": "https://www.bea.gov/news/schedule/ics/online-calendar-subscription.ics",
 }
-# (소스, 제목에 들어 있는 말, 표시 이름)
+# (소스, 제목에 들어 있는 말, 표시 이름, 달력 칸에 쓰는 짧은 이름)
 RULES = [
-    ("bls", "Employment Situation", "고용보고서(비농업 고용·실업률)"),
-    ("bls", "Consumer Price Index", "소비자물가(CPI)"),
-    ("bls", "Producer Price Index", "생산자물가(PPI)"),
-    ("bls", "Job Openings and Labor Turnover", "구인·이직 보고서(JOLTS)"),
-    ("bls", "Employment Cost Index", "고용비용지수(ECI)"),
-    ("bea", "GDP", "GDP"),
-    ("bea", "Gross Domestic Product", "GDP"),
-    ("bea", "Personal Income and Outlays", "개인소득·지출(PCE 물가)"),
+    ("bls", "Employment Situation", "고용보고서(비농업 고용·실업률)", "고용"),
+    ("bls", "Consumer Price Index", "소비자물가(CPI)", "CPI"),
+    ("bls", "Producer Price Index", "생산자물가(PPI)", "PPI"),
+    ("bls", "Job Openings and Labor Turnover", "구인·이직 보고서(JOLTS)", "JOLTS"),
+    ("bls", "Employment Cost Index", "고용비용지수(ECI)", "ECI"),
+    ("bea", "GDP", "GDP", "GDP"),
+    ("bea", "Gross Domestic Product", "GDP", "GDP"),
+    ("bea", "Personal Income and Outlays", "개인소득·지출(PCE 물가)", "PCE"),
 ]
 
 
@@ -98,11 +98,11 @@ def main():
         n = 0
         for ev in items:
             summary = ev.get("SUMMARY", ("", {}))[0].replace("\\,", ",")
-            for s, key, label in RULES:
+            for s, key, label, short in RULES:
                 if s == src and key.lower() in summary.lower():
                     date, hm = start_kst(ev)
                     if date >= lo:
-                        events.append({"date": date, "time": hm, "c": "us", "t": label, "src": src})
+                        events.append({"date": date, "time": hm, "c": "us", "t": label, "s": short, "src": src})
                         n += 1
                     break
         print(f"{src}: 일정 {n}건 (전체 {len(items)}건 중)")
