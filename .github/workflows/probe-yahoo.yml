@@ -1,0 +1,11 @@
+name: probe-yahoo
+on:
+  push:
+    branches: [claude/project-thread-6r971x]
+    paths: [.github/workflows/probe-yahoo.yml, tools/fetch_quotes.py]
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/fetch_quotes.py && head -c 1500 _data/briefing_quotes.json
