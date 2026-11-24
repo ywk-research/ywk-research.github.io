@@ -5,26 +5,26 @@
     <h2>해외 지수·금리·유가</h2>
   </div>
   <div class="gl-cards" id="gl-cards"></div>
-  <p class="note">각 카드의 날짜가 해당 지표의 최근 값 기준일입니다(미국 현지 날짜). 금리 변동은 bp, 차트는 최근 3개월 · 자료: FRED, Federal Reserve Bank of St. Louis · 업데이트 {{ gi.updated_at }}</p>
+  <p class="note">각 카드의 날짜가 해당 지표의 최근 값 기준일입니다(현지 날짜). '지연'은 다른 지표보다 기준일이 늦은 경우입니다. 금리 변동은 bp, 차트는 최근 3개월 · 자료: {{ gi.source }} · 업데이트 {{ gi.updated_at }}</p>
   <script>
     (function () {
       var GI = {{ gi | jsonify }};
       var css = getComputedStyle(document.documentElement);
       function c(n) { return css.getPropertyValue(n).trim(); }
       var wrap = document.getElementById('gl-cards');
+      var LATEST = GI.series.reduce(function (m, s) { var d = s.data[s.data.length - 1].d; return d > m ? d : m; }, '');
       function fmt(v, d) { return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
       GI.series.forEach(function (s) {
         var rows = s.data; if (!rows.length) return;
         var last = rows[rows.length - 1];
-        var dec = s.unit === 'pct' ? 2 : 2;
-        var val = s.unit === 'usd' ? '$' + fmt(last.close, 2) : s.unit === 'pct' ? fmt(last.close, 2) + '%' : fmt(last.close, 2);
+                var val = s.unit === 'usd' ? '$' + fmt(last.close, 2) : s.unit === 'pct' ? fmt(last.close, 2) + '%' : s.unit === 'krw' ? fmt(last.close, 1) + '원' : fmt(last.close, 2);
         var cls = last.chg > 0 ? 'up' : last.chg < 0 ? 'down' : 'flat';
         var arrow = last.chg > 0 ? '▲' : last.chg < 0 ? '▼' : '';
         var chg = s.unit === 'pct' ? arrow + ' ' + Math.abs(Math.round(last.chg * 100)) + 'bp'
-                : arrow + ' ' + fmt(Math.abs(last.chg), 2) + ' (' + (last.pct > 0 ? '+' : '') + fmt(last.pct, 2) + '%)';
+                : arrow + ' ' + fmt(Math.abs(last.chg), s.unit === 'krw' ? 1 : 2) + (s.unit === 'krw' ? '원' : '') + ' (' + (last.pct > 0 ? '+' : '') + fmt(last.pct, 2) + '%)';
         var el = document.createElement('div');
         el.className = 'gl-card';
-        el.innerHTML = '<p class="krx-name">' + s.label + ' <span class="krx-sub">' + last.d.slice(5).replace('-', '/') + '</span></p>' +
+        el.innerHTML = '<p class="krx-name">' + s.label + ' <span class="krx-sub">' + last.d.slice(5).replace('-', '/') + (last.d < LATEST ? ' · 지연' : '') + '</span></p>' +
           '<p class="gl-close">' + val + '</p><p class="krx-chg ' + cls + '">' + chg + '</p><div class="gl-spark"><canvas></canvas></div>';
         wrap.appendChild(el);
         var cut = new Date(last.d); cut.setMonth(cut.getMonth() - 3);

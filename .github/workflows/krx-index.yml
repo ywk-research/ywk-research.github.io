@@ -1,4 +1,4 @@
-name: KRX 지수 업데이트
+name: 시장 데이터 업데이트
 
 on:
   schedule:
@@ -30,11 +30,12 @@ jobs:
           KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
         run: python tools/fetch_krx.py
 
-      - name: FRED 해외 지수 받아오기
+      - name: 해외 지수·금리·원자재·환율 받아오기
         continue-on-error: true
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-        run: python tools/fetch_fred.py
+          TWELVEDATA_API_KEY: ${{ secrets.TWELVEDATA_API_KEY }}
+        run: python tools/fetch_global.py
 
       - name: 변경분 커밋
         id: commit
