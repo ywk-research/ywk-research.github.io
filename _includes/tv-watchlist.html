@@ -1,8 +1,28 @@
 <!-- 관심종목 가상 수익률: TradingView 무료 위젯 (로고·링크는 약관상 지우지 않음)
      종목·비중은 _data/watchlist.yml. 수식 심볼(주식 수 × 종목)로 포트폴리오를 그린다 -->
 {%- assign wl = site.data.watchlist -%}
+{%- assign wl_total = 0 -%}{%- for s in wl.stocks -%}{%- assign wl_total = wl_total | plus: s.weight -%}{%- endfor -%}
 <section class="tv-wl" id="watchlist">
-  <p class="wl-mix">{% for s in wl.stocks %}<a href="{{ '/stock/' | relative_url }}?s={{ s.symbol | url_encode }}"><span data-i18n-name>{{ s.name }}</span> {{ s.symbol | split: ":" | last }}</a> {{ s.weight }}%{% unless forloop.last %} · {% endunless %}{% endfor %}</p>
+  <div class="wl-top">
+    <table class="wl-table">
+      <thead><tr><th data-i18n="wl.th_name">종목</th><th data-i18n="wl.th_ticker">티커</th><th data-i18n="wl.th_weight">비중</th><th data-i18n="wl.th_base" data-d="{{ wl.base_date | date: '%-m/%-d' }}">기준가 ({{ wl.base_date | date: '%-m/%-d' }} 종가)</th></tr></thead>
+      <tbody>
+        {%- for s in wl.stocks %}
+        <tr><td><a href="{{ '/stock/' | relative_url }}?s={{ s.symbol | url_encode }}" data-i18n-name>{{ s.name }}</a></td><td>{{ s.symbol | split: ":" | last }}</td><td class="num">{{ s.weight | times: 100.0 | divided_by: wl_total | round: 1 }}%</td><td class="num" data-usd="{{ s.base_price }}">${{ s.base_price }}</td></tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+    <div class="wl-periods">
+      <p class="wl-sub" data-i18n="wl.periods">포트폴리오 기간별 수익률</p>
+      <div class="wl-pgrid">
+        <div class="wl-p"><p class="krx-name" data-i18n="wl.p1w">1주</p><div class="tv-w" id="tv-wl-p5d"></div></div>
+        <div class="wl-p"><p class="krx-name" data-i18n="wl.p1m">1개월</p><div class="tv-w" id="tv-wl-p1m"></div></div>
+        <div class="wl-p"><p class="krx-name" data-i18n="wl.p3m">3개월</p><div class="tv-w" id="tv-wl-p3m"></div></div>
+        <div class="wl-p"><p class="krx-name" data-i18n="wl.p1y">1년</p><div class="tv-w" id="tv-wl-p12m"></div></div>
+      </div>
+      <p class="note" data-i18n="wl.pnote">각 칸의 %가 그 기간의 포트폴리오 수익률이에요(일봉 종가 기준, 지연 시세).</p>
+    </div>
+  </div>
   <div class="tv-box tv-wl-box" id="tv-wl-overview"></div>
   <p class="note" data-i18n="wl.note" data-d="{{ wl.base_date | date: '%b %-d, %Y' }}">{{ wl.base_date | replace: "-", "." }} 종가 기준 비중으로 주식 수를 정해 그 뒤로 그대로 들고 있었다고 가정한 가상 포트폴리오예요(기준일 가치 100). 리밸런싱·배당·환율·수수료는 반영하지 않아요. 위쪽 탭으로 포트폴리오와 비교 지수를 바꿔 볼 수 있어요.</p>
   <div class="tv-box tv-wl-chart" id="tv-wl-compare"></div>
@@ -38,6 +58,21 @@
         chartOnly: false, width: '100%', height: '100%', autosize: true, locale: TV_LOCALE,
         colorTheme: th, isTransparent: true, chartType: 'area', showVolume: false,
         dateRanges: ['5d|1D', '1m|1D', '3m|1D', '12m|1D']
+      });
+
+      // 맨 위 기간별 수익률: 기간 버튼이 하나뿐인 심볼 개요 위젯을 기간마다 하나씩. 머리글의 %가 그 기간 수익률
+      ['5d', '1m', '3m', '12m'].forEach(function (r) {
+        mount('tv-wl-p' + r, 'symbol-overview', {
+          symbols: [[t('wl.portfolio', '포트폴리오'), formula + '|1D']], dateRanges: [r + '|1D'],
+          chartOnly: false, width: '100%', height: '100%', autosize: true, locale: TV_LOCALE,
+          colorTheme: th, isTransparent: true, chartType: 'area', showVolume: false, noTimeScale: true,
+          hideMarketStatus: true, hideSymbolLogo: true
+        });
+      });
+
+      // 기준가 표기: 1,121.80
+      document.querySelectorAll('.wl-table [data-usd]').forEach(function (el) {
+        el.textContent = '$' + Number(el.dataset.usd).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       });
 
       // 종목별 % 비교: 포트폴리오 위에 종목·벤치마크를 같은 % 축으로 겹침

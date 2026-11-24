@@ -242,7 +242,18 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 }
 /* 관심종목 탭 */
 .tv-wl { margin-top: 28px; }
-.wl-mix { margin: 0 0 10px; font-weight: 600; color: var(--muted); font-size: 14px; }
+.wl-top { display: grid; gap: 18px; margin-bottom: 20px; }
+.wl-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.wl-table th, .wl-table td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+.wl-table th { color: var(--muted); font-weight: 600; font-size: 13px; }
+.wl-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.wl-table th:nth-child(n+3) { text-align: right; }
+.wl-sub { margin: 0 0 8px; color: var(--muted); font-weight: 600; font-size: 13px; }
+.wl-pgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.wl-p { display: flex; flex-direction: column; height: 200px; padding: 8px 4px 0; background: var(--soft); border-radius: 12px; min-width: 0; overflow: hidden; }
+.wl-p .krx-name { padding: 0 8px; margin: 0; }
+.wl-p .tv-w .tradingview-widget-container { height: 100%; }
+@media (max-width: 760px) { .wl-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .tv-wl-box { height: 460px; }
 .tv-wl-chart { height: 480px; margin-top: 20px; }
 @media (max-width: 560px) { .tv-wl-box { height: 420px; } .tv-wl-chart { height: 380px; } }
@@ -266,8 +277,8 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 /* 종목 상세 탭 (stock.html) */
 a.mv-name { color: var(--text); }
 a.mv-name:hover { color: var(--accent); text-decoration: none; }
-.wl-mix a { color: inherit; }
-.wl-mix a:hover { color: var(--accent); text-decoration: none; }
+.wl-table td a { color: var(--text); }
+.wl-table td a:hover { color: var(--accent); text-decoration: none; }
 .st-search { display: flex; gap: 8px; margin-top: 20px; }
 .st-search input { flex: 1; min-width: 0; font: inherit; font-size: 15px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); color: var(--text); }
 .st-search input:focus { outline: none; border-color: var(--accent); }

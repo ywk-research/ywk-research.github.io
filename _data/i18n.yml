@@ -9,7 +9,7 @@ en:
   nav.aria: Menu
   nav.briefing: Briefing
   nav.data: Data
-  nav.watchlist: Watchlist
+  nav.watchlist: Watchlist Backtest
   nav.about: About
   nav.macro: Macro
   nav.stock: Stocks
@@ -101,8 +101,18 @@ en:
   mc.note: 'As of US {us}, Korea {kr} (local dates). US term spread is 10Y−2Y, Korea is 10Y−3Y. The Korea–US gap compares values on the same date (or the latest before it); the US policy rate is the upper bound of the Fed target range. Card changes in bp from the previous day · Sources: U.S. Treasury, Bank of Korea ECOS, FRED (Federal Reserve) · Updated {u}'
 
   # 관심종목 탭 (watchlist.html, _includes/tv-watchlist.html)
-  wl.title: Watchlist Returns
-  wl.intro: A hypothetical portfolio of US stocks I'm watching, held at fixed weights.
+  wl.title: Watchlist Backtest
+  wl.intro: "A hypothetical portfolio of US stocks I'm watching, held at fixed weights. Simple buy-and-hold: bought once on the base date and held (no rebalancing, no dividends)."
+  wl.th_name: Stock
+  wl.th_ticker: Ticker
+  wl.th_weight: Weight
+  wl.th_base: Base price ({d} close)
+  wl.periods: Portfolio returns by period
+  wl.p1w: 1W
+  wl.p1m: 1M
+  wl.p3m: 3M
+  wl.p1y: 1Y
+  wl.pnote: The % in each box is the portfolio return over that period (daily closes, delayed quotes).
   wl.note: 'Share counts are set from the target weights at the {d} close and held unchanged since (value 100 on the base date). Rebalancing, dividends, FX and fees are not included. Use the tabs above to switch between the portfolio and the benchmark.'
   wl.note2: 'Last 12 months, returns measured from the first day of the period. Delayed quotes, not investment advice · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
   wl.portfolio: Portfolio
@@ -258,5 +268,6 @@ names:
   트랜스다임: TransDigm
   에퀴닉스: Equinix
   델타항공: Delta Air Lines
+  GE 에어로스페이스: GE Aerospace
   # 글 종류 (브리핑 front matter의 category_label)
   주간 코멘트: Weekly Comment
