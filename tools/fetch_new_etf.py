@@ -138,7 +138,7 @@ def exch_of(text):
 
 
 HDR_TAIL = re.compile(r"(?i).*(identification\s+(no\.?|number)|id\s+number|to\s+be\s+(so\s+)?registered|exchange\s+on\s+which)\)?[\s:_]*")
-PAR = re.compile(r"(?i)[,;]?\s*par\s+value(\s+per\s+share)?(\s+of)?\s*\$?[\d.]+(\s+per\s+share)?[,;:]?(\s+of\b:?)?")
+PAR = re.compile(r"(?i)[,;]?\s*par\s+value(\s+per\s+share)?(\s+of)?\s*\$[\d.]+(\s+per\s+share)?[,;:]?(\s+of\b:?)?")
 NOT_FUND = re.compile(r"(?i)common\s+stock|ordinary\s+shares|warrants?\b|notes?\s+due|preferred|depositary|\bunits?\b|^(nyse|nasdaq|cboe)\b")
 
 
