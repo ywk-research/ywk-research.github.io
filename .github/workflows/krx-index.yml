@@ -37,6 +37,10 @@ jobs:
           ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
         run: python tools/fetch_global.py
 
+      - name: 미국 지표 발표 일정 받아오기 (BEA)
+        continue-on-error: true
+        run: python tools/fetch_calendar.py
+
       - name: 매크로(한미 금리) 받아오기
         continue-on-error: true
         env:
