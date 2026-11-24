@@ -18,9 +18,9 @@ STATE_DIR = os.path.join(ROOT, "tools", "state", "krx_closes")
 OUT_PATH = os.path.join(ROOT, "_data", "krx_cross.json")
 
 PAIRS = [(50, 200), (20, 60)]
-KEEP = 205        # 저장할 거래일 수 (200일선 + 크로스 판정 여유)
+KEEP = 310        # 저장할 거래일 수: 200일선 + 크로스 여유, 52주 신고가(250) + 추이 60일(tools/krx_highlow.py)
 LOOKBACK = 5      # 최근 몇 거래일 안의 크로스를 보여 줄지
-MAX_BACKFILL_CAL_DAYS = 330  # 과거 채우기 한도(달력일)
+MAX_BACKFILL_CAL_DAYS = 480  # 과거 채우기 한도(달력일)
 
 
 def _num(v):

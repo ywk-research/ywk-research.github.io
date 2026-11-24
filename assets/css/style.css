@@ -326,3 +326,11 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .ecal-imp { font-size: 9px; letter-spacing: 1px; color: var(--up); white-space: nowrap; }
 .ecal-imp i { font-style: normal; color: var(--line); }
 .ecal-imp.i2 { color: #e0a030; } .ecal-imp.i1 { color: var(--muted); }
+
+/* 52주 신고가·신저가 (_includes/krx-highlow.html) */
+.hl { margin-top: 40px; }
+.gl-cards.hl-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hl-cards .gl-close.up { color: var(--up); } .hl-cards .gl-close.down { color: var(--down); }
+.hl-chart { height: 260px; margin: 16px 0; }
+.hl-names { margin-top: 8px; }
+@media (max-width: 760px) { .gl-cards.hl-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

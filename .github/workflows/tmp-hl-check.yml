@@ -1,0 +1,20 @@
+name: 임시 신고가 점검
+on:
+  push:
+    branches: [claude/project-thread-iv38jp]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - env:
+          KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
+        run: |
+          python tools/fetch_krx.py | tail -5
+          ls tools/state/krx_closes | wc -l
+          python -c "import json;d=json.load(open('_data/krx_highlow.json'));print('ELIG',d['eligible'],d['stored']);[print('S',r) for r in d['series'][-5:]];print('H',d['high_total'],d['high'][:5]);print('L',d['low_total'],d['low'][:5])"
+          base64 -w0 _data/krx_highlow.json | sed 's/^/B64 /'

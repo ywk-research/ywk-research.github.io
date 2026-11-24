@@ -96,6 +96,18 @@ en:
   etf.value: Value traded
   etf.aum: Net assets
   etf.note: "{n} listed ETFs, total value traded ₩{total} (shown in Korean units) · Source: Korea Exchange (KRX) Open API. ETF names are shown in Korean."
+  hl.title: '52-week Highs & Lows <span class="krx-sub">as of {d}</span>'
+  hl.kospi_hi: KOSPI new highs
+  hl.kospi_lo: KOSPI new lows
+  hl.kosdaq_hi: KOSDAQ new highs
+  hl.kosdaq_lo: KOSDAQ new lows
+  hl.hi: New highs
+  hl.lo: New lows
+  hl.today_hi: New highs today
+  hl.today_lo: New lows today
+  hl.none: None.
+  hl.aria: Number of stocks at 52-week highs and lows
+  hl.note: "Based on closing prices: a stock makes a new high (low) when its close is above (below) every close of the previous {w} trading days (about 52 weeks), adjusted for splits. May differ from broker counts that use intraday highs and lows. Common stocks only, excluding those listed less than a year (KOSPI {a}, KOSDAQ {b} stocks). Lists show the 10 largest by market cap. Stock names are shown in Korean · Source: Korea Exchange (KRX) Open API"
   # 상위 탭 페이지 (equity·rate·fx·commodity·calendar.html)
   equity.title: Equity
   equity.intro: "Sector trends and stock activity in the Korean equity market. Source: Korea Exchange (KRX) Open API"
