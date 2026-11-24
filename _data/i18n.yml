@@ -192,8 +192,10 @@ en:
   hl.note: "Based on closing prices: a stock makes a new high (low) when its close is above (below) every close of the previous {w} trading days (about 52 weeks), adjusted for splits. May differ from broker counts that use intraday highs and lows. Common stocks only, excluding those listed less than a year (KOSPI {a}, KOSDAQ {b} stocks). Lists show the 10 largest by market cap. Stock names are shown in Korean · Source: Korea Exchange (KRX) Open API"
   # 상위 탭 페이지 (equity·rate·fx·commodity·calendar.html)
   equity.title: Equity
-  equity.intro: Sector trends, stock activity, disclosures and newly listed ETFs in the Korean and US equity markets.
+  equity.intro: Sector trends, stock activity, disclosures and newly listed ETFs in the US and Korean equity markets.
   eq.tabs_aria: Market
+  fx.usd_title: US Dollar
+  fx.usd_note: "The Dollar Index (DXY) is not available in the widget, so its tracking ETF (UUP) is shown instead. Delayed quotes, last 12 months"
   eq.tab_kr: Korea
   eq.tab_us: US
   eq.lead_kr: 'Sources: Korea Exchange (KRX) Open API, FSS DART'
@@ -201,7 +203,7 @@ en:
   rate.title: Rate
   rate.intro: US and Korean Treasury yield curves, term spreads, the Korea–US rate gap and Korean short-term rates.
   fx.title: FX
-  fx.intro: Korean won exchange rate trends.
+  fx.intro: The US dollar and Korean won, currency futures positioning and foreign capital flows.
   fx.tv_title: Korean Won FX
   fx.tv_note: Delayed quotes, last 1 year
   cmd.title: Commodity

@@ -20,15 +20,16 @@
         items.push({ key: key, name: t('ks.' + key, ko), d: b[0], v: fmt(b[1], dec) + (unit || ''), chg: chg, cls: d > 0 ? 'up' : d < 0 ? 'down' : 'flat' });
       }
       function pairs(list) { return (list || []).map(function (r) { return [r.d, r.close]; }); }
-      if (KI) { add('kospi', '코스피', pairs(KI.kospi), 2, 'pct'); add('kosdaq', '코스닥', pairs(KI.kosdaq), 2, 'pct'); }
-      if (FX && FX.series) add('usdkrw', '원/달러', FX.series.usd, 1, 'pct');
+      // 개장 전 중요도 순: 美 금리 → 변동성 → 유가 → 환율 → 국내 지수 → 국내 금리
       if (MC) {
         var i10 = (MC.us_tenors || []).indexOf('10Y'), i3 = (MC.kr_tenors || []).indexOf('3Y');
         if (i10 >= 0) add('us10y', '美 10년물', (MC.us || []).map(function (r) { return [r[0], r[1][i10]]; }), 2, 'bp', '%');
-        if (i3 >= 0) add('kr3y', '국고 3년', (MC.kr || []).map(function (r) { return [r[0], r[1][i3]]; }), 2, 'bp', '%');
       }
       if (GI && GI.series) GI.series.forEach(function (s) { if (s.key === 'vix') add('vix', 'VIX', pairs(s.data), 2, 'pct'); });
       if (CM && CM.energy) CM.energy.series.forEach(function (s) { if (s.key === 'wti') add('wti', 'WTI', s.data, 2, 'pct', ''); });
+      if (FX && FX.series) add('usdkrw', '원/달러', FX.series.usd, 1, 'pct');
+      if (KI) { add('kospi', '코스피', pairs(KI.kospi), 2, 'pct'); add('kosdaq', '코스닥', pairs(KI.kosdaq), 2, 'pct'); }
+      if (MC && i3 >= 0) add('kr3y', '국고 3년', (MC.kr || []).map(function (r) { return [r[0], r[1][i3]]; }), 2, 'bp', '%');
       var row = document.getElementById('ks-row');
       row.innerHTML = items.map(function (x) {
         return '<div class="ks-item"><p class="ks-name">' + x.name + ' <span class="krx-sub">' + md(x.d) + '</span></p>' +

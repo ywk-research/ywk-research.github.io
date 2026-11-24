@@ -12,18 +12,18 @@ wide: true
 
 {% include stock-search.html %}
 
-<div class="krx-range wl-tabs" id="wl-tabs" role="tablist" aria-label="국내/해외">
-  <button type="button" role="tab" data-tab="kr" class="on" data-i18n="wl.tab_kr">국내</button>
-  <button type="button" role="tab" data-tab="us" data-i18n="wl.tab_us">해외</button>
+<div class="krx-range wl-tabs" id="wl-tabs" role="tablist" aria-label="미국/한국">
+  <button type="button" role="tab" data-tab="us" class="on" data-i18n="wl.tab_us">미국</button>
+  <button type="button" role="tab" data-tab="kr" data-i18n="wl.tab_kr">한국</button>
 </div>
 
-<div class="wl-pane" data-pane="kr">
-{% include wl-kr.html %}
-</div>
-
-<div class="wl-pane" data-pane="us" hidden>
+<div class="wl-pane" data-pane="us">
   <p class="wl-lead" data-i18n="wl.intro">관심 있는 미국 종목을 정해 둔 비중으로 들고 있었다면 어땠을지 보는 가상 포트폴리오예요. 기준일에 한 번 사서 그대로 들고 있는 단순 매수·보유 방식이에요(리밸런싱·배당 제외).</p>
 {% include tv-watchlist.html %}
+</div>
+
+<div class="wl-pane" data-pane="kr" hidden>
+{% include wl-kr.html %}
 </div>
 
 <script>
@@ -37,6 +37,6 @@ wide: true
     btns.forEach(function (b) {
       b.addEventListener('click', function () { show(b.dataset.tab); try { history.replaceState(null, '', '#' + b.dataset.tab); } catch (e) {} });
     });
-    show(location.hash === '#us' ? 'us' : 'kr');
+    show(location.hash === '#kr' ? 'kr' : 'us');
   })();
 </script>

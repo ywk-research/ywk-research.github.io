@@ -7,17 +7,25 @@ wide: true
 ---
 <section class="intro">
   <h1 data-i18n="equity.title">Equity</h1>
-  <p data-i18n="equity.intro">한국·미국 주식 시장의 업종 흐름과 종목 동향, 공시, 신규 상장 ETF를 모아 둡니다.</p>
+  <p data-i18n="equity.intro">미국·한국 주식 시장의 업종 흐름과 종목 동향, 공시, 신규 상장 ETF를 모아 둡니다.</p>
 </section>
 
 {% include stock-search.html %}
 
 <div class="krx-range wl-tabs mk-tabs" id="mk-tabs" role="tablist" aria-label="시장" data-i18n-aria="eq.tabs_aria" data-chips-anchor>
-  <button type="button" role="tab" data-tab="kr" class="on" data-i18n="eq.tab_kr">한국</button>
-  <button type="button" role="tab" data-tab="us" data-i18n="eq.tab_us">미국</button>
+  <button type="button" role="tab" data-tab="us" class="on" data-i18n="eq.tab_us">미국</button>
+  <button type="button" role="tab" data-tab="kr" data-i18n="eq.tab_kr">한국</button>
 </div>
 
-<div class="mk-pane" data-pane="kr">
+<div class="mk-pane" data-pane="us">
+<p class="wl-lead" data-i18n="eq.lead_us">자료: TradingView 위젯(지연 시세), SEC EDGAR</p>
+
+{% include tv-global.html parts="sectors" %}
+
+{% include new-etf.html market="us" %}
+</div>
+
+<div class="mk-pane" data-pane="kr" hidden>
 <p class="wl-lead" data-i18n="eq.lead_kr">자료: 한국거래소(KRX) Open API, 금융감독원 DART</p>
 
 {% include krx-sector-heat.html %}
@@ -26,37 +34,29 @@ wide: true
 
 {% include krx-highlow.html %}
 
-{% include new-etf.html market="kr" %}
+{% include krx-cross.html %}
 
 {% include krx-etf.html %}
 
-{% include krx-cross.html %}
-</div>
-
-<div class="mk-pane" data-pane="us" hidden>
-<p class="wl-lead" data-i18n="eq.lead_us">자료: TradingView 위젯(지연 시세), SEC EDGAR</p>
-
-{% include tv-global.html parts="sectors" %}
-
-{% include new-etf.html market="us" %}
+{% include new-etf.html market="kr" %}
 </div>
 
 <script>
-  // 한국/미국 탭. 주소 끝 #us면 미국 탭으로 열고, 섹션 주소(#dart 등)면 그 섹션이 있는 탭을 연다
+  // 미국/한국 탭(기본 미국). 주소 끝 #kr이면 한국 탭으로 열고, 섹션 주소(#dart 등)면 그 섹션이 있는 탭을 연다
   (function () {
     var btns = document.querySelectorAll('#mk-tabs button'), panes = document.querySelectorAll('.mk-pane');
     function show(k, keepHash) {
       btns.forEach(function (b) { var on = b.dataset.tab === k; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
       panes.forEach(function (p) { p.hidden = p.dataset.pane !== k; });
-      if (!keepHash) { try { history.replaceState(null, '', k === 'us' ? '#us' : location.pathname); } catch (e) {} }
+      if (!keepHash) { try { history.replaceState(null, '', k === 'kr' ? '#kr' : location.pathname); } catch (e) {} }
       document.dispatchEvent(new CustomEvent('panes-changed', { detail: k }));
       window.dispatchEvent(new Event('resize')); // 숨겨져 있던 차트 크기 다시 맞추기
     }
     btns.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.tab); }); });
     function fromHash(first) {
-      var h = location.hash.slice(1), target = h && h !== 'us' && document.getElementById(h);
+      var h = location.hash.slice(1), target = h && h !== 'us' && h !== 'kr' && document.getElementById(h);
       var pane = target && target.closest('.mk-pane');
-      var k = h === 'us' ? 'us' : pane ? pane.dataset.pane : first ? 'kr' : null;
+      var k = h === 'us' || h === 'kr' ? h : pane ? pane.dataset.pane : first ? 'us' : null;
       if (!k) return;
       var cur = document.querySelector('#mk-tabs .on');
       if (first || !cur || cur.dataset.tab !== k) show(k, true);

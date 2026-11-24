@@ -1,9 +1,11 @@
 <!-- 원자재 직접 수집 데이터 (_data/commodity.json, tools/fetch_commodity.py). 자료: EIA, 한국거래소(KRX), 세계은행 Pink Sheet -->
+{% comment %}include 인자: parts="energy,gold,monthly"(보여 줄 섹션), noscript=true(스크립트는 마지막 include에서 한 번만){% endcomment %}
 {% assign cm = site.data.commodity %}
 {% if cm %}
 {% include mc-common.html %}
+{% assign cm_parts = include.parts | default: "energy,gold,monthly" %}
 
-{% if cm.energy %}
+{% if cm.energy and cm_parts contains "energy" %}
 {% assign en_last = cm.energy.series | first %}{% assign en_last = en_last.data | last %}
 <section class="krx macro" id="cm-energy">
   <div class="krx-head">
@@ -22,7 +24,7 @@
 </section>
 {% endif %}
 
-{% if cm.gold_krx and cm.gold_krx.data.size > 0 %}
+{% if cm.gold_krx and cm.gold_krx.data.size > 0 and cm_parts contains "gold" %}
 {% assign gd_last = cm.gold_krx.data | last %}
 <section class="krx macro" id="cm-gold">
   <div class="krx-head">
@@ -38,7 +40,7 @@
 </section>
 {% endif %}
 
-{% if cm.monthly %}
+{% if cm.monthly and cm_parts contains "monthly" %}
 <section class="krx macro" id="cm-monthly">
   <div class="krx-head">
     <h2 data-i18n="cm.month_title" data-m="{{ cm.monthly.month | replace: '-', '.' }}">월간 원자재 가격 <span class="krx-sub">{{ cm.monthly.month | replace: "-", "." }} 평균</span></h2>
@@ -57,6 +59,7 @@
 </section>
 {% endif %}
 
+{% unless include.noscript %}
 <script>
   (function () {
     var CM = {{ cm | jsonify }};
@@ -140,4 +143,5 @@
     }
   })();
 </script>
+{% endunless %}
 {% endif %}
