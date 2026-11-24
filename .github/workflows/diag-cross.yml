@@ -1,5 +1,8 @@
 name: 점검 (일회성)
-on: workflow_dispatch
+on:
+  push:
+    branches: [claude/project-thread-7xka0z]
+    paths: [".github/workflows/diag-cross.yml"]
 jobs:
   diag:
     runs-on: ubuntu-latest
@@ -9,3 +12,4 @@ jobs:
         with: { python-version: "3.12" }
       - env: { KRX_API_KEY: "${{ secrets.KRX_API_KEY }}" }
         run: python tools/diag_cross.py
+# run
