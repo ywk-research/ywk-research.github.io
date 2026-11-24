@@ -95,6 +95,15 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .krx { margin-top: 28px; }
 .krx-head { display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
 .krx-head h2 { border: 0; margin: 0; padding-bottom: 6px; }
+/* 시세 기준 배지: 실시간은 초록 점, 고정 값은 회색 날짜 */
+.fresh { display: inline-flex; align-items: center; gap: 5px; align-self: flex-end; margin: 0 auto 9px 10px; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; color: var(--muted); background: var(--soft); font-variant-numeric: tabular-nums; cursor: help; }
+.fresh-live { color: #16a34a; background: rgba(22, 163, 74, 0.12); }
+.fresh-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: fresh-pulse 2s ease-in-out infinite; }
+@keyframes fresh-pulse { 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .fresh-live::before { animation: none; } }
+.fresh:empty { display: none; }
+/* 배지에 날짜가 나오므로 제목 옆 "MM.DD 기준"은 숨김 */
+#sector-heat h2 .krx-sub, #krx-highlow h2 .krx-sub, #krx-etf h2 .krx-sub { display: none; }
 .krx-range { display: flex; gap: 4px; padding-bottom: 6px; }
 .krx-range button { font: inherit; font-size: 13px; padding: 3px 10px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); border-radius: 999px; cursor: pointer; }
 .krx-range button.on { color: var(--text); border-color: var(--text); font-weight: 600; }

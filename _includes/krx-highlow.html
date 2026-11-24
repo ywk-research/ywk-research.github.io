@@ -6,6 +6,7 @@
 <section class="krx hl" id="krx-highlow">
   <div class="krx-head">
     <h2 data-i18n="hl.title" data-d="{{ hl.d | date: '%b %-d' }}">52주 신고가·신저가 <span class="krx-sub">{{ hl.d | date: "%m.%d" }} 기준</span></h2>
+    {% include fresh.html kind="close" d=hl.d %}
     <div class="krx-range hl-mkt">
       <button type="button" data-mkt="kospi" class="on" data-i18n="mkt.kospi">코스피</button>
       <button type="button" data-mkt="kosdaq" data-i18n="mkt.kosdaq">코스닥</button>

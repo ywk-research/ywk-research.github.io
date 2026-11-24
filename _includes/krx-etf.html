@@ -4,6 +4,7 @@
 <section class="krx etf" id="krx-etf">
   <div class="krx-head">
     <h2 data-i18n="etf.title" data-d="{{ ef.d | date: '%b %-d' }}">ETF 거래대금 상위 <span class="krx-sub">{{ ef.d | date: "%m.%d" }} 기준</span></h2>
+    {% include fresh.html kind="close" d=ef.d %}
   </div>
   <div class="etf-wrap">
     <table class="etf-table">

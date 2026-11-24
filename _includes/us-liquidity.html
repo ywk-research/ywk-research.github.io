@@ -5,6 +5,7 @@
 <section class="krx macro" id="us-liquidity">
   <div class="krx-head">
     <h2 data-i18n="lq.title">美 유동성·금융여건</h2>
+    {% assign fr = lq.series.assets | last | first %}{% include fresh.html kind="asof" d=fr %}
     <div class="krx-range" id="lq-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-months="12" data-i18n="range.1y">1년</button>
       <button type="button" data-months="36" class="on" data-i18n="range.3y">3년</button>

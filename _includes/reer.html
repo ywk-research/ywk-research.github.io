@@ -5,6 +5,7 @@
 <section class="krx macro" id="reer">
   <div class="krx-head">
     <h2 data-i18n="reer.title">실질실효환율(REER)</h2>
+    {% assign fr = re.series[0].data | last | first %}{% include fresh.html kind="asof" d=fr %}
     <div class="krx-range" id="reer-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-months="60" data-i18n="range.5y">5년</button>
       <button type="button" data-months="0" class="on" data-i18n="range.all">전체</button>

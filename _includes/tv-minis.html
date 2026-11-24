@@ -6,6 +6,7 @@
 <section class="krx gl" id="{{ include.id }}">
   <div class="krx-head">
     <h2{% if include.title_key %} data-i18n="{{ include.title_key }}"{% endif %}>{{ include.title }}</h2>
+    {% include fresh.html kind="live" %}
   </div>
   {% if include.mode == "mini" %}
   <div class="tvm-grid">{% for it in items %}<div class="tvm-card"></div>{% endfor %}</div>

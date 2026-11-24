@@ -5,6 +5,7 @@
 <section class="krx cross" id="cross">
   <div class="krx-head">
     <h2 data-i18n="cross.title" data-from="{{ first_day | date: '%b %-d' }}" data-to="{{ last_day | date: '%b %-d' }}" data-n="{{ cx.lookback }}">이평선 크로스 <span class="krx-sub">{{ first_day | date: "%m.%d" }}~{{ last_day | date: "%m.%d" }} · 최근 {{ cx.lookback }}거래일</span></h2>
+    {% include fresh.html kind="close" d=cx.d %}
     <div class="krx-range cross-tabs" role="tablist">
       {% for p in cx.pairs %}<button type="button" data-pair="{{ forloop.index0 }}"{% if forloop.first %} class="on"{% endif %} data-en="{{ p.short }}/{{ p.long }}D">{{ p.short }}·{{ p.long }}일</button>{% endfor %}
     </div>

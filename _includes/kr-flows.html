@@ -5,6 +5,7 @@
 <section class="krx macro" id="kr-flows">
   <div class="krx-head">
     <h2 data-i18n="kf.title">외국인 국내 증권투자</h2>
+    {% assign fr = site.data.kr_flows.series.equity | last | first %}{% include fresh.html kind="asof" d=fr %}
     <div class="krx-range" id="kf-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-months="24" class="on" data-i18n="range.2y">2년</button>
       <button type="button" data-months="72" data-i18n="range.6y">6년</button>

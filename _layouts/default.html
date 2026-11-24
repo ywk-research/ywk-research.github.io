@@ -58,6 +58,29 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+  <script>
+    // 시세 기준 배지(_includes/fresh.html) 글자 채우기: ● 실시간 / MM/DD 종가 / MM/DD 기준
+    document.addEventListener('DOMContentLoaded', function () {
+      var en = LANG === 'en', M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      document.querySelectorAll('.fresh').forEach(function (el) {
+        var k = el.dataset.kind, d = el.dataset.d || '', txt, tip;
+        var mon = d.length === 7, md = mon ? d.replace('-', '.') : d.slice(5).replace('-', '/');
+        var mdEn = mon ? M[+d.slice(5, 7) - 1] + ' ' + d.slice(0, 4) : M[+d.slice(5, 7) - 1] + ' ' + (+d.slice(8, 10));
+        if (k === 'live') {
+          txt = en ? 'Live' : '실시간';
+          tip = en ? 'TradingView widget quotes, updating while the market is open (may be delayed up to 15 min depending on the exchange)' : 'TradingView 위젯 시세. 장중에는 계속 바뀌어요(거래소에 따라 최대 15분 지연)';
+        } else if (!d) { el.remove(); return; }
+        else if (k === 'close') {
+          txt = en ? 'Close ' + mdEn : md + ' 종가';
+          tip = en ? 'Fixed value: close of ' + d + ' (local). Updated by the daily data refresh' : d + '(현지) 종가로 고정된 값이에요. 매일 데이터 갱신 때 바뀌어요';
+        } else {
+          txt = en ? 'As of ' + mdEn : md + ' 기준';
+          tip = en ? 'Latest available data point: ' + d : '가장 최근 자료 기준일: ' + d;
+        }
+        el.textContent = txt; el.title = tip;
+      });
+    });
+  </script>
 </head>
 <body>
   <header class="site-header">

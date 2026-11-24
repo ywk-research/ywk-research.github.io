@@ -4,6 +4,7 @@
 <section class="krx" id="ust-auctions">
   <div class="krx-head">
     <h2 data-i18n="ua.title">美 국채 입찰</h2>
+    {% assign fr = ua.rows | map: 'd' | sort | last %}{% include fresh.html kind="asof" d=fr %}
     <div class="krx-range" id="ua-tabs" role="tablist" aria-label="만기" data-i18n-aria="ua.tabs_aria">
       <button type="button" data-term="" class="on" data-i18n="ua.all">전체</button>
       <button type="button" data-term="2-Year">2Y</button>
