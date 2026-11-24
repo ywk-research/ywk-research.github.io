@@ -12,6 +12,7 @@ en:
   nav.watchlist: Watchlist
   nav.about: About
   nav.macro: Macro
+  nav.stock: Stocks
   theme.aria: Toggle light/dark mode
   theme.to_light: Switch to light mode
   theme.to_dark: Switch to dark mode
@@ -35,6 +36,7 @@ en:
   range.aria: Period
   range.1m: 1M
   range.3m: 3M
+  range.6m: 6M
   range.1y: 1Y
   mkt.kospi: KOSPI
   mkt.kosdaq: KOSDAQ
@@ -105,6 +107,49 @@ en:
   wl.note2: 'Last 12 months, returns measured from the first day of the period. Delayed quotes, not investment advice · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
   wl.portfolio: Portfolio
 
+
+  # 종목 상세 (stock.html)
+  st.title: Stocks
+  st.intro: Charts and key information for US and Korean stocks on one page.
+  st.ph: Ticker (AAPL) or Korean stock name/code (005930)
+  st.go: View
+  st.picks: Quick picks
+  st.empty: Search or pick a stock above. Clicking a stock on the Watchlist or in the home page movers list also brings you here.
+  st.ta: Technical Summary
+  st.profile: Company Profile
+  st.fin: Financials
+  st.news: Stock News
+  st.tv_note: 'Delayed quotes, US colors (green up). Not investment advice · Widgets: '
+  st.insider: Insider Trading
+  st.insider_inst: Insider Trading · Institutional Holdings
+  st.c_date: Date
+  st.c_who: Name · Title
+  st.c_type: Type
+  st.c_sh: Shares
+  st.c_px: Price ($)
+  st.c_after: Owned after
+  st.no_insider: No recent Form 4 filings.
+  st.inst: Institutional Holdings
+  st.k_holders: Reporting institutions
+  st.k_shares: Total institutional shares
+  st.c_inst: Institution
+  st.c_qchg: QoQ change
+  st.new: New
+  st.inst_note: 13F filings as of {p} (vs. {q}). Only managers with over $100M must file each quarter, due 45 days after quarter-end, so the data lags. Shares only, options excluded.
+  st.no_inst: No 13F summary for this stock yet.
+  st.edgar_note: 'Source: U.S. SEC EDGAR · Updated {u}'
+  st.no_edgar: SEC EDGAR data is collected daily for Watchlist stocks only. This stock isn't covered yet.
+  st.krx_none: Korean stocks are covered if their market cap is at least ₩1tn (KOSPI) or ₩300bn (KOSDAQ), or they rank high in trading value. This stock isn't covered yet.
+  st.k_cap: Market cap
+  st.k_val: Trading value
+  st.k_vol: Volume
+  st.k_shares_out: Shares outstanding
+  st.chart: Price Chart
+  st.close: Close
+  st.ohl: Open {o} · High {h} · Low {l}
+  st.krx_note: 'Daily prices as of the {d} close (not adjusted for splits) · Source: Korea Exchange (KRX) Open API'
+  st.flow: Investor Flows
+  st.flow_none: The KRX Open API doesn't provide trading by investor type (foreign, institutional, retail). We'll add it if an official source becomes available.
 
 names:
   # 지표 이름·출처 (_data/global_index.json)

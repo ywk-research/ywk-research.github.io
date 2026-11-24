@@ -1,0 +1,252 @@
+---
+layout: default
+title: 종목
+title_en: Stocks
+permalink: /stock/
+wide: true
+---
+<!-- 종목 상세: /stock/?s=티커
+     - 해외(예: NASDAQ:EQIX, AAPL): TradingView 무료 위젯(차트·기술 지표·기업 개요·재무·뉴스) + SEC EDGAR(내부자 매매·13F)
+       위젯 로고·링크는 약관상 지우지 않음. EDGAR 자료는 tools/fetch_edgar.py가 정해 둔 종목만 받아 둔다
+     - 국내(6자리 코드, 예: 005930): KRX Open API 일별 시세(tools/fetch_stocks.py → assets/data/krx/) -->
+<section class="intro">
+  <h1 data-i18n="st.title">종목</h1>
+  <p data-i18n="st.intro">해외·국내 종목의 차트와 기본 정보를 한 화면에 모아 봐요.</p>
+</section>
+
+{%- assign wl = site.data.watchlist -%}
+<form class="st-search" id="st-search" autocomplete="off">
+  <input id="st-q" list="st-list" type="search" placeholder="티커(AAPL) 또는 국내 종목명·코드(삼성전자, 005930)" aria-label="종목 검색">
+  <datalist id="st-list"></datalist>
+  <button type="submit" data-i18n="st.go">보기</button>
+</form>
+<p class="st-picks" id="st-picks"></p>
+
+<div id="st-body"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  var BASE = {{ '/assets/data/' | relative_url | jsonify }};
+  var WL = [{% for s in wl.stocks %}{ s: {{ s.symbol | jsonify }}, n: {{ s.name | jsonify }} }{% unless forloop.last %}, {% endunless %}{% endfor %}];
+  var root = document.documentElement;
+  var th = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  var css = getComputedStyle(root);
+  function color(n) { return css.getPropertyValue(n).trim(); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function fmt(n, d) { return n == null ? '–' : Number(n).toLocaleString(LANG === 'en' ? 'en-US' : 'ko-KR', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
+  function link(sym) { return '?s=' + encodeURIComponent(sym); }
+  function getJSON(url) { return fetch(url, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
+  var body = document.getElementById('st-body');
+  var qi = document.getElementById('st-q');
+  qi.placeholder = t('st.ph', qi.placeholder);
+  var sym = (new URLSearchParams(location.search).get('s') || '').trim().toUpperCase();
+
+  // 국내 종목 목록: 검색 자동완성과 이름 → 코드 변환에 쓴다
+  var krxIndex = getJSON(BASE + 'krx/index.json').catch(function () { return null; });
+
+  // 빠른 선택: 관심종목 + 국내 시가총액 상위
+  krxIndex.then(function (ix) {
+    var picks = WL.map(function (w) { return '<a href="' + link(w.s) + '">' + esc(tn(w.n)) + '</a>'; });
+    var dl = document.getElementById('st-list'), opts = WL.map(function (w) { return '<option value="' + esc(w.s) + '">' + esc(tn(w.n)) + '</option>'; });
+    if (ix) {
+      var all = Object.keys(ix.stocks).map(function (c) { return [c, ix.stocks[c]]; });
+      all.sort(function (a, b) { return b[1].cap - a[1].cap; }).slice(0, 6).forEach(function (x) {
+        picks.push('<a href="' + link(x[0]) + '">' + esc(x[1].n) + '</a>');
+      });
+      all.forEach(function (x) { opts.push('<option value="' + esc(x[1].n) + '">' + x[0] + ' · ' + x[1].m + '</option>'); });
+    }
+    document.getElementById('st-picks').innerHTML = '<span>' + esc(t('st.picks', '바로 보기')) + '</span> ' + picks.join(' · ');
+    dl.innerHTML = opts.join('');
+  });
+
+  document.getElementById('st-search').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var q = document.getElementById('st-q').value.trim();
+    if (!q) return;
+    krxIndex.then(function (ix) {
+      if (ix && !/^\d{6}$/.test(q)) {
+        var hit = Object.keys(ix.stocks).filter(function (c) { return ix.stocks[c].n === q; })[0];
+        if (hit) q = hit;
+      }
+      location.search = link(q.toUpperCase());
+    });
+  });
+
+  if (!sym) {
+    body.innerHTML = '<p class="note st-empty">' + esc(t('st.empty', '위에서 종목을 검색하거나 고르세요. 관심종목, 홈의 종목 등락 목록에서 종목을 눌러도 이 화면으로 와요.')) + '</p>';
+    return;
+  }
+  if (/^\d{6}$/.test(sym)) krx(sym); else overseas(sym);
+
+  // ---------------- 해외 ----------------
+  function mount(id, type, cfg) {
+    var box = document.createElement('div');
+    box.className = 'tradingview-widget-container';
+    box.innerHTML = '<div class="tradingview-widget-container__widget"></div>';
+    var s = document.createElement('script');
+    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-' + type + '.js';
+    s.async = true;
+    s.text = JSON.stringify(cfg);
+    box.appendChild(s);
+    document.getElementById(id).appendChild(box);
+  }
+
+  function overseas(sym) {
+    var ticker = sym.split(':').pop();
+    var w = WL.filter(function (x) { return x.s === sym || x.s.split(':').pop() === ticker; })[0];
+    if (w) sym = w.s;
+    document.title = (w ? tn(w.n) + ' ' : '') + ticker + ' · ' + document.title.split(' · ').pop();
+    var TV = '<a href="https://' + (LANG === 'en' ? 'www' : 'kr') + '.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>';
+    body.innerHTML =
+      '<div class="st-head-tv" id="tv-st-info"></div>' +
+      '<div class="tv-box st-chart" id="tv-st-chart"></div>' +
+      '<div class="st-grid">' +
+        '<section><h2>' + esc(t('st.ta', '기술 지표 요약')) + '</h2><div class="tv-box st-ta" id="tv-st-ta"></div></section>' +
+        '<section><h2>' + esc(t('st.profile', '기업 개요')) + '</h2><div class="tv-box st-ta" id="tv-st-profile"></div></section>' +
+      '</div>' +
+      '<section><h2>' + esc(t('st.fin', '재무')) + '</h2><div class="tv-box st-fin" id="tv-st-fin"></div></section>' +
+      '<section><h2>' + esc(t('st.news', '종목 뉴스')) + '</h2><div class="tv-box st-news" id="tv-st-news"></div></section>' +
+      '<p class="note">' + t('st.tv_note', '지연 시세, 위젯 색은 미국식(상승 초록). 투자 권유가 아니에요 · 위젯: ') + TV + '</p>' +
+      '<section id="st-edgar"></section>';
+    var common = { locale: TV_LOCALE, colorTheme: th, isTransparent: true };
+    mount('tv-st-info', 'symbol-info', Object.assign({ symbol: sym, width: '100%' }, common));
+    mount('tv-st-chart', 'advanced-chart', {
+      symbol: sym, interval: 'D', range: '12M', timezone: 'Asia/Seoul', theme: th, style: '1', locale: TV_LOCALE,
+      autosize: true, allow_symbol_change: false, hide_side_toolbar: false, withdateranges: true,
+      backgroundColor: color('--soft') || undefined
+    });
+    mount('tv-st-ta', 'technical-analysis', Object.assign({ symbol: sym, interval: '1D', width: '100%', height: '100%', showIntervalTabs: true, displayMode: 'single' }, common));
+    mount('tv-st-profile', 'symbol-profile', Object.assign({ symbol: sym, width: '100%', height: '100%' }, common));
+    mount('tv-st-fin', 'financials', Object.assign({ symbol: sym, width: '100%', height: '100%', displayMode: 'regular' }, common));
+    mount('tv-st-news', 'timeline', Object.assign({ feedMode: 'symbol', symbol: sym, displayMode: 'regular', width: '100%', height: '100%' }, common));
+    edgar(ticker);
+  }
+
+  var CODE = { P: ['장내 매수', 'Open-market buy'], S: ['장내 매도', 'Open-market sale'], A: ['보상 지급', 'Grant/award'],
+    M: ['옵션 행사', 'Option exercise'], F: ['세금 납부용 처분', 'Tax withholding'], G: ['증여', 'Gift'],
+    D: ['회사에 처분', 'Disposed to issuer'], C: ['전환', 'Conversion'], X: ['옵션 행사', 'Option exercise'] };
+  function codeTxt(c) { var x = CODE[c]; return x ? x[LANG === 'en' ? 1 : 0] : c; }
+  function shTxt(n) { return n == null ? '–' : fmt(n); }
+
+  function edgar(ticker) {
+    var box = document.getElementById('st-edgar');
+    getJSON(BASE + 'edgar/' + ticker + '.json').then(function (d) {
+      var h = '<h2>' + esc(t('st.insider', '내부자 매매')) + ' <span class="krx-sub">Form 4</span></h2>';
+      if (d.insider && d.insider.length) {
+        h += '<div class="st-table-wrap"><table class="st-table"><thead><tr><th>' + [t('st.c_date', '거래일'), t('st.c_who', '이름 · 직위'), t('st.c_type', '구분'), t('st.c_sh', '주식 수'), t('st.c_px', '가격($)'), t('st.c_after', '거래 후 보유')].map(esc).join('</th><th>') + '</th></tr></thead><tbody>';
+        d.insider.forEach(function (r) {
+          var cls = r.code === 'P' ? 'up' : r.code === 'S' ? 'down' : '';
+          h += '<tr><td>' + esc(r.d) + '</td><td>' + esc(r.name) + (r.title ? '<br><span class="krx-sub">' + esc(r.title) + '</span>' : '') + '</td>' +
+            '<td class="' + cls + '">' + esc(codeTxt(r.code)) + '</td><td class="num">' + (r.ad === 'D' ? '−' : '+') + shTxt(r.sh) + '</td>' +
+            '<td class="num">' + (r.px ? fmt(r.px, 2) : '–') + '</td><td class="num">' + shTxt(r.after) + '</td></tr>';
+        });
+        h += '</tbody></table></div>';
+      } else {
+        h += '<p class="note">' + esc(t('st.no_insider', '최근 Form 4 신고가 없어요.')) + '</p>';
+      }
+      var I = d.inst;
+      h += '<h2>' + esc(t('st.inst', '기관 보유')) + ' <span class="krx-sub">13F</span></h2>';
+      if (I) {
+        var dsh = I.shares - I.prev_shares;
+        h += '<div class="st-kpis">' +
+          kpi(t('st.k_holders', '보고 기관 수'), fmt(I.holders), I.holders - I.prev_holders, 0) +
+          kpi(t('st.k_shares', '기관 합계 주식 수'), fmt(I.shares), dsh, 0) +
+          '</div>';
+        h += '<div class="st-table-wrap"><table class="st-table"><thead><tr><th>' + [t('st.c_inst', '기관'), t('st.c_sh', '주식 수'), t('st.c_qchg', '직전 분기 대비')].map(esc).join('</th><th>') + '</th></tr></thead><tbody>';
+        I.top.forEach(function (r) {
+          var c = r.chg == null ? '<span class="krx-sub">' + esc(t('st.new', '신규')) + '</span>' : '<span class="' + (r.chg > 0 ? 'up' : r.chg < 0 ? 'down' : '') + '">' + (r.chg > 0 ? '+' : r.chg < 0 ? '−' : '') + fmt(Math.abs(r.chg)) + '</span>';
+          h += '<tr><td>' + esc(r.name) + '</td><td class="num">' + fmt(r.sh) + '</td><td class="num">' + c + '</td></tr>';
+        });
+        h += '</tbody></table></div>';
+        h += '<p class="note">' + esc(t('st.inst_note', '{p} 기준 13F 보고(직전 {q} 대비). 운용자산 1억 달러 이상 기관만 분기마다 신고하고, 신고 마감이 분기 말 45일 뒤라 늦게 반영돼요. 옵션은 빼고 주식만 셌어요.', { p: I.period, q: I.prev_period })) + '</p>';
+      } else {
+        h += '<p class="note">' + esc(t('st.no_inst', '이 종목은 아직 13F 집계가 없어요.')) + '</p>';
+      }
+      h += '<p class="note">' + esc(t('st.edgar_note', '자료: 미국 증권거래위원회(SEC) EDGAR · 업데이트 {u}', { u: d.updated_at || '' })) + '</p>';
+      box.innerHTML = h;
+    }).catch(function () {
+      box.innerHTML = '<h2>' + esc(t('st.insider_inst', '내부자 매매 · 기관 보유')) + '</h2><p class="note">' +
+        esc(t('st.no_edgar', 'SEC EDGAR 자료는 관심종목에 있는 종목만 매일 받아 둬요. 이 종목은 아직 없어요.')) + '</p>';
+    });
+  }
+
+  function kpi(label, val, chg, d) {
+    var cls = chg > 0 ? 'up' : chg < 0 ? 'down' : 'flat';
+    return '<div class="st-kpi"><p class="krx-name">' + esc(label) + '</p><p class="st-kpi-v">' + val + '</p>' +
+      (chg == null ? '' : '<p class="krx-chg ' + cls + '">' + (chg > 0 ? '+' : chg < 0 ? '−' : '') + fmt(Math.abs(chg), d) + '</p>') + '</div>';
+  }
+
+  // ---------------- 국내 ----------------
+  function krx(code) {
+    krxIndex.then(function (ix) {
+      var s = ix && ix.stocks[code];
+      if (!s) {
+        body.innerHTML = '<p class="note st-empty">' + esc(t('st.krx_none', '국내 종목은 코스피 시가총액 1조 원, 코스닥 3천억 원 이상이거나 거래대금 상위인 종목만 받아 둬요. 이 종목은 아직 없어요.')) + '</p>';
+        return;
+      }
+      document.title = s.n + ' · ' + document.title.split(' · ').pop();
+      var cls = s.chg > 0 ? 'up' : s.chg < 0 ? 'down' : 'flat';
+      var cap = LANG === 'en' ? '₩' + fmt(s.cap / 10000, 1) + 'tn' : (s.cap >= 10000 ? fmt(Math.floor(s.cap / 10000)) + '조 ' + fmt(s.cap % 10000) + '억' : fmt(s.cap) + '억');
+      var mk = s.m === 'KOSPI' ? t('mkt.kospi', '코스피') : t('mkt.kosdaq', '코스닥');
+      body.innerHTML =
+        '<div class="st-head"><h2 class="st-name">' + esc(s.n) + ' <span class="krx-sub">' + code + ' · ' + esc(mk) + (s.sect ? ' ' + esc(s.sect) : '') + '</span></h2>' +
+        '<p class="st-price"><b>' + fmt(s.close) + '</b> <span class="krx-chg ' + cls + '">' + (s.chg > 0 ? '▲' : s.chg < 0 ? '▼' : '') + ' ' + fmt(Math.abs(s.chg)) + ' (' + (s.pct > 0 ? '+' : '') + fmt(s.pct, 2) + '%)</span></p></div>' +
+        '<div class="st-kpis four">' +
+          kpi(t('st.k_cap', '시가총액'), cap) + kpi(t('st.k_val', '거래대금'), LANG === 'en' ? '₩' + fmt(s.val / 10, 0) + 'bn' : fmt(s.val) + '억') +
+          kpi(t('st.k_vol', '거래량'), fmt(s.vol)) + kpi(t('st.k_shares_out', '상장주식수'), fmt(s.sh)) +
+        '</div>' +
+        '<div class="krx-head"><h2>' + esc(t('st.chart', '주가 차트')) + '</h2><div class="krx-range" id="st-range">' +
+          '<button type="button" data-days="22">' + esc(t('range.1m', '1개월')) + '</button>' +
+          '<button type="button" data-days="66">' + esc(t('range.3m', '3개월')) + '</button>' +
+          '<button type="button" data-days="130">' + esc(t('range.6m', '6개월')) + '</button>' +
+          '<button type="button" data-days="260" class="on">' + esc(t('range.1y', '1년')) + '</button></div></div>' +
+        '<div class="mc-box"><div class="st-kchart"><canvas id="st-price"></canvas></div><div class="st-kvol"><canvas id="st-vol"></canvas></div></div>' +
+        '<p class="note" id="st-krx-note"></p>' +
+        '<h2>' + esc(t('st.flow', '투자자별 수급')) + '</h2><p class="note">' + esc(t('st.flow_none', 'KRX Open API가 투자자별 거래실적(외국인·기관·개인)을 제공하지 않아서, 공식 출처가 생기면 붙일게요.')) + '</p>';
+
+      Promise.all([getJSON(BASE + 'krx/h/' + code + '.json').catch(function () { return []; }),
+                   getJSON(BASE + 'krx/recent.json').catch(function () { return {}; })]).then(function (r) {
+        var seen = {}, bars = r[0].concat(r[1][code] || []).filter(function (b) { if (seen[b[0]]) return false; seen[b[0]] = 1; return true; });
+        bars.sort(function (a, b) { return a[0] < b[0] ? -1 : 1; });
+        document.getElementById('st-krx-note').textContent = t('st.krx_note', '{d} 종가 기준 일별 시세(수정주가 아님) · 자료: 한국거래소(KRX) Open API', { d: ix.d });
+        if (!bars.length) return;
+        drawKrx(bars, 260);
+        document.querySelectorAll('#st-range button').forEach(function (b) {
+          b.addEventListener('click', function () {
+            document.querySelectorAll('#st-range button').forEach(function (x) { x.classList.toggle('on', x === b); });
+            drawKrx(bars, +b.dataset.days);
+          });
+        });
+      });
+    });
+  }
+
+  var charts = {};
+  function drawKrx(all, days) {
+    var s = all.slice(-days);
+    var up = s[s.length - 1][4] >= s[0][4];
+    var labels = s.map(function (b) { return b[0].slice(2).replace(/-/g, '/'); });
+    var tick = { color: color('--muted') };
+    if (charts.p) charts.p.destroy();
+    if (charts.v) charts.v.destroy();
+    charts.p = new Chart(document.getElementById('st-price'), {
+      type: 'line',
+      data: { labels: labels, datasets: [{ data: s.map(function (b) { return b[4]; }), borderColor: color(up ? '--up' : '--down'), borderWidth: 1.8, pointRadius: 0, tension: 0.1 }] },
+      options: { animation: false, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { display: false }, tooltip: { callbacks: {
+          label: function (c) { var b = s[c.dataIndex]; return [t('st.close', '종가') + ' ' + fmt(b[4]), t('st.ohl', '시가 {o} · 고가 {h} · 저가 {l}', { o: fmt(b[1]), h: fmt(b[2]), l: fmt(b[3]) })]; } } } },
+        scales: { x: { ticks: Object.assign({ maxTicksLimit: 6 }, tick), grid: { display: false } },
+                  y: { ticks: Object.assign({ maxTicksLimit: 5, callback: function (v) { return fmt(v); } }, tick), grid: { color: color('--line') } } } }
+    });
+    charts.v = new Chart(document.getElementById('st-vol'), {
+      type: 'bar',
+      data: { labels: labels, datasets: [{ data: s.map(function (b) { return b[5]; }),
+        backgroundColor: s.map(function (b, i) { var p = i ? s[i - 1][4] : b[1]; return color(b[4] >= p ? '--up' : '--down') + '99'; }) }] },
+      options: { animation: false, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (c) { return t('st.k_vol', '거래량') + ' ' + fmt(c.parsed.y); } } } },
+        scales: { x: { display: false }, y: { ticks: Object.assign({ maxTicksLimit: 2, callback: function (v) { return v >= 1e6 ? fmt(v / 1e6, 1) + 'M' : fmt(v); } }, tick), grid: { display: false } } } }
+    });
+  }
+})();
+</script>
