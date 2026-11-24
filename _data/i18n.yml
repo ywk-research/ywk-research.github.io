@@ -164,6 +164,10 @@ en:
   ne.prev_title: "US ETFs listed on the previous trading day ({d})"
   ne.prev_none: No new ETFs listed on the previous trading day.
   ne.all: Last 45 days
+  ne.src: Source
+  ne.unchecked: Not yet verified
+  ne.prev_ok: "Only funds whose first trade that day was confirmed by an issuer press release or notice ({n} 8-A candidates)."
+  ne.prev_cand: Not verified yet, so 8-A filing–based candidates are shown.
   ne.date_kr: Listed
   ne.ticker: Ticker
   ne.fund: Fund

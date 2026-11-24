@@ -483,3 +483,4 @@ section[id] { scroll-margin-top: 56px; }
 .ne-pn { font-weight: 600; }
 .ne-prev-list .ne-link { margin-left: auto; }
 .ne-all { margin: 4px 0 8px; }
+.ne-badge { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; margin-left: 4px; }

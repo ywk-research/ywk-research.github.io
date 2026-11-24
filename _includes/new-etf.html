@@ -16,8 +16,24 @@
   <div class="ne-pane" data-k="us">
     {% assign pd = ne.us.prev_day %}
     {% assign today_list = nus | where: "ld", pd %}
+    {% assign cf = site.data.new_etf_confirmed[pd] %}
     <div class="ne-prev">
-      <p class="krx-name"><span data-i18n="ne.prev_title" data-d="{{ pd | date: '%b %-d' }}">전 거래일({{ pd | date: "%m.%d" }}) 상장 미국 ETF</span> <span class="krx-sub">{{ today_list.size }}</span></p>
+      {% if cf and cf.checked %}
+      {% assign ok = cf.etfs | default: empty %}
+      <p class="krx-name"><span data-i18n="ne.prev_title" data-d="{{ pd | date: '%b %-d' }}">전 거래일({{ pd | date: "%m.%d" }}) 상장 미국 ETF</span> <span class="krx-sub">{{ ok.size }}</span></p>
+      {% if ok.size > 0 %}
+      <ul class="ne-prev-list">
+        {% for r in ok %}
+        <li><span class="ne-tk">{{ r.ticker | default: "—" }}</span>
+          <span class="ne-pn">{{ r.name }}</span>
+          <span class="krx-sub">{{ r.issuer }}{% if r.exchange %} · {{ r.exchange }}{% endif %}</span>
+          {% if r.src %}<a class="ne-link" href="{{ r.src }}" target="_blank" rel="noopener" data-i18n="ne.src">출처</a>{% endif %}</li>
+        {% endfor %}
+      </ul>
+      {% else %}<p class="note" data-i18n="ne.prev_none">전 거래일에 새로 상장한 ETF가 없어요.</p>{% endif %}
+      <p class="note" data-i18n="ne.prev_ok" data-n="{{ today_list.size }}">운용사 보도자료·공지로 그날 첫 거래를 확인한 것만 넣었어요(8-A 후보 {{ today_list.size }}개 중).</p>
+      {% else %}
+      <p class="krx-name"><span data-i18n="ne.prev_title" data-d="{{ pd | date: '%b %-d' }}">전 거래일({{ pd | date: "%m.%d" }}) 상장 미국 ETF</span> <span class="ne-badge" data-i18n="ne.unchecked">확인 전</span></p>
       {% if today_list.size > 0 %}
       <ul class="ne-prev-list">
         {% for r in today_list %}
@@ -28,6 +44,8 @@
         {% endfor %}
       </ul>
       {% else %}<p class="note" data-i18n="ne.prev_none">전 거래일에 새로 상장한 ETF가 없어요.</p>{% endif %}
+      <p class="note" data-i18n="ne.prev_cand">아직 첫 거래 확인 전이라 8-A 제출 기준 후보를 보여 줘요.</p>
+      {% endif %}
     </div>
     {% if nus.size > 0 %}
     <p class="krx-name ne-all" data-i18n="ne.all">최근 45일</p>
