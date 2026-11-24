@@ -2,7 +2,13 @@
 title: "개장 전 브리핑 | 전일 시황 종합 (2026.11.20 금)"
 date: 2026-11-20 07:30:00 +0900
 summary: "앤트로픽 상장 첫날 +17%에도 3대 지수 2%대 하락"
+us_day: "2026-11-19"
+kr_day: "2026-11-19"
 ---
+
+## 전 거래일 신규 상장 ETF
+
+{% include briefing-etf.html us=page.us_day kr=page.kr_day %}
 
 ## 미국 증시 (11/19 마감)
 

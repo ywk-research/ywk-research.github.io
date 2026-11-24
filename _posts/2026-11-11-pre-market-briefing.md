@@ -2,7 +2,13 @@
 title: "개장 전 브리핑 | 전일 시황 종합 (2026.11.11 수)"
 date: 2026-11-11 07:30:00 +0900
 summary: "10월 CPI 예상 상회에 미 2년물 급등…월러 '빅스텝' 언급"
+us_day: "2026-11-10"
+kr_day: "2026-11-10"
 ---
+
+## 전 거래일 신규 상장 ETF
+
+{% include briefing-etf.html us=page.us_day kr=page.kr_day %}
 
 ## 미국 증시 (11/10 마감)
 

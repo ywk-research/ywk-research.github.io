@@ -2,7 +2,13 @@
 title: "개장 전 브리핑 | 전일 시황 종합 (2026.11.16 월)"
 date: 2026-11-16 07:30:00 +0900
 summary: "10월 PPI 전년비 6.5%로 4년 만에 최고…반도체지수 −3.43%"
+us_day: "2026-11-13"
+kr_day: "2026-11-13"
 ---
+
+## 전 거래일 신규 상장 ETF
+
+{% include briefing-etf.html us=page.us_day kr=page.kr_day %}
 
 ## 미국 증시 (11/13 마감)
 
