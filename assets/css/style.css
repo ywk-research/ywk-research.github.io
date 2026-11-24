@@ -54,7 +54,9 @@ a:hover { text-decoration: underline; }
 .site-header .head-top { display: flex; align-items: center; justify-content: space-between; height: 40px; }
 .brand { font-weight: 800; font-size: 14px; color: var(--muted); letter-spacing: 0.02em; }
 .brand:hover { color: var(--text); text-decoration: none; }
-.site-nav { display: flex; justify-content: center; gap: 6px; padding: 0 16px 12px; overflow-x: auto; scrollbar-width: none; }
+.site-nav { display: flex; justify-content: flex-start; gap: 6px; padding: 0 16px 12px; overflow-x: auto; scrollbar-width: none; }
+.site-nav a:first-child { margin-left: auto; }
+.site-nav a:last-child { margin-right: auto; } /* 넘칠 땐 왼쪽부터, 남을 땐 가운데 */
 .site-nav a { flex: none; padding: 8px 20px; border-radius: 999px; font-size: 17px; font-weight: 600; color: var(--muted); }
 .site-nav a:hover { color: var(--text); background: var(--soft); text-decoration: none; }
 .site-nav a.on { color: var(--text); background: var(--soft); box-shadow: inset 0 0 0 1px var(--line); }
@@ -248,12 +250,6 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .wl-table th { color: var(--muted); font-weight: 600; font-size: 13px; }
 .wl-table .num { text-align: right; font-variant-numeric: tabular-nums; }
 .wl-table th:nth-child(n+3) { text-align: right; }
-.wl-sub { margin: 0 0 8px; color: var(--muted); font-weight: 600; font-size: 13px; }
-.wl-pgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.wl-p { display: flex; flex-direction: column; height: 200px; padding: 8px 4px 0; background: var(--soft); border-radius: 12px; min-width: 0; overflow: hidden; }
-.wl-p .krx-name { padding: 0 8px; margin: 0; }
-.wl-p .tv-w .tradingview-widget-container { height: 100%; }
-@media (max-width: 760px) { .wl-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .tv-wl-box { height: 460px; }
 .tv-wl-chart { height: 480px; margin-top: 20px; }
 @media (max-width: 560px) { .tv-wl-box { height: 420px; } .tv-wl-chart { height: 380px; } }
@@ -266,8 +262,26 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .mc-chart { position: relative; height: 240px; margin-top: 6px; }
 @media (max-width: 560px) { .mc-grid { grid-template-columns: 1fr; } }
 
-<<<<<<< HEAD
-/* 이평선 크로스 (데이터 탭) */
+/* 한/영 전환 (헤더 EN 버튼) */
+.head-tools { display: inline-flex; gap: 6px; align-items: center; }
+.lang-toggle { min-width: 30px; font-size: 12px; font-weight: 700; color: var(--muted); }
+.lang-toggle:hover { color: var(--text); }
+/* 언어별로만 보이는 블록: 영어 안내 문구, 소개 페이지 영어판 */
+:root:not([data-lang="en"]) .en-only { display: none !important; }
+:root[data-lang="en"] .ko-only { display: none !important; }
+
+
+/* 업종별 등락 히트맵 (_includes/krx-sector-heat.html) */
+.sheat { margin-bottom: 40px; }
+.sheat .krx-head { flex-wrap: wrap; gap: 8px; }
+.sheat-ctl { display: flex; gap: 10px; flex-wrap: wrap; padding-bottom: 6px; }
+.sheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 4px; }
+.sheat-tile { display: flex; flex-direction: column; justify-content: space-between; min-height: 64px; padding: 8px 10px; border-radius: 8px; color: var(--text); }
+.sheat-name { font-size: 13px; line-height: 1.3; }
+.sheat-v { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .sheat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .sheat-tile { min-height: 56px; padding: 6px 8px; } }
+
+/* 이평선 크로스 (_includes/krx-cross.html) */
 .cross .krx-head h2 .krx-sub { margin-left: 6px; }
 .cross .krx-name .up { color: var(--up); } .cross .krx-name .down { color: var(--down); }
 .cross-pair[hidden] { display: none; }
@@ -276,12 +290,3 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .cx-empty { margin: 10px 0 4px; }
 @media (max-width: 560px) { .cross .krx-head { flex-wrap: wrap; } }
 .cross .movers-list { max-height: 440px; overflow-y: auto; padding-right: 4px; }
-=======
-/* 한/영 전환 (헤더 EN 버튼) */
-.head-tools { display: inline-flex; gap: 6px; align-items: center; }
-.lang-toggle { min-width: 30px; font-size: 12px; font-weight: 700; color: var(--muted); }
-.lang-toggle:hover { color: var(--text); }
-/* 언어별로만 보이는 블록: 영어 안내 문구, 소개 페이지 영어판 */
-:root:not([data-lang="en"]) .en-only { display: none !important; }
-:root[data-lang="en"] .ko-only { display: none !important; }
->>>>>>> origin/main

@@ -1,0 +1,59 @@
+<!-- 업종별 1일·1주·1개월 등락 히트맵 (_data/krx_sectors.json, 자료: KRX Open API) -->
+{% assign sc = site.data.krx_sectors %}
+{% if sc and sc.kospi.size > 0 %}
+<section class="krx sheat" id="sector-heat">
+  <div class="krx-head">
+    <h2 data-i18n="sheat.title" data-d="{{ sc.d | date: '%b %-d' }}">업종별 등락 히트맵 <span class="krx-sub">{{ sc.d | date: "%m.%d" }} 기준</span></h2>
+    <div class="sheat-ctl">
+      <div class="krx-range sheat-mkt">
+        <button type="button" data-mkt="kospi" class="on" data-i18n="mkt.kospi">코스피</button>
+        <button type="button" data-mkt="kosdaq" data-i18n="mkt.kosdaq">코스닥</button>
+      </div>
+      <div class="krx-range sheat-per">
+        <button type="button" data-per="pct" data-i18n="sheat.d1">1일</button>
+        <button type="button" data-per="w1" class="on" data-i18n="sheat.w1">1주</button>
+        <button type="button" data-per="m1" data-i18n="sheat.m1">1개월</button>
+      </div>
+    </div>
+  </div>
+  <div class="sheat-grid"></div>
+  <p class="note sheat-note"></p>
+  <script>
+    (function () {
+      var SC = {{ sc | jsonify }};
+      var root = document.getElementById('sector-heat'), grid = root.querySelector('.sheat-grid'), note = root.querySelector('.sheat-note');
+      var st = { mkt: 'kospi', per: 'w1' };
+      function md(d) { if (!d) return ''; var p = d.split('-'); return +p[1] + '.' + +p[2]; }
+      function draw() {
+        var rows = (SC[st.mkt] || []).filter(function (r) { return r[st.per] != null; })
+          .sort(function (a, b) { return b[st.per] - a[st.per]; });
+        var max = Math.max.apply(null, rows.map(function (r) { return Math.abs(r[st.per]); }).concat([1]));
+        grid.innerHTML = rows.map(function (r) {
+          var v = r[st.per], k = Math.round(15 + 70 * Math.min(1, Math.abs(v) / max));
+          var col = v > 0 ? 'var(--up)' : v < 0 ? 'var(--down)' : 'var(--muted)';
+          return '<div class="sheat-tile" style="background:color-mix(in srgb,' + col + ' ' + k + '%, var(--soft))">' +
+            '<span class="sheat-name">' + tn(r.name) + '</span>' +
+            '<span class="sheat-v">' + (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(2) + '%</span></div>';
+        }).join('');
+        var base = (SC[st.mkt + '_base'] || {})[st.per];
+        note.textContent = st.per === 'pct'
+          ? t('sheat.note_d1', '전 거래일 대비 등락률 · 자료: 한국거래소(KRX) Open API')
+          : t('sheat.note_base', '{b} 종가 대비 등락률 · 자료: 한국거래소(KRX) Open API', { b: md(base) });
+      }
+      function bind(sel, prop, attr) {
+        root.querySelectorAll(sel + ' button').forEach(function (b) {
+          b.addEventListener('click', function () {
+            root.querySelectorAll(sel + ' button').forEach(function (x) { x.classList.toggle('on', x === b); });
+            st[prop] = b.dataset[attr]; draw();
+          });
+        });
+      }
+      bind('.sheat-mkt', 'mkt', 'mkt'); bind('.sheat-per', 'per', 'per');
+      // 1주·1개월 값이 아직 없으면(첫 수집 전) 1일로 시작
+      if (!(SC.kospi || []).some(function (r) { return r.w1 != null; })) {
+        root.querySelector('.sheat-per [data-per="pct"]').click();
+      } else draw();
+    })();
+  </script>
+</section>
+{% endif %}
