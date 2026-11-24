@@ -111,7 +111,10 @@ EXCH_FULL = re.compile(
     r"|nyse\s*arca,?\s*(inc\.?|llc)?|nyse\s+american,?\s*(llc)?|cboe\s+bzx\s+exchange,?\s*(inc\.?)?"
     r"|(the\s+)?new\s+york\s+stock\s+exchange,?\s*(llc|inc\.?)?|(the\s+)?nyse,?\s+llc")
 EIN = re.compile(r"\(?\b\d{2}\s*-\s*\d{7}\b\)?")
-HEAD_END = re.compile(r"(?i)(to\s+be\s+(so\s+)?registered|identification\s+(no\.?|number)\)?)\s*")
+HDR = re.compile(r"(?i)\(?\s*((securities\s+(to\s+be\s+)?registered\s+)?pursuant\s+to\s+section\s+12\s*\(b\)\s+of\s+the\s+act|title\s+of\s+each\s+class(\s+of\s+securities)?(\s+to\s+be(\s+so)?\s+registered)?"
+                 r"|name\s+of\s+((each|the)\s+)?exchange\s+on\s+which(\s+each\s+class\s+is)?(\s+to\s+be)?(\s+so)?\s+registered"
+                 r"|each\s+class\s+is\s+to\s+be(\s+so)?\s+registered|to\s+be\s+so\s+registered"
+                 r"|i\.?\s*r\.?\s*s\.?\s+employer\s+identification\s+(no\.?|number))\s*:?\s*\)?")
 GENERIC = re.compile(r"(?i)\b(common\s+)?shares?\s+of\s+(beneficial\s+interest|common\s+stock)[,;:]?(\s+(of|in)\s+(the\s+)?)?"
                      r"|[,;]?\s*(no|\$?[\d.]+)\s+par\s+value(\s+per\s+share)?[,;:]?(\s+(of|in)\s+(the\s+)?)?"
                      r"|^\s*shares\s+of\s+")
@@ -127,48 +130,72 @@ def exch_of(text):
 
 
 def fund_name(txt):
-    txt = re.sub(r"(?i)^\s*(and|each|per)\b", "", txt)
-    txt = GENERIC.sub(" ", txt)
+    txt = GENERIC.sub(" ", txt.strip())
     txt = re.sub(r"\s+", " ", txt).strip(" ,;:-–•*")
-    txt = re.sub(r"(?i)^(the\s+)", "", txt) if not re.match(r"(?i)the\s+\w+\s+(etf|fund)$", txt) else txt
+    txt = re.sub(r"(?i)^(and|each|per|of)\b[\s:,]*", "", txt).strip(" ,;:-–•*")
+    if re.match(r"(?i)(see|none|n/a|\(?the\s+series)", txt):
+        return ""
     return txt
 
 
+def split_names(seg):
+    """'A ETF B ETF'처럼 붙은 이름을 나눈다."""
+    out = []
+    for piece in EIN.split(seg):
+        for nm in re.split(r"(?<=\bETF)\s+(?!Class\b|Shares\b)(?=[A-Z0-9])", fund_name(piece)):
+            nm = fund_name(nm)
+            if len(nm) >= 4 and re.search(r"[A-Za-z]{2}", nm):
+                out.append(nm)
+    return out
+
+
 def parse_8a(txt):
-    """제출 원문(.txt)에서 회사 이름, SIC, 표지의 '등록할 증권 / 거래소' 칸에서 펀드 이름·거래소를 뽑는다.
-    (8-A 머리말에는 시리즈·티커 정보가 없다)"""
+    """제출 원문(.txt)에서 회사 이름, SIC, 펀드 이름·거래소를 뽑는다(8-A 머리말에는 시리즈·티커 정보가 없다).
+    1) 표지의 '등록할 증권 / 거래소' 칸  2) 없으면 본문 표에서 IRS 번호가 붙은 줄(펀드 목록)"""
     head, _, body = txt.partition("</SEC-HEADER>")
     m = re.search(r"COMPANY CONFORMED NAME:\s*(.+)", head)
     company = m.group(1).strip() if m else ""
     m = re.search(r"STANDARD INDUSTRIAL CLASSIFICATION:.*?\[(\d{4})\]", head)
     sic = m.group(1) if m else ""
-    text = html.unescape(re.sub(r"<[^>]+>", " ", body[:400000]))
+    body = body[:400000]
+    text = html.unescape(re.sub(r"<[^>]+>", " ", body))
     text = re.sub(r"[\s\u200b]+", " ", text)
+    exch = exch_of(text)
     funds = []
-    m = re.search(r"(?i)securities\s+to\s+be\s+registered\s+pursuant\s+to\s+section\s+12\s*\(b\)(.*?)"
-                  r"(if\s+this\s+form\s+relates|securities\s+act\s+registration)", text)
-    if m:
-        region = m.group(1)
-        # 머리글('Title of each class ... registered', 'Name of each exchange ... registered', 'I.R.S. ... Number') 뒤부터
-        hm = list(HEAD_END.finditer(region[:600]))
-        if hm:
-            region = region[hm[-1].end():]
-        region = re.sub(r"(?i)\(?(title of (each )?class|name of (each )?exchange)[^)]*\)?", " ", region)
-        last_ex = exch_of(region)
+    st = re.search(r"(?i)pursuant\s+to\s+section\s+12\s*\(b\)\s+of\s+the\s+act\s*:?|title\s+of\s+each\s+class", text)
+    if st:
+        en = re.search(r"(?i)if\s+this\s+form\s+relates|securities\s+act\s+registration", text[st.end():])
+        region = HDR.sub(" ", text[st.start(): st.end() + (en.start() if en else 1500)])
         pos, chunks = 0, []
         for mm in EXCH_FULL.finditer(region):
             chunks.append((region[pos:mm.start()], exch_of(mm.group(0))))
             pos = mm.end()
-        tail = region[pos:]
-        for seg, ex in chunks or [(tail, last_ex)]:
-            for piece in EIN.split(seg):
-                nm = fund_name(piece)
-                if len(nm) >= 3 and re.search(r"[A-Za-z]{2}", nm):
-                    funds.append({"name": nm, "exchange": ex})
+        chunks.append((region[pos:], chunks[-1][1] if chunks else exch))
+        for seg, ex in chunks:
+            funds += [{"name": nm, "exchange": ex} for nm in split_names(seg)]
+    if not funds:  # 표지에 'Shares of beneficial interest'만 있고 펀드는 뒤쪽 표에 있는 경우
+        for row in re.findall(r"(?is)<tr\b.*?</tr>", body):
+            cells = [re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", c))).strip()
+                     for c in re.findall(r"(?is)<t[dh]\b.*?</t[dh]>", row)]
+            cells = [c for c in cells if c]
+            if not any(EIN.fullmatch(c) for c in cells):
+                continue
+            for c in cells:
+                if EIN.fullmatch(c) or EXCH_FULL.fullmatch(c):
+                    continue
+                nm = fund_name(c)
+                if len(nm) >= 4 and re.search(r"[A-Za-z]{2}", nm) and not re.search(r"(?i)^name\b|identification", nm):
+                    funds.append({"name": nm, "exchange": exch_of(" ".join(cells)) or exch})
+                    break
     if os.environ.get("DEBUG") and not funds:
         i = text.lower().find("12(b)")
         print("    [본문]", text[max(i, 0):max(i, 0) + 700])
-    return company, sic, funds, exch_of(text)
+    seen, out = set(), []
+    for f in funds:
+        if f["name"].lower() not in seen:
+            seen.add(f["name"].lower())
+            out.append(f)
+    return company, sic, out, exch
 
 
 # ── 티커: SEC 투자회사 시리즈·클래스 목록(연간 CSV, 수시 갱신)과 company_tickers_mf.json ──

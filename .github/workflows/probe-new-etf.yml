@@ -16,6 +16,7 @@ jobs:
       - env:
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
           DEBUG: "1"
-          NEW_ETF_BACKFILL: "12"
+          NEW_ETF_BACKFILL: "45"
         run: |
-          python tools/fetch_new_etf.py && cat _data/new_etf.json | head -c 6000
+          python tools/fetch_new_etf.py
+          python -c "import json;d=json.load(open('_data/new_etf.json'));[print('ROW',i['d'],i['ticker'] or '-','|',i['name'],'|',i['issuer'],'|',i['exchange']) for i in d['us']['items']]"
