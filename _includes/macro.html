@@ -4,6 +4,7 @@
 <section class="krx macro" id="macro">
   <div class="krx-head">
     <h2 data-i18n="mc.title">한미 금리</h2>
+    {% assign fa = site.data.macro.us | last | first %}{% assign fb = site.data.macro.kr | last | first %}{% if fb > fa %}{% assign fa = fb %}{% endif %}{% include fresh.html kind="close" d=fa %}
     <div class="krx-range" id="mc-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-months="3" data-i18n="range.3m">3개월</button>
       <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>

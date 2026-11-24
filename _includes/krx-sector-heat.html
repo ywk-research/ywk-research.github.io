@@ -4,6 +4,7 @@
 <section class="krx sheat" id="sector-heat">
   <div class="krx-head">
     <h2 data-i18n="sheat.title" data-d="{{ sc.d | date: '%b %-d' }}">업종별 등락 히트맵 <span class="krx-sub">{{ sc.d | date: "%m.%d" }} 기준</span></h2>
+    {% include fresh.html kind="close" d=sc.d %}
     <div class="sheat-ctl">
       <div class="krx-range sheat-mkt">
         <button type="button" data-mkt="kospi" class="on" data-i18n="mkt.kospi">코스피</button>

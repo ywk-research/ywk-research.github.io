@@ -10,6 +10,7 @@
 <section class="krx macro" id="cm-energy">
   <div class="krx-head">
     <h2 data-i18n="cm.energy_title">에너지 현물가격</h2>
+    {% assign fr = cm.energy.series[0].data | last | first %}{% include fresh.html kind="close" d=fr %}
     <div class="krx-range" id="cm-energy-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-months="3" data-i18n="range.3m">3개월</button>
       <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>
@@ -29,6 +30,7 @@
 <section class="krx macro" id="cm-gold">
   <div class="krx-head">
     <h2 data-i18n="cm.gold_title">국내 금 시세</h2>
+    {% assign fr = gd_last | first %}{% include fresh.html kind="close" d=fr %}
     <div class="krx-range" id="cm-gold-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-months="3" data-i18n="range.3m">3개월</button>
       <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>
@@ -44,6 +46,7 @@
 <section class="krx macro" id="cm-monthly">
   <div class="krx-head">
     <h2 data-i18n="cm.month_title" data-m="{{ cm.monthly.month | replace: '-', '.' }}">월간 원자재 가격 <span class="krx-sub">{{ cm.monthly.month | replace: "-", "." }} 평균</span></h2>
+    {% include fresh.html kind="asof" d=cm.monthly.month %}
   </div>
   <div class="cm-table-wrap">
     <table class="cm-table">

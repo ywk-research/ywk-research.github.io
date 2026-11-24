@@ -5,6 +5,7 @@
 <section class="krx macro" id="crude-stocks">
   <div class="krx-head">
     <h2 data-i18n="cs.title">美 원유 재고</h2>
+    {% assign fr = site.data.crude_stocks.data | last | first %}{% include fresh.html kind="asof" d=fr %}
   </div>
   <div class="gl-cards" id="cs-cards"></div>
   <div class="mc-grid">

@@ -8,6 +8,7 @@
 <section class="krx etf ne" id="new-etf{% if ne_m != "" %}-{{ ne_m }}{% endif %}">
   <div class="krx-head">
     <h2 data-i18n="ne.title">신규 상장 ETF</h2>
+    {% if ne_m == 'kr' %}{% assign fr = ne.kr.updated %}{% else %}{% assign fr = ne.us.updated %}{% endif %}{% include fresh.html kind="asof" d=fr %}
     <div class="krx-range ne-tab"{% if ne_m != "" %} hidden{% endif %}>
       <button type="button" data-k="us" class="on" data-i18n="ne.us">미국</button>
       <button type="button" data-k="kr" data-i18n="ne.kr">한국</button>

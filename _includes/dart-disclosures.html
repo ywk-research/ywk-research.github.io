@@ -4,6 +4,7 @@
 <section class="krx dart" id="dart">
   <div class="krx-head">
     <h2 data-i18n="dart.title">주요 공시</h2>
+    {% assign fr = dj.rows | map: 'd' | sort | last %}{% include fresh.html kind="asof" d=fr %}
     <div class="krx-range" id="dart-days" role="tablist" aria-label="날짜" data-i18n-aria="dart.days_aria"></div>
   </div>
   <div class="dart-kinds" id="dart-kinds"></div>

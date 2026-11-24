@@ -5,6 +5,7 @@
 <section class="krx macro" id="krw-fx">
   <div class="krx-head">
     <h2 data-i18n="kfx.title">원화 매매기준율</h2>
+    {% assign fr = site.data.krw_fx.series.usd | last | first %}{% include fresh.html kind="asof" d=fr %}
     <div class="krx-range" id="kfx-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-months="3" data-i18n="range.3m">3개월</button>
       <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>

@@ -5,6 +5,7 @@
 <section class="krx macro" id="kr-monthly">
   <div class="krx-head">
     <h2 data-i18n="km.title">한국 월간 경제지표</h2>
+    {% assign fr = '' %}{% for p in km.series %}{% assign x = p[1] | last %}{% if x[0] > fr %}{% assign fr = x[0] %}{% endif %}{% endfor %}{% include fresh.html kind="asof" d=fr %}
     <div class="krx-range" id="km-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-months="12" data-i18n="range.1y">1년</button>
       <button type="button" data-months="36" class="on" data-i18n="range.3y">3년</button>

@@ -5,6 +5,7 @@
 <section class="krx macro" id="us-real">
   <div class="krx-head">
     <h2 data-i18n="rr.title">美 실질금리·기대인플레이션</h2>
+    {% assign fr = site.data.macro.us_real | last | first %}{% include fresh.html kind="close" d=fr %}
     <div class="krx-range" id="rr-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-months="3" data-i18n="range.3m">3개월</button>
       <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>

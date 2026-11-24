@@ -8,6 +8,7 @@
 <section class="krx macro cot" id="{{ include.id }}">
   <div class="krx-head">
     <h2 data-i18n="{{ include.title_key }}">{{ include.title }}</h2>
+    {% assign fr = '' %}{% for s in site.data.cot.fin %}{% assign x = s.data | last %}{% if x[0] > fr %}{% assign fr = x[0] %}{% endif %}{% endfor %}{% include fresh.html kind="asof" d=fr %}
     <div class="krx-range" id="{{ include.id }}-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>
       <button type="button" data-months="36" data-i18n="range.3y">3년</button>

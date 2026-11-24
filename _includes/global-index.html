@@ -3,6 +3,7 @@
 <section class="krx gl" id="global-rates">
   <div class="krx-head">
     <h2 data-i18n="rates.title">변동성·금리·환율</h2>
+    {% assign fr = '' %}{% for s in site.data.global_index.series %}{% assign x = s.data | last %}{% assign xd = x.d | default: x[0] %}{% if xd > fr %}{% assign fr = xd %}{% endif %}{% endfor %}{% include fresh.html kind="close" d=fr %}
   </div>
   <div class="gl-cards" id="gl-cards"></div>
   <p class="note" data-i18n="rates.note" data-src="{{ gi.source }}" data-u="{{ gi.updated_at }}">각 카드의 날짜가 해당 지표의 최근 값 기준일입니다(현지 날짜). '지연'은 다른 지표보다 기준일이 늦은 경우입니다. 금리 변동은 bp, 차트는 최근 3개월 · 자료: {{ gi.source }} · 업데이트 {{ gi.updated_at }}</p>

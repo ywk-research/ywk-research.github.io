@@ -2,6 +2,7 @@
 <section class="krx" id="krx-index">
   <div class="krx-head">
     <h2 data-i18n="krx.title">국내 지수</h2>
+    {% assign fr = site.data.krx_index.kospi | last %}{% include fresh.html kind="close" d=fr.d %}
     <div class="krx-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
       <button type="button" data-days="22" data-i18n="range.1m">1개월</button>
       <button type="button" data-days="66" class="on" data-i18n="range.3m">3개월</button>
