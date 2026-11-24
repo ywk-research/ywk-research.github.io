@@ -31,7 +31,7 @@
       document.getElementById('wlk-mix').innerHTML = head([T('wl.th_name', '종목'), T('wlk.code', '코드'), T('wl.th_weight', '비중'),
         T('wlk.first', '시작일 종가', { d: B.start.slice(5).replace('-', '/') }), T('wlk.last', '최근 종가', { d: B.end.slice(5).replace('-', '/') }), T('wlk.ret_all', '수익률')]) +
         '<tbody>' + B.stocks.map(function (s) {
-          return '<tr><td>' + N(s.name) + '</td><td class="num">' + s.code + '</td><td class="num">' + f(s.weight, 1) + '%</td><td class="num">' +
+          return '<tr><td><a href="{{ '/stock/' | relative_url }}?s=' + s.code + '">' + N(s.name) + '</a></td><td class="num">' + s.code + '</td><td class="num">' + f(s.weight, 1) + '%</td><td class="num">' +
             f(s.first, 0) + '</td><td class="num">' + f(s.last, 0) + '</td>' + pct(all.stocks[s.code]) + '</tr>';
         }).join('') + '</tbody>';
 

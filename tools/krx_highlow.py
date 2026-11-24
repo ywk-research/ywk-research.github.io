@@ -43,11 +43,11 @@ def build(days, universe, latest):
             if v > max(prev):
                 counts[d][mkt][0] += 1
                 if d == show[-1]:
-                    names["high"].append((info.get("cap") or 0, info["name"], mkt))
+                    names["high"].append((info.get("cap") or 0, info["name"], mkt, code))
             elif v < min(prev):
                 counts[d][mkt][1] += 1
                 if d == show[-1]:
-                    names["low"].append((info.get("cap") or 0, info["name"], mkt))
+                    names["low"].append((info.get("cap") or 0, info["name"], mkt, code))
     out = {
         "source": "한국거래소(KRX) Open API", "d": latest.isoformat(), "window": WINDOW,
         "stored": len(dates), "eligible": eligible,
@@ -56,6 +56,6 @@ def build(days, universe, latest):
     }
     for k in ("high", "low"):
         top = sorted(names[k], reverse=True)[:TOP]
-        out[k] = [{"name": n, "mkt": m} for _, n, m in top]
+        out[k] = [{"name": n, "mkt": m, "code": c} for _, n, m, c in top]  # code: 종목 상세 링크
         out[k + "_total"] = len(names[k])
     return out

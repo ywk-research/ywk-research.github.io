@@ -18,7 +18,7 @@
       <ol class="movers-list" data-tab="{{ tab }}"{% unless tab == "gainers" %} hidden{% endunless %}>
         {% for r in m[tab] %}
         <li>
-          <span class="mv-name">{{ r.name }}</span>
+          <a class="mv-name" href="{{ '/stock/' | relative_url }}?s={{ r.code }}">{{ r.name }}</a>
           {% if tab == "value" %}<span class="mv-val" data-en="₩{{ r.value | divided_by: 10000.0 | round: 2 }}tn">{{ r.value_txt }}</span>{% endif %}
           <span class="mv-pct {% if r.pct > 0 %}up{% elsif r.pct < 0 %}down{% else %}flat{% endif %}">{% if r.pct > 0 %}+{% endif %}{{ r.pct | round: 2 }}%</span>
         </li>

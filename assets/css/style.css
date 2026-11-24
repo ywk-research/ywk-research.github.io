@@ -355,6 +355,52 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .hl-names { margin-top: 8px; }
 @media (max-width: 760px) { .gl-cards.hl-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
+
+/* 종목 상세 탭 (stock.html) */
+a.mv-name { color: var(--text); }
+a.mv-name:hover { color: var(--accent); text-decoration: none; }
+.wl-table td a, .mv-name a { color: var(--text); }
+.wl-table td a:hover, .mv-name a:hover { color: var(--accent); text-decoration: none; }
+.st-search { display: flex; gap: 8px; margin-top: 20px; }
+.st-search input { flex: 1; min-width: 0; font: inherit; font-size: 15px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); color: var(--text); }
+.st-search input:focus { outline: none; border-color: var(--accent); }
+.st-search button { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 18px; border: 0; border-radius: 999px; background: var(--accent); color: var(--bg); cursor: pointer; }
+.st-picks { margin: 10px 0 0; font-size: 14px; color: var(--muted); }
+.st-picks a { white-space: nowrap; }
+.st-empty { margin-top: 28px; }
+.st-head-tv { margin-top: 24px; }
+.st-chart { height: 560px; margin-top: 12px; }
+.st-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.st-grid > section { min-width: 0; }
+.st-ta { height: 440px; }
+.st-fin { height: 820px; }
+.st-news { height: 520px; }
+.st-head { margin-top: 24px; }
+.st-name { margin: 0; padding: 0; border: 0; font-size: 24px; }
+.st-price { margin: 4px 0 0; font-size: 15px; }
+.st-price b { font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; margin-right: 6px; }
+.st-price .krx-chg.up { color: var(--up); } .st-price .krx-chg.down { color: var(--down); }
+.st-kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 16px 0; }
+.st-kpis.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.st-kpi { padding: 12px 14px; background: var(--soft); border-radius: 12px; min-width: 0; }
+.st-kpi-v { margin: 2px 0 0; font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.st-kpi .krx-chg { margin: 2px 0 0; font-size: 13px; }
+.st-kpi .krx-chg.up { color: var(--up); } .st-kpi .krx-chg.down { color: var(--down); } .st-kpi .krx-chg.flat { color: var(--muted); }
+.st-kchart { position: relative; height: 300px; }
+.st-kvol { position: relative; height: 80px; margin-top: 4px; }
+.st-table-wrap { overflow-x: auto; }
+.st-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.st-table th, .st-table td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.st-table th { font-size: 13px; color: var(--muted); font-weight: 600; background: var(--soft); white-space: nowrap; }
+.st-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.st-table .up { color: var(--up); } .st-table .down { color: var(--down); }
+@media (max-width: 760px) { .st-grid { grid-template-columns: 1fr; } .st-kpis.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } .st-chart { height: 440px; } }
+@media (max-width: 560px) { .st-fin { height: 700px; } }
+.st-dart { list-style: none; margin: 0; padding: 0; }
+.st-dart li { display: flex; gap: 10px; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.st-dart a { flex: 1; min-width: 0; color: var(--text); }
+.st-dart a:hover { color: var(--accent); text-decoration: none; }
+.st-dart-d { flex: none; width: 3em; color: var(--muted); font-variant-numeric: tabular-nums; }
 /* Commodity: 직접 수집 데이터 */
 .cm-gold-chart { height: 260px; }
 .cm-table-wrap { overflow-x: auto; }
