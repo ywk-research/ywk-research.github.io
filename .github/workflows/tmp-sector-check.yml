@@ -1,0 +1,21 @@
+name: 임시 업종 점검
+on:
+  push:
+    branches: [claude/project-thread-iv38jp]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - env:
+          KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
+        run: |
+          cd tools && python -c "
+          import datetime as dt, json, fetch_krx as f, os
+          k=os.environ['KRX_API_KEY'].strip(); d=f.last_trading_day(k, dt.datetime.now(f.KST).date()); f.update_sectors(k, d)
+          j=json.load(open('../_data/krx_sectors.json')); print('BASE', j.get('kospi_base'), j.get('kosdaq_base'))
+          [print('ROW', r) for r in j['kospi'][:5]+j['kosdaq'][:3]]
+          " | grep -E "BASE|ROW"
