@@ -173,3 +173,16 @@
       issuer: Leverage Shares by Themes
       exchange: Cboe
       src: https://www.prnewswire.com/news-releases/anuu-andd-and-anss-now-trading-leverage-shares-by-themes-launches-2x-leveraged--short-anthropic-ant-etfs-on-cboe-302947482.html
+"2026-11-24":
+  checked: true
+  etfs:
+    - ticker: YANT
+      name: YieldMax ANT Option Income Strategy ETF
+      issuer: YieldMax
+      exchange: NYSE Arca
+      src: https://www.globenewswire.com/news-release/2026/11/24/3409229/0/en/yieldmax-introduces-option-income-strategy-etf-on-anthropic-ant.html
+    - ticker: IVEA
+      name: Dan Ives Wedbush AI Autocallable Income ETF
+      issuer: Wedbush Fund Advisers
+      exchange: NYSE
+      src: https://www.globenewswire.com/news-release/2026/11/24/3409265/32619/en/wedbush-launches-the-dan-ives-wedbush-ai-autocallable-income-etf-ivea-an-income-focused-approach-to-ai-investing.html
