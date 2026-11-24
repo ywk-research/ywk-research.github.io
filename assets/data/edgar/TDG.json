@@ -24,13 +24,6 @@
  },
  "filings": [
   [
-   "2026-11-13",
-   "SCHEDULE 13G/A",
-   "",
-   "",
-   "https://www.sec.gov/Archives/edgar/data/1260221/000142284826000149/xslSCHEDULE_13G_X02/primary_doc.xml"
-  ],
-  [
    "2026-11-10",
    "10-K",
    "10-K",
@@ -127,6 +120,13 @@
    "SD",
    "",
    "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000042/formsd-tdg12312025.htm"
+  ],
+  [
+   "2026-05-05",
+   "10-Q",
+   "10-Q",
+   "",
+   "https://www.sec.gov/Archives/edgar/data/1260221/000126022126000040/tdg-20260328.htm"
   ]
  ],
  "insider": [
@@ -521,5 +521,5 @@
    }
   ]
  },
- "updated_at": "2026-11-24 19:52 KST"
+ "updated_at": "2026-11-24 20:14 KST"
 }
