@@ -17,6 +17,17 @@ en:
   nav.calendar: Calendar
   nav.about: About
   nav.macro: Macro
+  ks.aria: Key numbers
+  ks.note: 'Previous close; each date is that series’ latest observation (local date) · Sources: Korea Exchange, Bank of Korea ECOS, U.S. Treasury, Cboe, FRED (EIA)'
+  ks.kospi: KOSPI
+  ks.kosdaq: KOSDAQ
+  ks.usdkrw: USD/KRW
+  ks.us10y: US 10Y
+  ks.kr3y: KTB 3Y
+  ks.vix: VIX
+  ks.wti: WTI
+  nav.sections: Jump to section
+  footer.method: Data & Methodology
   theme.aria: Toggle light/dark mode
   theme.to_light: Switch to light mode
   theme.to_dark: Switch to dark mode

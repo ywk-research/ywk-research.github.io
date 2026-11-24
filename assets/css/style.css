@@ -117,8 +117,8 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 
 .post-header { margin-bottom: 8px; }
 
-.post-body table { width: 100%; border-collapse: collapse; margin: 8px 0 6px; font-size: 15px; font-variant-numeric: tabular-nums; }
-.post-body th, .post-body td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+.post-body table, .doc-table table { width: 100%; border-collapse: collapse; margin: 8px 0 6px; font-size: 15px; font-variant-numeric: tabular-nums; }
+.post-body th, .post-body td, .doc-table th, .doc-table td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; }
 .post-body th { font-size: 13px; color: var(--muted); font-weight: 600; background: var(--soft); }
 .post-body td:nth-child(n+2) { white-space: nowrap; }
 .post-body th[style*="right"], .post-body td[style*="right"] { text-align: right; }
@@ -367,3 +367,28 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .cm-table th.cm-spark-h, .cm-table td.cm-spark-c { width: 130px; text-align: right; }
 .cm-spark { width: 120px; height: 28px; display: inline-block; vertical-align: middle; }
 @media (max-width: 560px) { .cm-table { font-size: 13px; } .cm-table td, .cm-table th { padding-left: 4px; padding-right: 4px; } .cm-table .num .krx-sub { display: block; font-size: 11px; } .cm-spark-h, .cm-spark-c { display: none; } }
+
+/* 홈 핵심 숫자 줄 (_includes/key-strip.html). 좁은 화면에서는 옆으로 밀어서 본다 */
+.keystrip { margin-top: 20px; }
+.ks-row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+.ks-item { padding: 10px 12px; background: var(--soft); border-radius: 10px; min-width: 0; }
+.ks-item p { margin: 0; white-space: nowrap; }
+.ks-name { font-size: 13px; color: var(--muted); font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+.ks-val { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ks-chg { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ks-chg.up { color: var(--up); } .ks-chg.down { color: var(--down); } .ks-chg.flat { color: var(--muted); }
+.keystrip .note { margin-top: 6px; }
+@media (max-width: 1000px) {
+  .ks-row { display: flex; overflow-x: auto; scroll-snap-type: x proximity; scroll-padding: 0 20px; scrollbar-width: none; margin: 0 -20px; padding: 0 20px; }
+  .ks-row::-webkit-scrollbar { display: none; }
+  .ks-item { flex: none; width: 128px; scroll-snap-align: start; }
+}
+
+/* 섹션 바로가기 칩 (_layouts/default.html). 스크롤해도 위에 붙어 있다 */
+.sec-chips { position: sticky; top: 0; z-index: 5; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 14px -20px 0; padding: 8px 20px; background: var(--bg); border-bottom: 1px solid var(--line); }
+.sec-chips::-webkit-scrollbar { display: none; }
+.sec-chips a { flex: none; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.sec-chips a:hover { color: var(--text); text-decoration: none; }
+.sec-chips a.on { color: var(--text); border-color: var(--text); }
+section[id] { scroll-margin-top: 56px; }
+.doc-table th { color: var(--muted); font-weight: 600; font-size: 13px; white-space: nowrap; }

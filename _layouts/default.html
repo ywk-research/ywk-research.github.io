@@ -88,7 +88,7 @@
   <footer class="site-footer">
     <div class="wrap{% if page.wide %} wide{% endif %}">
       <p data-i18n="footer.disclaimer">공개 자료를 정리한 정보 제공 목적의 글이며, 투자 권유가 아닙니다. 투자 판단과 그 결과의 책임은 투자자 본인에게 있습니다.</p>
-      <p>© {{ site.time | date: "%Y" }} {{ site.title }} · <a href="{{ '/feed.xml' | relative_url }}">RSS</a> · <a href="https://github.com/ywk-research/ywk-research.github.io" rel="noopener" target="_blank">GitHub</a></p>
+      <p>© {{ site.time | date: "%Y" }} {{ site.title }} · <a href="{{ '/methodology/' | relative_url }}" data-i18n="footer.method">데이터·방법론</a> · <a href="{{ '/feed.xml' | relative_url }}">RSS</a> · <a href="https://github.com/ywk-research/ywk-research.github.io" rel="noopener" target="_blank">GitHub</a></p>
     </div>
   </footer>
   <script>
@@ -132,5 +132,40 @@
       {% if page.title_en %}document.title = {{ page.title_en | append: ' · ' | append: site.title | jsonify }};{% endif %}
     })();
   </script>
+  {% if page.wide and page.url != '/' %}
+  <script>
+    // 긴 페이지: 소개 아래에 섹션 바로가기 칩을 만든다(섹션 3개 이상일 때). 스크롤하면 위에 붙어 따라오고, 지금 보는 섹션이 강조된다
+    (function () {
+      var main = document.querySelector('main'), intro = main && main.querySelector('.intro');
+      if (!intro) return;
+      var secs = [].filter.call(main.querySelectorAll('section[id]'), function (s) { return s.querySelector('h2') && !s.closest('.home-grid'); });
+      if (secs.length < 3) return;
+      var nav = document.createElement('nav');
+      nav.className = 'sec-chips';
+      nav.setAttribute('aria-label', t('nav.sections', '섹션 바로가기'));
+      secs.forEach(function (s) {
+        var h = s.querySelector('h2').cloneNode(true);
+        h.querySelectorAll('.krx-sub').forEach(function (x) { x.remove(); });
+        var a = document.createElement('a');
+        a.href = '#' + s.id; a.textContent = h.textContent.trim();
+        nav.appendChild(a);
+      });
+      intro.after(nav);
+      var links = nav.querySelectorAll('a');
+      if (!('IntersectionObserver' in window)) return;
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          links.forEach(function (a) {
+            var on = a.getAttribute('href') === '#' + e.target.id;
+            a.classList.toggle('on', on);
+            if (on && nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: a.offsetLeft - 20, behavior: 'smooth' });
+          });
+        });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      secs.forEach(function (s) { io.observe(s); });
+    })();
+  </script>
+  {% endif %}
 </body>
 </html>
