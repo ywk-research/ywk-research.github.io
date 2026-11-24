@@ -282,5 +282,5 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 @media (max-width: 560px) { .sheat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .sheat-tile { min-height: 56px; padding: 6px 8px; } }
 
 /* 원화 환율 카드 4칸 (_includes/krw-fx.html) */
-.gl-cards.fx-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-@media (max-width: 760px) { .gl-cards.fx-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.gl-cards.kfx-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 760px) { .gl-cards.kfx-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

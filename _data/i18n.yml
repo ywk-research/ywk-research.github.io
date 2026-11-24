@@ -131,9 +131,9 @@ en:
   rr.bei: Breakeven Inflation (BEI) <span class="krx-sub">%</span>
   rr.note: 'As of {d} (US date). Real yields are the TIPS yields published by the U.S. Treasury; breakeven inflation (BEI) is the nominal Treasury yield minus the real yield of the same maturity. Card changes in bp from the previous day · Source: U.S. Treasury · Updated {u}'
   # 원화 환율 (_includes/krw-fx.html)
-  fx.title: Korean Won Exchange Rates
-  fx.index: Indexed to 100 at the start of the period <span class="krx-sub">Higher = weaker won</span>
-  fx.note: 'Base rates as of {d} (Seoul FX market; JPY per 100 yen). Card changes from the previous business day · Source: Bank of Korea ECOS · Updated {u}'
+  kfx.title: Korean Won Base Rates (BOK)
+  kfx.index: Indexed to 100 at the start of the period <span class="krx-sub">Higher = weaker won</span>
+  kfx.note: 'Base rates as of {d} (Seoul FX market; JPY per 100 yen). Card changes from the previous business day · Source: Bank of Korea ECOS · Updated {u}'
   # 한국 월간 경제지표 (_includes/kr-monthly.html)
   km.title: Korea Monthly Indicators
   km.cpi: Consumer Price Inflation <span class="krx-sub">YoY, %</span>
