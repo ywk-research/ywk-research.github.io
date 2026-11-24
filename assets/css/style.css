@@ -194,17 +194,24 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 @media (max-width: 760px) { .gl-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* 해외 지수·섹터: TradingView 위젯 */
-.tv-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.tv-card { display: flex; flex-direction: column; height: 200px; padding: 10px 6px 0; background: var(--soft); border-radius: 12px; min-width: 0; overflow: hidden; }
-.tv-card .krx-name { padding: 0 8px; }
-.tv-w { flex: 1; min-height: 0; }
+/* TradingView 시세표 + 큰 차트: 넓은 화면은 나란히, 좁으면 위아래 */
+.tvo { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 12px; }
+.tvo-quotes, .tvo-chart { background: var(--soft); border-radius: 12px; overflow: hidden; padding: 4px 2px; }
+.tvo-quotes { height: max(420px, calc(64px + var(--rows, 4) * 44px)); }
+.tvo-chart { height: max(420px, calc(64px + var(--rows, 4) * 44px)); }
+.tvo-quotes .tradingview-widget-container, .tvo-chart .tradingview-widget-container { height: 100%; }
+.tvo-credit { margin-top: -4px; }
+.tvo-sec { container-type: inline-size; }
+@container (max-width: 820px) {
+  .tvo { grid-template-columns: 1fr; }
+  .tvo-quotes { height: calc(64px + var(--rows, 4) * 44px); }
+  .tvo-chart { height: 380px; }
+}
 .tv-box { height: 560px; padding: 4px 2px; background: var(--soft); border-radius: 12px; overflow: hidden; }
 .tv-heat { height: 480px; margin-bottom: 0; }
 #tv-sectors { height: 430px; }
-.tv-w .tradingview-widget-container, .tv-box .tradingview-widget-container { height: 100%; }
-@media (max-width: 760px) { .tv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tv-box .tradingview-widget-container { height: 100%; }
 @media (max-width: 560px) { .tv-heat { height: 380px; } }
-@media (max-width: 330px) { .tv-grid { grid-template-columns: 1fr; } }
 
 /* 테마 전환 버튼 */
 .theme-toggle { padding: 2px 6px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); font-size: 14px; line-height: 1.4; cursor: pointer; vertical-align: middle; }

@@ -10,11 +10,11 @@ wide: true
   <p data-i18n="fx.intro">달러와 원화 환율, 통화 선물 포지션, 외국인 자금 흐름을 모아 둡니다.</p>
 </section>
 
-{% include tv-minis.html id="usd-tv" title="달러" title_key="fx.usd_title" items="AMEX:UUP|달러인덱스 ETF (UUP)|US Dollar Index ETF (UUP);FX_IDC:EURUSD|유로/달러|EUR/USD;FX_IDC:USDJPY|달러/엔|USD/JPY;FX_IDC:USDCNH|달러/위안 (역외)|USD/CNH" range="12M" note="달러인덱스(DXY)는 위젯 제공이 막혀 있어 추종 ETF(UUP)로 대신 보여 줘요. 지연 시세, 최근 1년" note_key="fx.usd_note" %}
+{% include tv-minis.html id="usd-tv" title="달러" title_key="fx.usd_title" items="AMEX:UUP|달러인덱스 ETF (UUP)|US Dollar Index ETF (UUP);FX_IDC:EURUSD|유로/달러|EUR/USD;FX_IDC:USDJPY|달러/엔|USD/JPY;FX_IDC:USDCNH|달러/위안 (역외)|USD/CNH" range="12M" note="달러인덱스(DXY)는 위젯 제공이 막혀 있어 추종 ETF(UUP)로 대신 보여 줘요. 지연 시세, 차트 기본 1년" note_key="fx.usd_note" %}
 
 {% include krw-fx.html %}
 
-{% include tv-minis.html id="fx-tv" title="원화 환율" title_key="fx.tv_title" items="FX_IDC:USDKRW|원/달러|USD/KRW;FX_IDC:JPYKRW|원/엔 (1엔)|JPY/KRW (per 1 yen);FX_IDC:EURKRW|원/유로|EUR/KRW;FX_IDC:CNYKRW|원/위안|CNY/KRW" range="12M" note="지연 시세, 최근 1년" note_key="fx.tv_note" %}
+{% include tv-minis.html id="fx-tv" title="원화 환율" title_key="fx.tv_title" items="FX_IDC:USDKRW|원/달러|USD/KRW;FX_IDC:JPYKRW|원/엔 (1엔)|JPY/KRW (per 1 yen);FX_IDC:EURKRW|원/유로|EUR/KRW;FX_IDC:CNYKRW|원/위안|CNY/KRW" range="12M" note="지연 시세, 차트 기본 1년" note_key="fx.tv_note" %}
 
 {% include cot.html id="cot-fx" group="fin" keys="dxy,jpy,eur,gbp,aud" title="통화 선물 포지션" title_key="cot.fx_title" %}
 
