@@ -438,3 +438,27 @@ a.mv-name:hover { color: var(--accent); text-decoration: none; }
 .sec-chips a.on { color: var(--text); border-color: var(--text); }
 section[id] { scroll-margin-top: 56px; }
 .doc-table th { color: var(--muted); font-weight: 600; font-size: 13px; white-space: nowrap; }
+
+/* CFTC 포지션 계약 고르기 (_includes/cot.html) */
+.cot-pick { justify-content: flex-start; flex-wrap: wrap; margin-bottom: 4px; }
+.cot .gl-close .krx-sub { font-size: 12px; font-weight: 600; }
+.cot-cards { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.cs-chart { height: 300px; }
+.ua-table td.num .up, .ua-table td.num .down { font-size: 11px; }
+.ua-table .up { color: var(--up); } .ua-table .down { color: var(--down); }
+.ua-table th:nth-child(n+3) { text-align: right; }
+
+/* 주요 공시 (_includes/dart-disclosures.html) */
+.dart-kinds { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.dart-kinds button { font: inherit; font-size: 13px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); color: var(--muted); cursor: pointer; }
+.dart-kinds button.on { color: var(--text); border-color: var(--text); }
+.dart-list { list-style: none; margin: 0; padding: 0; max-height: 420px; overflow-y: auto; }
+.dart-list li { display: grid; grid-template-columns: 76px 170px minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.dart-kind { font-size: 12px; font-weight: 600; color: var(--muted); }
+.dart-corp { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dart-title { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dart-list li.dart-empty { display: block; color: var(--muted); }
+@media (max-width: 560px) {
+  .dart-list li { grid-template-columns: 64px minmax(0, 1fr); row-gap: 2px; }
+  .dart-title { grid-column: 2; white-space: normal; font-size: 13px; color: var(--muted); }
+}

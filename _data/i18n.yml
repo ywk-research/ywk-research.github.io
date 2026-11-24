@@ -28,6 +28,55 @@ en:
   ks.wti: WTI
   nav.sections: Jump to section
   footer.method: Data & Methodology
+  range.2y: 2Y
+  range.5y: 5Y
+  range.6y: 6Y
+  range.all: All
+  lq.title: US Liquidity & Financial Conditions
+  lq.net_chart: 'Net liquidity = Fed assets − TGA − reverse repo <span class="krx-sub">USD bn</span>'
+  lq.parts_chart: 'Reserves, TGA and reverse repo <span class="krx-sub">USD bn</span>'
+  lq.nfci_chart: 'Chicago Fed National Financial Conditions Index (NFCI) <span class="krx-sub">below 0 = looser than average</span>'
+  lq.note: 'Fed total assets, reserves and the Treasury General Account (TGA) are weekly (Wednesday); reverse repo is daily. Net liquidity uses the same Wednesday (or the latest value before it) and is a market rule of thumb, not an official measure. Card changes vs the previous release · Source: FRED (Federal Reserve, U.S. Treasury, Chicago Fed) · Updated {u}'
+  ua.title: US Treasury Auctions
+  ua.tabs_aria: Maturity
+  ua.all: All
+  ua.date: Date
+  ua.sec: Security
+  ua.yield: High yield
+  ua.btc: Bid-to-cover
+  ua.ind: Indirect
+  ua.pd: Dealers
+  ua.amt: Size
+  ua.reopen: reopen
+  ua.note: 'Note, bond and TIPS auction results (latest 12). Bid-to-cover is bids ÷ accepted; the arrow shows whether it beat (▲) or missed (▼) the average of the previous six auctions of the same maturity. Indirect and dealer columns are shares of competitive awards taken by indirect bidders (incl. foreign central banks) and primary dealers; a high dealer share reads as weak demand · Source: U.S. Treasury Fiscal Data · Updated {u}'
+  cot.rates_title: 10Y T-Note Futures Positioning
+  cot.fx_title: Currency Futures Positioning
+  cot.cmd_title: Commodity Futures Positioning
+  cot.note_fin: 'Net position of leveraged funds (hedge funds, CTAs etc.), long − short in contracts. As of Tuesday, published Friday. Card % is of open interest; change is week on week · Source: U.S. Commodity Futures Trading Commission (CFTC) · Updated {u}'
+  cot.note_cmd: 'Net position of managed money (hedge funds, CTAs etc.), long − short in contracts. As of Tuesday, published Friday. Card % is of open interest; change is week on week · Source: U.S. Commodity Futures Trading Commission (CFTC) · Updated {u}'
+  cs.title: US Crude Inventories
+  cs.chart: 'Commercial crude stocks excl. SPR, by week <span class="krx-sub">mn barrels</span>'
+  cs.note: 'EIA Weekly Petroleum Status Report (usually Wednesday, for the previous Friday). The grey band is the 5-year min–max for the same week; the dashed line is the 5-year average · Source: U.S. Energy Information Administration (EIA) · Updated {u}'
+  cs.level: Commercial crude stocks
+  cs.vs5y: vs 5-year average
+  cs.avg: 5Y avg
+  cs.range: 5Y range
+  cs.min: 5Y low
+  reer.title: Real Effective Exchange Rates (REER)
+  reer.chart: 'Real effective exchange rate <span class="krx-sub">2020 = 100, higher = stronger currency</span>'
+  reer.note: 'Value against a basket of 64 trading partners, adjusted for relative prices (monthly average). Cards show the latest value vs the average since 2010 · Source: Bank for International Settlements (BIS) · Updated {u}'
+  reer.vs_avg: vs long-run avg
+  kf.title: Foreign Portfolio Investment in Korea
+  kf.chart: 'Monthly net inflow <span class="krx-sub">USD 100mn, + = inflow</span>'
+  kf.note: 'Portfolio investment liabilities in the balance of payments: new foreign investment in Korean equities and debt securities minus withdrawals. Released early each month with a two-month lag · Source: Bank of Korea ECOS · Updated {u}'
+  kf.ytd12: Last 12M
+  dart.title: Key Disclosures
+  dart.days_aria: Date
+  dart.all: All
+  dart.kospi: KOSPI
+  dart.kosdaq: KOSDAQ
+  dart.empty: No filings of this type
+  dart.note: 'Buybacks, equity and bond issuance, M&A, preliminary results, supply contracts and dividends only (KOSPI market cap of KRW 1tn or more, KOSDAQ KRW 300bn or more). Amendments are excluded; click a title to open it on DART. Company names are in Korean · Source: Financial Supervisory Service DART · Updated {u}'
   theme.aria: Toggle light/dark mode
   theme.to_light: Switch to light mode
   theme.to_dark: Switch to dark mode
@@ -295,6 +344,12 @@ en:
   st.flow_none: The KRX Open API doesn't provide trading by investor type (foreign, institutional, retail). We'll add it if an official source becomes available.
 
 names:
+  연준 총자산: Fed total assets
+  순유동성: Net liquidity
+  지급준비금: Bank reserves
+  역레포: Reverse repo
+  주식: Equities
+  채권: Debt securities
   # 지표 이름·출처 (_data/global_index.json)
   美 10년물: US 10Y
   원/달러: USD/KRW

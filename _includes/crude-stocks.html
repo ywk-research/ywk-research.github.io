@@ -1,0 +1,59 @@
+<!-- 미국 상업 원유 재고와 5년 범위. 데이터: _data/crude_stocks.json (tools/fetch_extra.py, EIA) -->
+{% assign cs = site.data.crude_stocks %}
+{% if cs and cs.data.size > 0 %}
+{% include mc-common.html %}
+<section class="krx macro" id="crude-stocks">
+  <div class="krx-head">
+    <h2 data-i18n="cs.title">美 원유 재고</h2>
+  </div>
+  <div class="gl-cards" id="cs-cards"></div>
+  <div class="mc-grid">
+    <div class="mc-box mc-wide"><p class="krx-name" data-i18n="cs.chart">상업 원유 재고(전략비축유 제외), 주차별 <span class="krx-sub">백만 배럴</span></p><div class="mc-chart cs-chart"><canvas id="cs-chart" aria-label="미국 원유 재고와 5년 범위"></canvas></div></div>
+  </div>
+  <p class="note" data-i18n="cs.note" data-u="{{ cs.updated_at }}">EIA 주간 석유 현황(보통 수요일 발표, 직전 금요일 기준). 회색 띠는 직전 5년 같은 주차의 최저~최고, 점선은 5년 평균이에요 · 자료: 미 에너지정보청(EIA) · 업데이트 {{ cs.updated_at }}</p>
+  <script>
+    (function () {
+      var D = {{ cs.data | jsonify }};
+      var css = getComputedStyle(document.documentElement);
+      function c(n) { return css.getPropertyValue(n).trim(); }
+      // 연중 주차(1~53)
+      function wk(d) { var t = new Date(d + 'T00:00:00Z'), s = Date.UTC(t.getUTCFullYear(), 0, 1); return Math.min(53, Math.floor((t - s) / 6048e5) + 1); }
+      var last = D[D.length - 1], Y = +last[0].slice(0, 4), byYear = {};
+      D.forEach(function (r) { var y = +r[0].slice(0, 4); (byYear[y] = byYear[y] || {})[wk(r[0])] = r[1]; });
+      var weeks = []; for (var w = 1; w <= 52; w++) weeks.push(w);
+      var band = weeks.map(function (w) {
+        var v = []; for (var y = Y - 5; y < Y; y++) if (byYear[y] && byYear[y][w] != null) v.push(byYear[y][w]);
+        return v.length ? [Math.min.apply(null, v), Math.max.apply(null, v), v.reduce(function (a, b) { return a + b; }, 0) / v.length] : [null, null, null];
+      });
+      // 카드: 최근 재고, 전주 대비, 5년 평균 대비
+      var prev = D[D.length - 2], lw = wk(last[0]), avg = band[lw - 1] ? band[lw - 1][2] : null;
+      var wrap = document.getElementById('cs-cards'), d = last[1] - prev[1];
+      MC.card(wrap, { label: t('cs.level', '상업 원유 재고'), date: last[0].slice(5).replace('-', '/'), value: last[1].toFixed(1) + (LANG === 'en' ? 'mn bbl' : '백만 배럴'),
+        chg: (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '') + Math.abs(d).toFixed(1) + (LANG === 'en' ? ' w/w' : ' (전주 대비)'), dir: d });
+      if (avg) {
+        var g = (last[1] / avg - 1) * 100;
+        MC.card(wrap, { label: t('cs.vs5y', '5년 평균 대비'), date: '', value: (g > 0 ? '+' : g < 0 ? '−' : '') + Math.abs(g).toFixed(1) + '%',
+          chg: t('cs.avg', '5년 평균') + ' ' + avg.toFixed(1), dir: 0 });
+      }
+      var yo = byYear[Y - 1] ? weeks.map(function (w) { return byYear[Y - 1][w] != null ? byYear[Y - 1][w] : null; }) : null;
+      var band0 = c('--line');
+      var sets = [
+        { label: t('cs.range', '5년 범위'), data: band.map(function (b) { return b[1]; }), borderWidth: 0, pointRadius: 0, backgroundColor: band0, fill: '+1', order: 9 },
+        { label: t('cs.min', '5년 최저'), data: band.map(function (b) { return b[0]; }), borderWidth: 0, pointRadius: 0, backgroundColor: band0, fill: false, order: 9 },
+        { label: t('cs.avg', '5년 평균'), data: band.map(function (b) { return b[2] == null ? null : Math.round(b[2] * 10) / 10; }), borderColor: c('--muted'), borderDash: [4, 4], borderWidth: 1.5, pointRadius: 0, fill: false, order: 2 },
+        { label: String(Y), data: weeks.map(function (w) { return byYear[Y][w] != null ? byYear[Y][w] : null; }), borderColor: c('--s1'), backgroundColor: c('--s1'), borderWidth: 2.5, pointRadius: 0, fill: false, spanGaps: true, order: 0 }
+      ];
+      if (yo) sets.splice(3, 0, { label: String(Y - 1), data: yo, borderColor: c('--s2'), backgroundColor: c('--s2'), borderWidth: 1.5, pointRadius: 0, fill: false, spanGaps: true, order: 1 });
+      new Chart(document.getElementById('cs-chart'), {
+        type: 'line', data: { labels: weeks, datasets: sets },
+        options: { animation: false, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { position: 'bottom', labels: { color: c('--muted'), boxWidth: 14, boxHeight: 2, padding: 12,
+              filter: function (i) { return i.datasetIndex !== 1; } } },
+            tooltip: { callbacks: { title: function (x) { return x.length ? (LANG === 'en' ? 'Week ' : '') + x[0].label + (LANG === 'en' ? '' : '주차') : ''; } } } },
+          scales: { x: { ticks: { color: c('--muted'), maxTicksLimit: 12, maxRotation: 0, callback: function (v, i) { return LANG === 'en' ? 'W' + weeks[i] : weeks[i] + '주'; } }, grid: { display: false } },
+            y: { ticks: { color: c('--muted'), maxTicksLimit: 6 }, border: { display: false }, grid: { color: c('--line') } } } }
+      });
+    })();
+  </script>
+</section>
+{% endif %}

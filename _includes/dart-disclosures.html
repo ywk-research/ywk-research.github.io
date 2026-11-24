@@ -1,0 +1,48 @@
+<!-- 주요 공시. 데이터: _data/dart.json (tools/fetch_extra.py, 금융감독원 OpenDART) -->
+{% assign dj = site.data.dart %}
+{% if dj and dj.rows.size > 0 %}
+<section class="krx dart" id="dart">
+  <div class="krx-head">
+    <h2 data-i18n="dart.title">주요 공시</h2>
+    <div class="krx-range" id="dart-days" role="tablist" aria-label="날짜" data-i18n-aria="dart.days_aria"></div>
+  </div>
+  <div class="dart-kinds" id="dart-kinds"></div>
+  <ul class="dart-list" id="dart-list"></ul>
+  <p class="note" data-i18n="dart.note" data-u="{{ dj.updated_at }}">자사주, 증자·사채, 합병·분할, 잠정실적, 공급계약, 배당 공시만 골랐어요{% if dj.filtered_by_cap %}(코스피 시가총액 1조 원 이상, 코스닥 3,000억 원 이상){% endif %}. 정정 공시는 뺐고, 제목을 누르면 DART 원문이 열려요 · 자료: 금융감독원 전자공시시스템(DART) · 업데이트 {{ dj.updated_at }}</p>
+  <script>
+    (function () {
+      var D = {{ dj | jsonify }};
+      var KIND = {}; D.kinds.forEach(function (k) { KIND[k.key] = LANG === 'en' ? k.en : k.ko; });
+      var days = []; D.rows.forEach(function (r) { if (days.indexOf(r.d) < 0) days.push(r.d); });
+      days.sort().reverse();
+      var day = days[0], kind = '';
+      var dayBox = document.getElementById('dart-days'), kindBox = document.getElementById('dart-kinds'), list = document.getElementById('dart-list');
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      function btn(box, label, on, fn) {
+        var b = document.createElement('button'); b.type = 'button'; b.innerHTML = label; if (on) b.className = 'on';
+        b.addEventListener('click', function () { box.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); fn(); });
+        box.appendChild(b);
+      }
+      days.slice(0, 5).forEach(function (d, i) { btn(dayBox, d.slice(5).replace('-', '/'), !i, function () { day = d; kinds(); render(); }); });
+      function kinds() {
+        kindBox.innerHTML = ''; kind = '';
+        var rows = D.rows.filter(function (r) { return r.d === day; });
+        btn(kindBox, t('dart.all', '전체') + ' <span class="krx-sub">' + rows.length + '</span>', true, function () { kind = ''; render(); });
+        D.kinds.forEach(function (k) {
+          var n = rows.filter(function (r) { return r.kind === k.key; }).length;
+          if (n) btn(kindBox, KIND[k.key] + ' <span class="krx-sub">' + n + '</span>', false, function () { kind = k.key; render(); });
+        });
+      }
+      function render() {
+        var rows = D.rows.filter(function (r) { return r.d === day && (!kind || r.kind === kind); });
+        list.innerHTML = rows.length ? rows.map(function (r) {
+          return '<li><span class="dart-kind k-' + r.kind + '">' + KIND[r.kind] + '</span>' +
+            '<span class="dart-corp">' + esc(r.corp) + ' <span class="krx-sub">' + (r.mkt === 'kospi' ? t('dart.kospi', '코스피') : t('dart.kosdaq', '코스닥')) + '</span></span>' +
+            '<a class="dart-title" href="https://dart.fss.or.kr/dsaf001/main.do?rcpNo=' + encodeURIComponent(r.no) + '" target="_blank" rel="noopener">' + esc(r.title) + '</a></li>';
+        }).join('') : '<li class="dart-empty">' + t('dart.empty', '해당 공시가 없어요') + '</li>';
+      }
+      kinds(); render();
+    })();
+  </script>
+</section>
+{% endif %}

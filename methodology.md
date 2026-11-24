@@ -36,6 +36,13 @@ GitHub Actions가 평일 한국시간 **07:00, 08:30, 18:30**에 수집 스크�
 | 원자재 | WTI·브렌트·천연가스 현물 | 미 에너지정보청(EIA), FRED 경유 |
 | 원자재 | 월간 원자재 가격 | 세계은행(World Bank) Pink Sheet |
 | 경제지표 | 한국 월간 지표 | 한국은행 ECOS |
+| 금리 | 연준 총자산·지급준비금·TGA·역레포, 금융여건지수(NFCI) | FRED(연준, 미 재무부, 시카고 연은) |
+| 금리 | 미 국채 입찰 결과 | 미 재무부 Fiscal Data |
+| 포지션 | 통화·국채·원자재 선물 투자자별 포지션(COT) | 미 상품선물거래위원회(CFTC) |
+| 환율 | 실질실효환율(REER) | 국제결제은행(BIS) |
+| 환율 | 외국인 국내 증권투자(국제수지) | 한국은행 ECOS |
+| 원자재 | 미국 상업 원유 재고(주간) | 미 에너지정보청(EIA) |
+| 공시 | 주요 공시(자사주·증자·합병·잠정실적 등) | 금융감독원 OpenDART |
 | 일정 | 미 GDP·PCE 발표 일정 | 미 경제분석국(BEA) |
 | 일정 | 기타 주요국 발표·금리 결정 일정 | 각 기관 공개 일정을 직접 정리 |
 | 참고 위젯 | 해외 지수·섹터·뉴스·경제 캘린더 | TradingView 무료 위젯(지연 시세, 표시만) |
@@ -91,6 +98,13 @@ GitHub Actions runs the collectors in `tools/` on weekdays at **07:00, 08:30 and
 | Commodities | WTI, Brent, natural gas spot | U.S. EIA via FRED |
 | Commodities | Monthly commodity prices | World Bank Pink Sheet |
 | Indicators | Korean monthly indicators | Bank of Korea ECOS |
+| Rates | Fed assets, reserves, TGA, reverse repo, financial conditions (NFCI) | FRED (Federal Reserve, U.S. Treasury, Chicago Fed) |
+| Rates | US Treasury auction results | U.S. Treasury Fiscal Data |
+| Positioning | Futures positioning by trader type (COT) | U.S. Commodity Futures Trading Commission (CFTC) |
+| FX | Real effective exchange rates (REER) | Bank for International Settlements (BIS) |
+| FX | Foreign portfolio investment in Korea (BoP) | Bank of Korea ECOS |
+| Commodities | US commercial crude inventories (weekly) | U.S. EIA |
+| Disclosures | Key filings (buybacks, issuance, M&A, preliminary results etc.) | FSS OpenDART |
 | Calendar | US GDP and PCE release dates | U.S. BEA |
 | Calendar | Other releases and rate decisions | Compiled from each agency's published schedule |
 | Reference widgets | Global indices, sectors, news, economic calendar | TradingView free widgets (delayed, display only) |

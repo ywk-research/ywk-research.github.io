@@ -1,0 +1,47 @@
+<!-- 미 달러 유동성·금융여건. 데이터: _data/us_liquidity.json (tools/fetch_extra.py, FRED) -->
+{% assign lq = site.data.us_liquidity %}
+{% if lq and lq.series %}
+{% include mc-common.html %}
+<section class="krx macro" id="us-liquidity">
+  <div class="krx-head">
+    <h2 data-i18n="lq.title">美 유동성·금융여건</h2>
+    <div class="krx-range" id="lq-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-months="12" data-i18n="range.1y">1년</button>
+      <button type="button" data-months="36" class="on" data-i18n="range.3y">3년</button>
+    </div>
+  </div>
+  <div class="gl-cards" id="lq-cards"></div>
+  <div class="mc-grid">
+    <div class="mc-box"><p class="krx-name" data-i18n="lq.net_chart">순유동성 = 연준 총자산 − TGA − 역레포 <span class="krx-sub">10억 달러</span></p><div class="mc-chart"><canvas id="lq-net" aria-label="연준 총자산과 순유동성"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="lq.parts_chart">지급준비금·TGA·역레포 <span class="krx-sub">10억 달러</span></p><div class="mc-chart"><canvas id="lq-parts" aria-label="지급준비금, TGA, 역레포"></canvas></div></div>
+    <div class="mc-box mc-wide"><p class="krx-name" data-i18n="lq.nfci_chart">시카고 연은 금융여건지수(NFCI) <span class="krx-sub">0보다 낮으면 평균보다 완화적</span></p><div class="mc-chart"><canvas id="lq-nfci" aria-label="NFCI"></canvas></div></div>
+  </div>
+  <p class="note" data-i18n="lq.note" data-u="{{ lq.updated_at }}">연준 총자산·지급준비금·TGA는 주간(수요일 기준), 역레포는 일간이에요. 순유동성은 같은 주 수요일(없으면 직전 값) 기준으로 계산한 시장 참고 지표예요. 카드 변동은 직전 발표 대비 · 자료: FRED(연준, 미 재무부, 시카고 연은) · 업데이트 {{ lq.updated_at }}</p>
+  <script>
+    (function () {
+      var L = {{ lq.series | jsonify }};
+      // 날짜 d에서 그 날 또는 직전 값
+      function at(rows, d) { var v = null; for (var i = 0; i < rows.length && rows[i][0] <= d; i++) v = rows[i][1]; return v; }
+      var net = L.assets.map(function (p) {
+        var tga = at(L.tga, p[0]), rrp = at(L.rrp, p[0]);
+        return [p[0], tga == null || rrp == null ? null : Math.round((p[1] - tga - rrp) * 10) / 10];
+      }).filter(function (p) { return p[1] != null; });
+      function fmt(v, d) { return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+      var wrap = document.getElementById('lq-cards');
+      [['연준 총자산', L.assets, 0], ['순유동성', net, 0], ['지급준비금', L.reserves, 0], ['TGA', L.tga, 0], ['역레포', L.rrp, 0], ['NFCI', L.nfci, 2]].forEach(function (x) {
+        var s = x[1]; if (!s || !s.length) return;
+        var last = s[s.length - 1], prev = s.length > 1 ? s[s.length - 2][1] : last[1], d = last[1] - prev, k = x[2];
+        // 유동성 지표는 늘면 '상승' 색. NFCI는 오르면 긴축이라 방향만 표시
+        MC.card(wrap, { label: x[0], date: last[0].slice(5).replace('-', '/'),
+          value: k ? fmt(last[1], k) : '$' + fmt(last[1], 0) + 'B',
+          chg: (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '') + fmt(Math.abs(d), k), dir: d });
+      });
+      MC.range(document.getElementById('lq-range'), function (months) {
+        MC.line(document.getElementById('lq-net'), [['연준 총자산', L.assets, 0], ['순유동성', net, 1]], { months: months, digits: 0 });
+        MC.line(document.getElementById('lq-parts'), [['지급준비금', L.reserves, 2], ['TGA', L.tga, 3], ['역레포', L.rrp, 1]], { months: months, digits: 0 });
+        MC.line(document.getElementById('lq-nfci'), [['NFCI', L.nfci, 0]], { months: months, digits: 2, zeroAt: 0 });
+      });
+    })();
+  </script>
+</section>
+{% endif %}

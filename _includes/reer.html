@@ -1,0 +1,35 @@
+<!-- 실질실효환율(REER). 데이터: _data/reer.json (tools/fetch_extra.py, BIS) -->
+{% assign re = site.data.reer %}
+{% if re and re.series.size > 0 %}
+{% include mc-common.html %}
+<section class="krx macro" id="reer">
+  <div class="krx-head">
+    <h2 data-i18n="reer.title">실질실효환율(REER)</h2>
+    <div class="krx-range" id="reer-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-months="60" data-i18n="range.5y">5년</button>
+      <button type="button" data-months="0" class="on" data-i18n="range.all">전체</button>
+    </div>
+  </div>
+  <div class="gl-cards" id="reer-cards"></div>
+  <div class="mc-grid">
+    <div class="mc-box mc-wide"><p class="krx-name" data-i18n="reer.chart">실질실효환율 <span class="krx-sub">2020 = 100, 높을수록 통화 강세</span></p><div class="mc-chart"><canvas id="reer-chart" aria-label="주요국 실질실효환율"></canvas></div></div>
+  </div>
+  <p class="note" data-i18n="reer.note" data-u="{{ re.updated_at }}">교역 상대국(64개국) 통화 대비 가치를 물가 차이까지 반영해 지수로 만든 값이에요(월평균). 카드는 최근 값과 2010년 이후 평균 대비 · 자료: 국제결제은행(BIS) · 업데이트 {{ re.updated_at }}</p>
+  <script>
+    (function () {
+      var S = {{ re.series | jsonify }};
+      function name(s) { return LANG === 'en' ? s.en : s.ko; }
+      var wrap = document.getElementById('reer-cards');
+      S.slice(0, 3).forEach(function (s) {
+        var a = s.data[s.data.length - 1], avg = s.data.reduce(function (m, r) { return m + r[1]; }, 0) / s.data.length, g = (a[1] / avg - 1) * 100;
+        MC.card(wrap, { label: name(s), date: a[0].slice(2).replace('-', '.'), value: a[1].toFixed(1),
+          chg: t('reer.vs_avg', '장기 평균 대비') + ' ' + (g > 0 ? '+' : g < 0 ? '−' : '') + Math.abs(g).toFixed(1) + '%', dir: 0 });
+      });
+      MC.range(document.getElementById('reer-range'), function (months) {
+        MC.line(document.getElementById('reer-chart'), S.map(function (s, i) { return [name(s), s.data, i % 4, i === 0 ? { borderWidth: 2.5 } : { borderWidth: 1.5 }]; }),
+          { months: months || null, digits: 1, zeroAt: 100, labelFmt: function (d) { return d.slice(0, 4); } });
+      });
+    })();
+  </script>
+</section>
+{% endif %}
