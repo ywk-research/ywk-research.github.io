@@ -52,11 +52,15 @@
     </div>
     <nav class="site-nav" aria-label="메뉴" data-i18n-aria="nav.aria">
       <a href="{{ '/' | relative_url }}"{% if page.url == '/' or page.url contains '/briefing/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.briefing">브리핑</a>
-      <a href="{{ '/data/' | relative_url }}"{% if page.url contains '/data/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.data">데이터</a>
-      <a href="{{ '/macro/' | relative_url }}"{% if page.url contains '/macro/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.macro">매크로</a>
-      <a href="{{ '/watchlist/' | relative_url }}"{% if page.url contains '/watchlist/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.watchlist">관심종목 백테스트</a>
+      <a href="{{ '/equity/' | relative_url }}"{% if page.url contains '/equity/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.equity">Equity</a>
+      <a href="{{ '/rate/' | relative_url }}"{% if page.url contains '/rate/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.rate">Rate</a>
+      <a href="{{ '/fx/' | relative_url }}"{% if page.url contains '/fx/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.fx">FX</a>
+      <a href="{{ '/commodity/' | relative_url }}"{% if page.url contains '/commodity/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.commodity">Commodity</a>
+      <a href="{{ '/calendar/' | relative_url }}"{% if page.url contains '/calendar/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.calendar">Calendar</a>
+      <a href="{{ '/watchlist/' | relative_url }}"{% if page.url contains '/watchlist/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.watchlist">백테스트</a>
       <a href="{{ '/about/' | relative_url }}"{% if page.url contains '/about/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.about">소개</a>
     </nav>
+    <script>(function () { var a = document.querySelector('.site-nav a.on'), n = a && a.parentNode; if (a && n.scrollWidth > n.clientWidth) n.scrollLeft = a.offsetLeft - (n.clientWidth - a.offsetWidth) / 2; })();</script>
   </header>
 
   <main class="wrap{% if page.wide %} wide{% endif %}">

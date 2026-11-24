@@ -9,7 +9,12 @@ en:
   nav.aria: Menu
   nav.briefing: Briefing
   nav.data: Data
-  nav.watchlist: Watchlist Backtest
+  nav.watchlist: Backtest
+  nav.equity: Equity
+  nav.rate: Rate
+  nav.fx: FX
+  nav.commodity: Commodity
+  nav.calendar: Calendar
   nav.about: About
   nav.macro: Macro
   theme.aria: Toggle light/dark mode
@@ -78,7 +83,29 @@ en:
   news.note: 'Click a headline to open the story on TradingView · News widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
 
   # 데이터 탭 (data.html, _includes/econ-calendar.html, tv-calendar.html) · 매크로 탭 (macro.html, _includes/macro.html)
+  # 상위 탭 페이지 (equity·rate·fx·commodity·calendar.html)
+  equity.title: Equity
+  equity.intro: "Sector trends and stock activity in the Korean equity market. Source: Korea Exchange (KRX) Open API"
+  rate.title: Rate
+  rate.intro: US and Korean Treasury yield curves, term spreads, the Korea–US rate gap and Korean short-term rates.
+  fx.title: FX
+  fx.intro: Korean won exchange rate trends.
+  fx.tv_title: Korean Won FX
+  fx.tv_note: Delayed quotes, last 1 year
+  cmd.title: Commodity
+  cmd.intro: Price trends for metals and energy.
+  cmd.tv_title: Commodities
+  cmd.tv_note: Spot / front-month delayed quotes, last 1 year
+  cal.title: Calendar
+  cal.intro: This month's major economic releases and rate decisions, with results.
+  tv.credit: Quote widget
   data.title: Data
+  sheat.title: 'Sector Heatmap <span class="krx-sub">as of {d}</span>'
+  sheat.d1: 1D
+  sheat.w1: 1W
+  sheat.m1: 1M
+  sheat.note_d1: "Change vs. previous trading day · Source: Korea Exchange (KRX) Open API"
+  sheat.note_base: "Change vs. close on {b} · Source: Korea Exchange (KRX) Open API"
   data.intro: Indicators and schedules one level deeper than the home page summary.
   ecal.title: Economic Calendar
   ecal.prev: Previous month
