@@ -9,7 +9,8 @@
 - 신규 상장 ETF: 글에는 include만 넣고, 화면은 빌드할 때 _data/new_etf_confirmed.yml·new_etf.json으로 그린다
   (05:52 확인 작업이 늦게 끝나도 Pages가 다시 빌드되면 글에 바로 반영된다)
 
-미국 지수·아시아(일·중·홍콩)·달러인덱스·WTI·금, 주요 뉴스는 여기서 채우지 못하므로 "—"로 남긴다.
+- 미국·아시아 지수, 달러인덱스, WTI·금, 미국 주요 종목: Yahoo Finance 전일 종가(_data/briefing_quotes.json, tools/fetch_close.py가 개인용 Worker에서 받음)
+그래도 비는 칸과 주요 뉴스는 "—"/표시로 남긴다.
 평일 06:08 Claude 예약 작업이 이 초안을 만든 뒤 빈칸과 뉴스를 채워 올리고,
 예약 작업이 실패하면 .github/workflows/briefing.yml(06:40)이 이 초안을 그대로 올린다.
 
@@ -140,6 +141,20 @@ def build(pub, now):
     ki = load("krx_index.json") or {}
     fx = load("krw_fx.json") or {}
     mv = load("krx_movers.json") or {}
+    yq = load("briefing_quotes.json") or {}
+    yi, ys = yq.get("index", {}), yq.get("stocks", {})
+
+    def yus(key):
+        """Yahoo 전일 종가: 미국 전 거래일 D 것만"""
+        r = yi.get(key)
+        return r if r and r.get("d") == us_d.isoformat() else None
+
+    def yasia(key):
+        """아시아: 국내 전 거래일 이하 가장 최근(휴장이면 직전 거래일), 5일 넘게 묵은 건 버림"""
+        r = yi.get(key)
+        if r and (kr_d - dt.timedelta(days=5)).isoformat() <= r.get("d", "") <= kr_d.isoformat():
+            return r
+        return None
     missing = []
 
     # 국내 전 거래일 = 발간일 이전 코스피 마지막 날짜
@@ -166,11 +181,15 @@ def build(pub, now):
 
     # 1. 미국 증시
     L += [f"## 미국 증시 ({md(us_d)} 마감)", "", "| 지표 | 종가 | 등락률 |", "|---|--:|--:|"]
-    for name in ["S&P500", "나스닥", "다우", "필라델피아 반도체(SOX)"]:
-        L.append(f"| {name} | {DASH} | {DASH} |")
-        missing.append(f"미국 {name}")
+    for key, name in [("spx", "S&P500"), ("ndx", "나스닥"), ("dji", "다우"), ("sox", "필라델피아 반도체(SOX)")]:
+        r = yus(key)
+        if r:
+            L.append(f"| {name} | {fmt(r['close'])} | {pct(r['pct'])} |")
+        else:
+            L.append(f"| {name} | {DASH} | {DASH} |")
+            missing.append(f"미국 {name}")
     vix = gser.get("vix")
-    vrow = next((r for r in (vix or {}).get("data", []) if r["d"] == us_d.isoformat()), None)
+    vrow = next((r for r in (vix or {}).get("data", []) if r["d"] == us_d.isoformat()), None) or yus("vix")
     if vrow:
         L.append(f"| VIX | {vrow['close']:.2f} | {pct(vrow.get('pct'))} |")
     else:
@@ -180,15 +199,28 @@ def build(pub, now):
 
     # 2. 아시아 증시
     L += ["## 아시아 증시", "", "| 지표 | 기준일 | 종가 | 등락률 |", "|---|---|--:|--:|"]
+    if not kospi_row:
+        r = yasia("kospi")
+        kospi_row = r if r and r["d"] == kr_d.isoformat() else None
     if kospi_row:
         L.append(f"| 코스피 | {md(kr_d)} | {fmt(kospi_row['close'])} | {pct(kospi_row.get('pct'))} |")
     else:
         L.append(f"| 코스피 | {md(kr_d)} | {DASH} | {DASH} |")
         missing.append("코스피")
-    for name in ["닛케이225", "상하이종합", "항셍"]:
-        L.append(f"| {name} | {md(kr_d)} | {DASH} | {DASH} |")
-        missing.append(name)
+    closed = []
+    for key, name in [("n225", "닛케이225"), ("sse", "상하이종합"), ("hsi", "항셍")]:
+        r = yasia(key)
+        if r:
+            rd = dt.date.fromisoformat(r["d"])
+            L.append(f"| {name} | {md(rd)} | {fmt(r['close'])} | {pct(r['pct'])} |")
+            if rd != kr_d:
+                closed.append(f"{name.rstrip('225')}({md(rd)})")
+        else:
+            L.append(f"| {name} | {md(kr_d)} | {DASH} | {DASH} |")
+            missing.append(name)
     L.append("")
+    if closed:
+        L += [f'<p class="note">※ {", ".join(closed)}은 {md(kr_d)}에 휴장해 직전 거래일 종가를 적었어요.</p>', ""]
 
     # 3. 금리·환율·원자재
     L += [f"## 금리 · 환율 · 원자재 ({md(us_d)})", "", "| 지표 | 수준 | 변동 |", "|---|--:|--:|"]
@@ -197,11 +229,19 @@ def build(pub, now):
     if trow:
         bp = round((trow.get("chg") or 0) * 100)
         L.append(f"| 미국 10년물 국채금리 | {trow['close']:.2f}% | {span(bp, f'{abs(bp)}bp')} |")
+    elif yus("tnx"):
+        r = yus("tnx")
+        bp = round(r["chg"] * 100)
+        L.append(f"| 미국 10년물 국채금리 | {r['close']:.2f}% | {span(bp, f'{abs(bp)}bp')} |")
     else:
         L.append(f"| 미국 10년물 국채금리 | {DASH} | {DASH} |")
         missing.append("미국 10년물")
-    L.append(f"| 달러인덱스 | {DASH} | {DASH} |")
-    missing.append("달러인덱스")
+    r = yus("dxy")
+    if r:
+        L.append(f"| 달러인덱스 | {r['close']:.2f} | {pct(r['pct'])} |")
+    else:
+        L.append(f"| 달러인덱스 | {DASH} | {DASH} |")
+        missing.append("달러인덱스")
     s = fx.get("series", {})
     close = s.get("usd_close")
     label = "원/달러 (서울 종가)"
@@ -215,9 +255,13 @@ def build(pub, now):
     else:
         L.append(f"| 원/달러 (서울 종가) | {DASH} | {DASH} |")
         missing.append("원/달러")
-    L.append(f"| WTI | {DASH} | {DASH} |")
-    L.append(f"| 금 | {DASH} | {DASH} |")
-    missing += ["WTI", "금"]
+    for key, name in [("wti", "WTI (근월물)"), ("gold", "금 (근월물)")]:
+        r = yus(key)
+        if r:
+            L.append(f"| {name} | ${r['close']:,.2f} | {pct(r['pct'])} |")
+        else:
+            L.append(f"| {name} | {DASH} | {DASH} |")
+            missing.append(name)
     L.append("")
 
     # 4. 주요 종목 (국내는 KRX 자료로 미리 채움)
@@ -233,6 +277,10 @@ def build(pub, now):
             L.append(f"- **코스피 상승 1위(시총 1조↑):** {g[0]['name']} {pct(g[0]['pct'])}")
         if lo:
             L.append(f"- **코스피 하락 1위(시총 1조↑):** {lo[0]['name']} {pct(lo[0]['pct'])}")
+    # 미국 주요 종목: Yahoo 종가 중 D에 가장 많이 움직인 4개(이유는 예약 작업이 덧붙임)
+    movers = sorted((r for r in ys.values() if r.get("d") == us_d.isoformat()), key=lambda r: -abs(r["pct"]))[:4]
+    for r in movers:
+        L.append(f"- **{r['name']} {pct(r['pct'])} (${r['close']:,.2f})**")
     L.append("<!-- US_STOCKS -->")
     L.append("")
 
@@ -249,12 +297,14 @@ def build(pub, now):
         L.append("오늘은 큰 발표 일정이 없어요.")
     L.append("")
 
-    srcs = "한국거래소(KRX) Open API, 한국은행 ECOS, Cboe, 미 재무부, SEC EDGAR"
+    srcs = "한국거래소(KRX) Open API, 한국은행 ECOS, Cboe, 미 재무부, SEC EDGAR" + (", Yahoo Finance(지수·종목 종가)" if yi else "")
     L.append(f'<p class="note">자료: {srcs} 및 각 거래소·언론 보도 종합. 정보 정리 목적이며 투자 권유가 아닙니다.</p>')
     L.append("")
 
     # 요약(예약 작업이 다시 씀)
-    if kospi_row:
+    if yus("spx") and yus("ndx"):
+        summ = f"S&P500 {fmt(yus('spx')['pct'])}%·나스닥 {fmt(yus('ndx')['pct'])}%, 전 거래일 시장 정리"
+    elif kospi_row:
         summ = f"코스피 {fmt(kospi_row['pct'])}%, 전 거래일 시장 데이터 정리"
     else:
         summ = "전 거래일 시장 데이터 정리"
