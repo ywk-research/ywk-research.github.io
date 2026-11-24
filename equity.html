@@ -4,6 +4,7 @@ title: Equity
 title_en: Equity
 permalink: /equity/
 wide: true
+xwide: true
 ---
 <section class="intro">
   <h1 data-i18n="equity.title">Equity</h1>
@@ -17,7 +18,9 @@ wide: true
   <button type="button" role="tab" data-tab="kr" data-i18n="eq.tab_kr">한국</button>
 </div>
 
+<div class="mk-split">
 <div class="mk-pane" data-pane="us">
+<h2 class="mk-pane-title" data-i18n="eq.tab_us">미국</h2>
 <p class="wl-lead" data-i18n="eq.lead_us">자료: TradingView 위젯(지연 시세), SEC EDGAR</p>
 
 {% include tv-global.html %}
@@ -26,6 +29,7 @@ wide: true
 </div>
 
 <div class="mk-pane" data-pane="kr" hidden>
+<h2 class="mk-pane-title" data-i18n="eq.tab_kr">한국</h2>
 <p class="wl-lead" data-i18n="eq.lead_kr">자료: 한국거래소(KRX) Open API, 금융감독원 DART</p>
 
 {% include krx-sector-heat.html %}
@@ -40,14 +44,17 @@ wide: true
 
 {% include new-etf.html market="kr" %}
 </div>
+</div>
 
 <script>
-  // 미국/한국 탭(기본 미국). 주소 끝 #kr이면 한국 탭으로 열고, 섹션 주소(#dart 등)면 그 섹션이 있는 탭을 연다
+  // 넓은 화면(1200px 이상)은 왼쪽 미국·오른쪽 한국 2단, 좁으면 미국/한국 탭(기본 미국).
+  // 탭일 때 주소 끝 #kr이면 한국 탭으로 열고, 섹션 주소(#dart 등)면 그 섹션이 있는 탭을 연다
   (function () {
     var btns = document.querySelectorAll('#mk-tabs button'), panes = document.querySelectorAll('.mk-pane');
+    var mq = window.matchMedia('(min-width: 1200px)');
     function show(k, keepHash) {
       btns.forEach(function (b) { var on = b.dataset.tab === k; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-      panes.forEach(function (p) { p.hidden = p.dataset.pane !== k; });
+      panes.forEach(function (p) { p.hidden = !mq.matches && p.dataset.pane !== k; });
       if (!keepHash) { try { history.replaceState(null, '', k === 'kr' ? '#kr' : location.pathname); } catch (e) {} }
       document.dispatchEvent(new CustomEvent('panes-changed', { detail: k }));
       window.dispatchEvent(new Event('resize')); // 숨겨져 있던 차트 크기 다시 맞추기
@@ -61,8 +68,11 @@ wide: true
       var cur = document.querySelector('#mk-tabs .on');
       if (first || !cur || cur.dataset.tab !== k) show(k, true);
       if (target) target.scrollIntoView();
+      else if (h === 'kr' && mq.matches && !first) document.querySelector('.mk-pane[data-pane="kr"]').scrollIntoView();
     }
     fromHash(true);
     window.addEventListener('hashchange', function () { fromHash(false); });
+    function onMq() { var cur = document.querySelector('#mk-tabs .on'); show(cur ? cur.dataset.tab : 'us', true); }
+    if (mq.addEventListener) mq.addEventListener('change', onMq); else mq.addListener(onMq);
   })();
 </script>

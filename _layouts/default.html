@@ -61,7 +61,7 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap head-top{% if page.wide %} wide{% endif %}">
+    <div class="wrap head-top{% if page.wide %} wide{% endif %}{% if page.xwide %} xwide{% endif %}">
       <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
       <span class="head-tools">
         <button type="button" class="theme-toggle lang-toggle" id="lang-toggle"></button>
@@ -81,12 +81,12 @@
     <script>(function () { var a = document.querySelector('.site-nav a.on'), n = a && a.parentNode; if (a && n.scrollWidth > n.clientWidth) n.scrollLeft = a.offsetLeft - (n.clientWidth - a.offsetWidth) / 2; })();</script>
   </header>
 
-  <main class="wrap{% if page.wide %} wide{% endif %}">
+  <main class="wrap{% if page.wide %} wide{% endif %}{% if page.xwide %} xwide{% endif %}">
     {{ content }}
   </main>
 
   <footer class="site-footer">
-    <div class="wrap{% if page.wide %} wide{% endif %}">
+    <div class="wrap{% if page.wide %} wide{% endif %}{% if page.xwide %} xwide{% endif %}">
       <p data-i18n="footer.disclaimer">공개 자료를 정리한 정보 제공 목적의 글이며, 투자 권유가 아닙니다. 투자 판단과 그 결과의 책임은 투자자 본인에게 있습니다.</p>
       <p>© {{ site.time | date: "%Y" }} {{ site.title }} · <a href="{{ '/methodology/' | relative_url }}" data-i18n="footer.method">데이터·방법론</a> · <a href="{{ '/feed.xml' | relative_url }}">RSS</a> · <a href="https://github.com/ywk-research/ywk-research.github.io" rel="noopener" target="_blank">GitHub</a></p>
     </div>
