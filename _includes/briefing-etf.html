@@ -30,6 +30,7 @@
 <ul>
 {% for r in krl %}<li><strong>{{ r.name }}</strong> <span class="krx-sub">({{ r.code }} · 기초지수 {{ r.index }}{% if r.aum_txt %} · 순자산 {{ r.aum_txt }}{% endif %})</span></li>
 {% endfor %}</ul>
+{% elsif ne.kr.updated < bk %}<p class="note">KRX 자료가 아침(08:30)에 들어오면 자동으로 반영돼요.</p>
 {% else %}<p>새로 상장한 ETF가 없어요.</p>{% endif %}
 {% endif %}
 <p class="note">자료: SEC EDGAR, 운용사 공시·보도자료, 한국거래소(KRX) Open API</p>
