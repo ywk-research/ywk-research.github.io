@@ -1,0 +1,99 @@
+{%- comment -%}
+매크로 계열 섹션(실질금리, 원화 환율, 월간 지표)이 같이 쓰는 Chart.js와 도우미. 한 페이지에서 몇 번 include해도 한 번만 들어간다.
+쓰는 쪽: window.MC.card / MC.line / MC.range / MC.back
+{%- endcomment -%}
+{%- unless mc_common_loaded -%}
+{%- assign mc_common_loaded = true -%}
+{%- unless chartjs_loaded -%}{%- assign chartjs_loaded = true -%}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{%- endunless %}
+<script>
+  (function () {
+    var css = getComputedStyle(document.documentElement);
+    function c(n) { return css.getPropertyValue(n).trim(); }
+    var MUTED = c('--muted'), LINE = c('--line');
+    var S = [c('--s1'), c('--s2'), c('--s3'), c('--s4')];
+    var tr = function (s) { return window.tn ? tn(s) : s; };
+    var tt = function (k, ko, v) { return window.t ? t(k, ko, v) : ko; };
+
+    // 날짜 문자열(YYYY-MM-DD 또는 YYYY-MM)에서 m개월 전
+    function back(iso, m) {
+      var y = +iso.slice(0, 4), mo = +iso.slice(5, 7) - m, d = iso.length > 7 ? iso.slice(7) : '';
+      while (mo < 1) { mo += 12; y--; }
+      return y + '-' + (mo < 10 ? '0' : '') + mo + d;
+    }
+
+    // 요약 카드. o: { label, date, value(문자열), chg(문자열), dir(+1/-1/0) }
+    function card(wrap, o) {
+      var cls = o.dir > 0 ? 'up' : o.dir < 0 ? 'down' : 'flat';
+      var el = document.createElement('div');
+      el.className = 'gl-card';
+      el.innerHTML = '<p class="krx-name">' + tr(o.label) + (o.date ? ' <span class="krx-sub">' + o.date + '</span>' : '') + '</p>' +
+        '<p class="gl-close">' + o.value + '</p><p class="krx-chg ' + cls + '">' + (o.chg || '&nbsp;') + '</p>';
+      wrap.appendChild(el);
+    }
+
+    // 시계열 차트. list: [[이름, [[날짜, 값], ...], 색 번호, {추가 옵션}], ...]
+    // o: { months, type('line'|'bar'), digits, zeroAt(이 값의 가로선 강조), labelFmt(날짜→축 글자), base100(첫 값=100으로) }
+    var charts = {};
+    function line(canvas, list, o) {
+      o = o || {};
+      var end = list.reduce(function (m, s) { var d = s[1].length ? s[1][s[1].length - 1][0] : ''; return d > m ? d : m; }, '');
+      var cut = o.months ? back(end, o.months) : '';
+      var days = {};
+      list.forEach(function (s) { s[1].forEach(function (p) { if (p[0] > cut || (!o.months)) days[p[0]] = 1; }); });
+      var labels = Object.keys(days).sort();
+      var sets = list.map(function (s, i) {
+        var m = {}; s[1].forEach(function (p) { m[p[0]] = p[1]; });
+        var vals = labels.map(function (d) { return d in m ? m[d] : null; });
+        if (o.base100) {
+          var b = null; vals.forEach(function (v) { if (b == null && v != null) b = v; });
+          vals = vals.map(function (v) { return v == null || !b ? null : Math.round(v / b * 10000) / 100; });
+        }
+        var k = s[2] != null ? s[2] : i;
+        return Object.assign({ label: tr(s[0]), data: vals, borderColor: S[k], backgroundColor: S[k], borderWidth: 2,
+          pointRadius: 0, pointHoverRadius: 4, tension: 0.1, spanGaps: true, borderRadius: 2, maxBarThickness: 14 }, s[3] || {});
+      });
+      var digits = o.digits != null ? o.digits : 2;
+      var fmtX = o.labelFmt || function (d) { return d.slice(2, 7).replace('-', '.'); };
+      var cfg = {
+        type: o.type || 'line',
+        data: { labels: labels, datasets: sets },
+        options: {
+          animation: false, maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: list.length > 1, position: 'bottom', labels: { color: MUTED, boxWidth: 14, boxHeight: 2, padding: 12 } },
+            tooltip: { callbacks: {
+              title: function (x) { return x.length ? labels[x[0].dataIndex] : ''; },
+              label: function (x) { return ' ' + x.dataset.label + ' ' + (x.parsed.y == null ? '-' : x.parsed.y.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })); } } }
+          },
+          scales: {
+            x: { ticks: { color: MUTED, maxTicksLimit: 6, maxRotation: 0, callback: function (v) { return fmtX(labels[v]); } }, grid: { display: false } },
+            y: { ticks: { color: MUTED, maxTicksLimit: 6 }, border: { display: false },
+              grid: { color: function (g) { return o.zeroAt != null && g.tick && g.tick.value === o.zeroAt ? MUTED : LINE; } } }
+          }
+        }
+      };
+      if (charts[canvas.id]) charts[canvas.id].destroy();
+      charts[canvas.id] = new Chart(canvas, cfg);
+    }
+
+    // 기간 버튼 묶음: 누르면 render(개월 수)
+    function range(group, render) {
+      var btns = group.querySelectorAll('button');
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          btns.forEach(function (x) { x.classList.remove('on'); });
+          b.classList.add('on');
+          render(+b.dataset.months);
+        });
+      });
+      var on = group.querySelector('button.on') || btns[btns.length - 1];
+      render(+on.dataset.months);
+    }
+
+    window.MC = { card: card, line: line, range: range, back: back, tr: tr, t: tt };
+  })();
+</script>
+{%- endunless -%}

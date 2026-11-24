@@ -41,7 +41,7 @@ jobs:
         continue-on-error: true
         run: python tools/fetch_calendar.py
 
-      - name: 매크로(한미 금리) 받아오기
+      - name: 매크로(금리·원화 환율·월간 지표) 받아오기
         continue-on-error: true
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
