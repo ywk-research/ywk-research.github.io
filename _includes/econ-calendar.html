@@ -11,7 +11,7 @@
   </div>
   <div class="ecal-grid" role="grid"></div>
   <div class="ecal-day" aria-live="polite"></div>
-  <p class="note" data-i18n="ecal.note">한국시간 기준. 미국 지표는 미 노동통계국(BLS)·경제분석국(BEA) 공식 발표 일정, 금리 결정은 연준·한국은행·일본은행·ECB 공식 회의 일정. 일본은행·한국은행은 발표 시각이 따로 정해지지 않아 시간을 비워 뒀어요.</p>
+  <p class="note" data-i18n="ecal.note">한국시간 기준. 각국 정부·중앙은행·통계기관이 공개한 공식 발표 일정만 넣었어요(미 BLS·BEA·인구조사국·노동부, ISM, 연준·ECB, 한국은행·국가데이터처·산업통상부, 일본은행·총무성·내각부, 중국 국가통계국). 한국·중국 2027년 지표 일정은 기관이 공개하면 추가해요. 회색 작은 글씨는 매주 나오는 일정이에요.</p>
   <script>
     (function () {
       var manual = {{ site.data.econ_events | jsonify }} || [];
@@ -45,9 +45,19 @@
         var list = byDate[k] || [];
         day.innerHTML = '<h3>' + (EN ? wd + ', ' + MON[+p[1] - 1].slice(0, 3) + ' ' + (+p[2]) : (+p[1]) + '월 ' + (+p[2]) + '일 (' + wd + ')') + '</h3>' + (list.length
           ? '<ul>' + list.map(function (e) {
-              return '<li><span class="ecal-time">' + (e.time || '—') + '</span><span class="ecal-flag">' + (FLAG[e.c] || '') + '</span>' + esc(tn(e.t)) + '</li>';
+              return '<li' + (e.minor ? ' class="minor"' : '') + '><span class="ecal-time">' + (e.time || '—') + '</span><span class="ecal-flag">' + (FLAG[e.c] || '') + '</span>' + esc(tn(e.t)) + '</li>';
             }).join('') + '</ul>'
           : '<p class="ecal-empty">' + t('ecal.empty', '주요 일정이 없어요.') + '</p>');
+      }
+
+      // 칸에는 주요 일정 먼저 최대 MAX개, 나머지는 +n. 매주 나오는 일정(minor)은 회색으로 작게
+      var MAX = 4;
+      function evHtml(list) {
+        var major = list.filter(function (e) { return !e.minor; }), minor = list.filter(function (e) { return e.minor; });
+        var shown = major.concat(minor).slice(0, MAX), rest = list.length - shown.length;
+        return shown.map(function (e) {
+          return '<span class="ecal-ev ' + e.c + (e.minor ? ' minor' : '') + '">' + (FLAG[e.c] || '') + '<b>' + esc(tn(e.s || e.t)) + '</b></span>';
+        }).join('') + (rest > 0 ? '<span class="ecal-more">+' + rest + '</span>' : '');
       }
 
       function render() {
@@ -60,7 +70,7 @@
           var k = key(y, m, d), list = byDate[k] || [], wd = (first + d - 1) % 7;
           html += '<button type="button" class="ecal-cell' + (k === today ? ' today' : '') + (wd === 0 ? ' sun' : wd === 6 ? ' sat' : '') + '" data-d="' + k + '">' +
             '<span class="ecal-num">' + d + '</span>' +
-            list.map(function (e) { return '<span class="ecal-ev ' + e.c + '">' + (FLAG[e.c] || '') + '<b>' + esc(tn(e.s || e.t)) + '</b></span>'; }).join('') +
+            evHtml(list) +
             '</button>';
         }
         grid.innerHTML = html;

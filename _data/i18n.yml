@@ -85,7 +85,7 @@ en:
   ecal.next: Next month
   ecal.today: Today
   ecal.empty: No major events.
-  ecal.note: "Korea time (KST). US data releases follow the official schedules of the Bureau of Labor Statistics (BLS) and Bureau of Economic Analysis (BEA); rate decisions follow the official meeting calendars of the Fed, Bank of Korea, Bank of Japan and ECB. The Bank of Japan and Bank of Korea don't fix an announcement time, so the time is left blank."
+  ecal.note: "Korea time (KST). Only official release schedules published by governments, central banks and statistics agencies (US BLS, BEA, Census Bureau, Labor Department, ISM, Fed, ECB, Bank of Korea, Statistics Korea, Korea trade ministry, Bank of Japan, Japan Statistics Bureau, Cabinet Office, China NBS). Korea and China 2027 data dates will be added once the agencies publish them. Small grey items are weekly releases."
   tvcal.title: Indicator Details (Forecast &amp; Actual)
   tvcal.note: 'US, Korea, Japan, China and the euro area, medium importance and above. Times follow your device time zone (KST in Korea) · Calendar widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
   macro.title: Macro
@@ -167,6 +167,32 @@ names:
   개인소득·지출(PCE 물가): Personal income and outlays (PCE)
   고용: Jobs
   금통위: BOK
+  소매판매: Retail sales
+  내구재 주문: Durable goods orders
+  내구재: Durables
+  주택착공·허가: Housing starts & permits
+  주택착공: Housing starts
+  ISM 제조업 PMI: ISM manufacturing PMI
+  ISM 서비스업 PMI: ISM services PMI
+  ISM제조: ISM Mfg
+  ISM서비스: ISM Svcs
+  신규 실업수당 청구: Initial jobless claims
+  실업수당: Claims
+  수출입동향: Exports & imports
+  수출입: Trade
+  소비자물가동향: Consumer prices (CPI)
+  고용동향: Employment
+  산업활동동향: Industrial activity
+  산업활동: Industry
+  제조업·비제조업 PMI(국가통계국): Official manufacturing & non-manufacturing PMI (NBS)
+  소비자·생산자물가(CPI·PPI): Consumer & producer prices (CPI, PPI)
+  산업생산·소매판매 등 월간 실물지표: Monthly activity data (industrial output, retail sales)
+  실물지표: Activity
+  전국 소비자물가(CPI): National CPI
+  GDP 1차 속보: GDP (preliminary)
+  GDP 2차 속보: GDP (second preliminary)
+  일본은행 단칸(기업단기경제관측): BOJ Tankan survey
+  단칸: Tankan
   # 매크로 (_includes/macro.html)
   美 2년: US 2Y
   美 10년: US 10Y
