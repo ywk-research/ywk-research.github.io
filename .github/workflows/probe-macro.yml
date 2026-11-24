@@ -1,0 +1,32 @@
+name: probe macro (임시)
+on:
+  push:
+    branches: [claude/project-thread-xwxure]
+    paths: [.github/workflows/probe-macro.yml]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          k = os.environ["ECOS_API_KEY"].strip()
+          def g(u):
+              return json.loads(urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent":"Mozilla/5.0"}), timeout=40).read().decode("utf-8-sig"))
+          for t in ["817Y002", "722Y001", "731Y001"]:
+              j = g(f"https://ecos.bok.or.kr/api/StatisticItemList/{k}/json/kr/1/300/{t}")
+              for r in j.get("StatisticItemList", {}).get("row", [])[:80]:
+                  print(t, r["CYCLE"], r["ITEM_CODE"], r["ITEM_NAME"], r["START_TIME"], r["END_TIME"])
+          j = g(f"https://ecos.bok.or.kr/api/StatisticSearch/{k}/json/kr/1/50/817Y002/D/20261110/20261124/010200000")
+          for r in j.get("StatisticSearch", {}).get("row", []): print(r["TIME"], r["ITEM_NAME1"], r["DATA_VALUE"])
+          j = g(f"https://ecos.bok.or.kr/api/StatisticSearch/{k}/json/kr/1/50/722Y001/D/20261001/20261124/0101000")
+          print(json.dumps(j, ensure_ascii=False)[:600])
+          j = g(f"https://api.stlouisfed.org/fred/series/observations?series_id=DFEDTARU&api_key={os.environ['FRED_API_KEY'].strip()}&file_type=json&observation_start=2026-09-01")
+          print([ (o["date"], o["value"]) for o in j["observations"]][-5:])
+          u = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv"
+          t = urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent":"Mozilla/5.0"}), timeout=40).read().decode("utf-8-sig")
+          print("\n".join(t.splitlines()[:3]))
+          PY
