@@ -1,0 +1,19 @@
+name: probe (임시)
+on:
+  push:
+    branches: ['claude/project-thread-jgq9bc']
+    paths: ['.github/workflows/probe.yml']
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: run
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
+        run: |
+          pip install -q xlrd
+          python tools/fetch_extra.py
+          echo "@@B64START"; tar czf - _data/us_liquidity.json _data/crude_stocks.json _data/ust_auctions.json _data/cot.json _data/reer.json _data/kr_flows.json _data/dart.json 2>/dev/null | base64 -w0; echo; echo "@@B64END"
