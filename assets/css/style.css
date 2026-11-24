@@ -248,12 +248,6 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .wl-table th { color: var(--muted); font-weight: 600; font-size: 13px; }
 .wl-table .num { text-align: right; font-variant-numeric: tabular-nums; }
 .wl-table th:nth-child(n+3) { text-align: right; }
-.wl-sub { margin: 0 0 8px; color: var(--muted); font-weight: 600; font-size: 13px; }
-.wl-pgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.wl-p { display: flex; flex-direction: column; height: 200px; padding: 8px 4px 0; background: var(--soft); border-radius: 12px; min-width: 0; overflow: hidden; }
-.wl-p .krx-name { padding: 0 8px; margin: 0; }
-.wl-p .tv-w .tradingview-widget-container { height: 100%; }
-@media (max-width: 760px) { .wl-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .tv-wl-box { height: 460px; }
 .tv-wl-chart { height: 480px; margin-top: 20px; }
 @media (max-width: 560px) { .tv-wl-box { height: 420px; } .tv-wl-chart { height: 380px; } }
