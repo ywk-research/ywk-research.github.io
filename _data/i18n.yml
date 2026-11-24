@@ -77,6 +77,11 @@ en:
   movers.losers: Top losers
   movers.value: Most traded
   movers.note: 'Gainer and loser rankings: KOSPI {kospi}; KOSDAQ {kosdaq}. The most-traded ranking only excludes preferred shares and SPACs. Stock names are shown in Korean.'
+  cross.title: MA Crossovers <span class="krx-sub">{from}–{to} · last {n} trading days</span>
+  cross.golden: Golden cross
+  cross.dead: Death cross
+  cross.empty: None in the last {n} trading days.
+  cross.note: 'A golden cross is when the short moving average crosses above the long one; a death cross is the reverse. Dates show the trading day of the cross; % change is for {d} only. Universe: KOSPI {kospi}; KOSDAQ {kosdaq} ({stocks} stocks). Computed from daily closes, adjusted for splits and bonus issues using KRX base prices. Not investment advice · Source: Korea Exchange (KRX) Open API · Updated {updated}'
 
   # 홈: 세계 시장 뉴스 (_includes/tv-news.html)
   news.title: World Market News

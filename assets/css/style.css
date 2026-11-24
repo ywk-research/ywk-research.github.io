@@ -280,3 +280,13 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .sheat-name { font-size: 13px; line-height: 1.3; }
 .sheat-v { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
 @media (max-width: 560px) { .sheat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .sheat-tile { min-height: 56px; padding: 6px 8px; } }
+
+/* 이평선 크로스 (_includes/krx-cross.html) */
+.cross .krx-head h2 .krx-sub { margin-left: 6px; }
+.cross .krx-name .up { color: var(--up); } .cross .krx-name .down { color: var(--down); }
+.cross-pair[hidden] { display: none; }
+.cx-mkt { font-size: 11px; color: var(--muted); margin-left: 2px; }
+.cx-new { color: var(--text); font-weight: 600; }
+.cx-empty { margin: 10px 0 4px; }
+@media (max-width: 560px) { .cross .krx-head { flex-wrap: wrap; } }
+.cross .movers-list { max-height: 440px; overflow-y: auto; padding-right: 4px; }
