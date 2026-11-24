@@ -5,6 +5,7 @@
   (처음 받는 시리즈는 최근 BACKFILL_DAYS일을 채우고, 이후에는 마지막 저장일 다음 날부터 받는다)
 - _data/krx_movers.json : 직전 거래일 코스피·코스닥 등락률 상·하위, 거래대금 상위
 - _data/krx_cross.json : 이평선 골든·데드크로스 종목 (tools/krx_cross.py, 과거 종가는 tools/state/)
+- _data/watchlist_kr.json : 국내 관심종목 백테스트 (tools/krx_backtest.py, 같은 과거 종가 사용)
 - 이용 신청이 안 된 부가 서비스(VKOSPI, 종목 시세)는 건너뛰고 나머지는 계속 받는다.
 """
 import datetime as dt
@@ -16,6 +17,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+import krx_backtest
 import krx_cross
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -313,6 +315,11 @@ def main():
             cross = update_cross(key, stocks, day)
         except Exception as e:  # 크로스 계산이 실패해도 다른 데이터는 저장한다
             print(f"이평선 크로스 실패: {type(e).__name__}: {e}")
+        try:  # 국내 관심종목 백테스트 (종목 이름은 KRX 응답으로 확인)
+            names = {r.get("ISU_CD", ""): r.get("ISU_NM", "") for rows in stocks.values() for r in rows}
+            krx_backtest.update(names=names)
+        except Exception as e:
+            print(f"국내 백테스트 실패: {type(e).__name__}: {e}")
     etf = update_etf(key, day)
     print(f"{day} 기준 · 지수 추가 {added}건, 업종 {'갱신' if sec else '변경 없음'}, "
           f"종목 {'갱신' if moved else '변경 없음'}, 크로스 {'갱신' if cross else '변경 없음'}, ETF {'갱신' if etf else '변경 없음'}")
