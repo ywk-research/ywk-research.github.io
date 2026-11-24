@@ -1,0 +1,61 @@
+<!-- 52주 신고가·신저가 종목 수 추이 (_data/krx_highlow.json, tools/krx_highlow.py, 자료: KRX Open API) -->
+{% assign hl = site.data.krx_highlow %}
+{% if hl and hl.series.size > 0 %}
+{% include mc-common.html %}
+{% assign last = hl.series | last %}
+<section class="krx hl" id="krx-highlow">
+  <div class="krx-head">
+    <h2 data-i18n="hl.title" data-d="{{ hl.d | date: '%b %-d' }}">52주 신고가·신저가 <span class="krx-sub">{{ hl.d | date: "%m.%d" }} 기준</span></h2>
+    <div class="krx-range hl-mkt">
+      <button type="button" data-mkt="kospi" class="on" data-i18n="mkt.kospi">코스피</button>
+      <button type="button" data-mkt="kosdaq" data-i18n="mkt.kosdaq">코스닥</button>
+    </div>
+  </div>
+  <div class="gl-cards hl-cards">
+    <div class="gl-card"><p class="krx-name" data-i18n="hl.kospi_hi">코스피 신고가</p><p class="gl-close up">{{ last.kospi_hi }}</p></div>
+    <div class="gl-card"><p class="krx-name" data-i18n="hl.kospi_lo">코스피 신저가</p><p class="gl-close down">{{ last.kospi_lo }}</p></div>
+    <div class="gl-card"><p class="krx-name" data-i18n="hl.kosdaq_hi">코스닥 신고가</p><p class="gl-close up">{{ last.kosdaq_hi }}</p></div>
+    <div class="gl-card"><p class="krx-name" data-i18n="hl.kosdaq_lo">코스닥 신저가</p><p class="gl-close down">{{ last.kosdaq_lo }}</p></div>
+  </div>
+  <div class="hl-chart"><canvas id="hl-chart" aria-label="52주 신고가·신저가 종목 수 추이" data-i18n-aria="hl.aria"></canvas></div>
+  <div class="movers-grid hl-names">
+    <div class="movers-col"><p class="krx-name"><span data-i18n="hl.today_hi">오늘 신고가</span> <span class="krx-sub">{{ hl.high_total }}</span></p>
+      <ol class="movers-list">{% for r in hl.high %}<li><span class="mv-name">{% if r.code %}<a href="{{ '/stock/' | relative_url }}?s={{ r.code }}">{{ r.name }}</a>{% else %}{{ r.name }}{% endif %} <span class="cx-mkt" data-i18n="mkt.{{ r.mkt }}">{% if r.mkt == "kospi" %}코스피{% else %}코스닥{% endif %}</span></span></li>{% endfor %}</ol>
+      {% if hl.high.size == 0 %}<p class="note" data-i18n="hl.none">없어요.</p>{% endif %}</div>
+    <div class="movers-col"><p class="krx-name"><span data-i18n="hl.today_lo">오늘 신저가</span> <span class="krx-sub">{{ hl.low_total }}</span></p>
+      <ol class="movers-list">{% for r in hl.low %}<li><span class="mv-name">{% if r.code %}<a href="{{ '/stock/' | relative_url }}?s={{ r.code }}">{{ r.name }}</a>{% else %}{{ r.name }}{% endif %} <span class="cx-mkt" data-i18n="mkt.{{ r.mkt }}">{% if r.mkt == "kospi" %}코스피{% else %}코스닥{% endif %}</span></span></li>{% endfor %}</ol>
+      {% if hl.low.size == 0 %}<p class="note" data-i18n="hl.none">없어요.</p>{% endif %}</div>
+  </div>
+  <p class="note" data-i18n="hl.note" data-w="{{ hl.window }}" data-a="{{ hl.eligible.kospi }}" data-b="{{ hl.eligible.kosdaq }}">종가 기준: 그날 종가가 직전 {{ hl.window }}거래일(약 52주) 종가 최고치보다 높으면 신고가, 최저치보다 낮으면 신저가(액면분할 등 보정). 장중 고가·저가 기준인 증권사 집계와 다를 수 있어요. 보통주만, 상장 1년 미만 제외(대상 코스피 {{ hl.eligible.kospi }}·코스닥 {{ hl.eligible.kosdaq }}종목). 종목 목록은 시가총액 상위 10 · 자료: 한국거래소(KRX) Open API</p>
+  <script>
+    (function () {
+      var H = {{ hl.series | jsonify }};
+      var css = getComputedStyle(document.documentElement);
+      function c(n) { return css.getPropertyValue(n).trim(); }
+      var chart, root = document.getElementById('krx-highlow');
+      function md(d) { var p = d.split('-'); return +p[1] + '/' + +p[2]; }
+      function draw(mkt) {
+        if (chart) chart.destroy();
+        chart = new Chart(document.getElementById('hl-chart'), {
+          type: 'bar',
+          data: { labels: H.map(function (r) { return md(r.d); }), datasets: [
+            { label: t('hl.hi', '신고가'), data: H.map(function (r) { return r[mkt + '_hi']; }), backgroundColor: c('--up'), borderRadius: 2 },
+            { label: t('hl.lo', '신저가'), data: H.map(function (r) { return -r[mkt + '_lo']; }), backgroundColor: c('--down'), borderRadius: 2 }] },
+          options: { animation: false, maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: c('--muted'), boxWidth: 10 } },
+              tooltip: { callbacks: { label: function (x) { return x.dataset.label + ' ' + Math.abs(x.parsed.y); } } } },
+            scales: { x: { stacked: true, ticks: { color: c('--muted'), maxTicksLimit: 8 }, grid: { display: false } },
+              y: { stacked: true, ticks: { color: c('--muted'), callback: function (v) { return Math.abs(v); } }, grid: { color: c('--line') } } } }
+        });
+      }
+      root.querySelectorAll('.hl-mkt button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          root.querySelectorAll('.hl-mkt button').forEach(function (x) { x.classList.toggle('on', x === b); });
+          draw(b.dataset.mkt);
+        });
+      });
+      draw('kospi');
+    })();
+  </script>
+</section>
+{% endif %}

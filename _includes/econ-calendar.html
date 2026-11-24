@@ -1,5 +1,6 @@
 <!-- 월간 경제 일정 달력: 중앙은행 회의(_data/econ_events.yml, 손으로 관리) + 미국 지표 발표(_data/econ_calendar.json, BLS·BEA 공식 .ics 자동 수집) -->
 <section class="ecal" id="econ-month">
+  <div class="ecal-now" aria-live="polite"></div>
   <div class="krx-head">
     <h2 data-i18n="ecal.title">경제 일정</h2>
     <div class="ecal-nav">
@@ -16,7 +17,8 @@
     (function () {
       var manual = {{ site.data.econ_events | jsonify }} || [];
       var auto = ({{ site.data.econ_calendar | jsonify }} || {}).events || [];
-      var FLAG = { us: '🇺🇸', kr: '🇰🇷', jp: '🇯🇵', cn: '🇨🇳', eu: '🇪🇺' };
+      // 국기: 윈도우는 국기 이모지를 글자(US·KR)로 보여 줘서 작은 SVG로 그린다
+      var FLAG = {"us": "<svg class=\"flag\" viewBox=\"0 0 24 16\" width=\"18\" height=\"12\" role=\"img\" aria-label=\"US\"><rect width=\"24\" height=\"16\" fill=\"#fff\"/><rect y=\"0.00\" width=\"24\" height=\"1.23\" fill=\"#b22234\"/><rect y=\"2.46\" width=\"24\" height=\"1.23\" fill=\"#b22234\"/><rect y=\"4.92\" width=\"24\" height=\"1.23\" fill=\"#b22234\"/><rect y=\"7.38\" width=\"24\" height=\"1.23\" fill=\"#b22234\"/><rect y=\"9.85\" width=\"24\" height=\"1.23\" fill=\"#b22234\"/><rect y=\"12.31\" width=\"24\" height=\"1.23\" fill=\"#b22234\"/><rect y=\"14.77\" width=\"24\" height=\"1.23\" fill=\"#b22234\"/><rect width=\"10\" height=\"8.62\" fill=\"#3c3b6e\"/><rect x=\".25\" y=\".25\" width=\"23.5\" height=\"15.5\" fill=\"none\" stroke=\"rgba(127,127,127,.45)\" stroke-width=\".5\"/></svg>", "kr": "<svg class=\"flag\" viewBox=\"0 0 24 16\" width=\"18\" height=\"12\" role=\"img\" aria-label=\"KR\"><rect width=\"24\" height=\"16\" fill=\"#fff\"/><path d=\"M8 8a4 4 0 0 1 8 0z\" fill=\"#cd2e3a\"/><path d=\"M8 8a4 4 0 0 0 8 0z\" fill=\"#0047a0\"/><path d=\"M3 3.5l2.5-1.5M3.6 4.4l2.5-1.5M18.5 2l2.5 1.5M17.9 2.9l2.5 1.5M3 12.5l2.5 1.5M3.6 11.6l2.5 1.5M18.5 14l2.5-1.5M17.9 13.1l2.5-1.5\" stroke=\"#000\" stroke-width=\".6\"/><rect x=\".25\" y=\".25\" width=\"23.5\" height=\"15.5\" fill=\"none\" stroke=\"rgba(127,127,127,.45)\" stroke-width=\".5\"/></svg>", "jp": "<svg class=\"flag\" viewBox=\"0 0 24 16\" width=\"18\" height=\"12\" role=\"img\" aria-label=\"JP\"><rect width=\"24\" height=\"16\" fill=\"#fff\"/><circle cx=\"12\" cy=\"8\" r=\"4.8\" fill=\"#bc002d\"/><rect x=\".25\" y=\".25\" width=\"23.5\" height=\"15.5\" fill=\"none\" stroke=\"rgba(127,127,127,.45)\" stroke-width=\".5\"/></svg>", "cn": "<svg class=\"flag\" viewBox=\"0 0 24 16\" width=\"18\" height=\"12\" role=\"img\" aria-label=\"CN\"><rect width=\"24\" height=\"16\" fill=\"#de2910\"/><polygon points=\"4.50,1.70 5.16,3.59 7.16,3.63 5.57,4.85 6.15,6.77 4.50,5.62 2.85,6.77 3.43,4.85 1.84,3.63 3.84,3.59\" fill=\"#ffde00\"/><polygon points=\"9.00,0.90 9.21,1.51 9.86,1.52 9.34,1.91 9.53,2.53 9.00,2.16 8.47,2.53 8.66,1.91 8.14,1.52 8.79,1.51\" fill=\"#ffde00\"/><polygon points=\"10.60,2.70 10.81,3.31 11.46,3.32 10.94,3.71 11.13,4.33 10.60,3.96 10.07,4.33 10.26,3.71 9.74,3.32 10.39,3.31\" fill=\"#ffde00\"/><polygon points=\"10.60,5.30 10.81,5.91 11.46,5.92 10.94,6.31 11.13,6.93 10.60,6.56 10.07,6.93 10.26,6.31 9.74,5.92 10.39,5.91\" fill=\"#ffde00\"/><polygon points=\"9.00,7.10 9.21,7.71 9.86,7.72 9.34,8.11 9.53,8.73 9.00,8.36 8.47,8.73 8.66,8.11 8.14,7.72 8.79,7.71\" fill=\"#ffde00\"/><rect x=\".25\" y=\".25\" width=\"23.5\" height=\"15.5\" fill=\"none\" stroke=\"rgba(127,127,127,.45)\" stroke-width=\".5\"/></svg>", "eu": "<svg class=\"flag\" viewBox=\"0 0 24 16\" width=\"18\" height=\"12\" role=\"img\" aria-label=\"EU\"><rect width=\"24\" height=\"16\" fill=\"#003399\"/><circle cx=\"17.00\" cy=\"8.00\" r=\".75\" fill=\"#fc0\"/><circle cx=\"16.33\" cy=\"10.50\" r=\".75\" fill=\"#fc0\"/><circle cx=\"14.50\" cy=\"12.33\" r=\".75\" fill=\"#fc0\"/><circle cx=\"12.00\" cy=\"13.00\" r=\".75\" fill=\"#fc0\"/><circle cx=\"9.50\" cy=\"12.33\" r=\".75\" fill=\"#fc0\"/><circle cx=\"7.67\" cy=\"10.50\" r=\".75\" fill=\"#fc0\"/><circle cx=\"7.00\" cy=\"8.00\" r=\".75\" fill=\"#fc0\"/><circle cx=\"7.67\" cy=\"5.50\" r=\".75\" fill=\"#fc0\"/><circle cx=\"9.50\" cy=\"3.67\" r=\".75\" fill=\"#fc0\"/><circle cx=\"12.00\" cy=\"3.00\" r=\".75\" fill=\"#fc0\"/><circle cx=\"14.50\" cy=\"3.67\" r=\".75\" fill=\"#fc0\"/><circle cx=\"16.33\" cy=\"5.50\" r=\".75\" fill=\"#fc0\"/><rect x=\".25\" y=\".25\" width=\"23.5\" height=\"15.5\" fill=\"none\" stroke=\"rgba(127,127,127,.45)\" stroke-width=\".5\"/></svg>"};
       var EN = LANG === 'en';
       var WD = EN ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : ['일', '월', '화', '수', '목', '금', '토'];
       var MON = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -78,6 +80,30 @@
         var p = sel.split('-');
         showDay(+p[0] === y && +p[1] === m + 1 ? sel : key(y, m, 1));
       }
+
+      // 오늘 발표 지표 카드 (달력 위). 오늘 일정이 없으면 다음 발표일
+      // 중요도: 3 금리 결정·물가·고용·GDP·PCE, 1 매주 일정, 나머지 2
+      var HIGH = ['FOMC', '금통위', 'BOJ', 'ECB', 'CPI', '고용', 'GDP', 'PCE'];
+      function imp(e) { return e.minor ? 1 : HIGH.indexOf(e.s) >= 0 ? 3 : 2; }
+      function stars(n) { return '<span class="ecal-imp i' + n + '" title="' + t('ecal.imp' + n, ['', '낮음', '보통', '높음'][n]) + '">' + '●●●'.slice(0, n) + '<i>' + '●●●'.slice(n) + '</i></span>'; }
+      function renderNow() {
+        var box = root.querySelector('.ecal-now'), k = today, label = t('ecal.now_today', '오늘 발표 지표');
+        if (!byDate[k]) {
+          var next = Object.keys(byDate).sort().filter(function (d) { return d > today; })[0];
+          if (!next) { box.hidden = true; return; }
+          k = next; label = t('ecal.now_next', '다음 발표 지표');
+        }
+        var p = k.split('-'), wd = WD[new Date(+p[0], +p[1] - 1, +p[2]).getDay()];
+        var dateTxt = EN ? wd + ', ' + MON[+p[1] - 1].slice(0, 3) + ' ' + (+p[2]) : (+p[1]) + '월 ' + (+p[2]) + '일 (' + wd + ')';
+        var hm = pad(now.getHours()) + ':' + pad(now.getMinutes());
+        box.innerHTML = '<div class="ecal-now-head"><h2>' + label + '</h2><span class="krx-sub">' + dateTxt + ' · ' + t('ecal.kst', '한국시간') + '</span></div>' +
+          '<ul>' + byDate[k].slice().sort(function (a, b) { return (a.time || '99').localeCompare(b.time || '99') || imp(b) - imp(a); }).map(function (e) {
+            var done = k === today && e.time && e.time <= hm;
+            return '<li class="' + (done ? 'done' : '') + (e.minor ? ' minor' : '') + '"><span class="ecal-time">' + (e.time || t('ecal.tbd', '시간 미정')) + '</span>' +
+              '<span class="ecal-flag">' + (FLAG[e.c] || '') + '</span><span class="ecal-t">' + esc(tn(e.t)) + '</span>' + stars(imp(e)) + '</li>';
+          }).join('') + '</ul>';
+      }
+      renderNow();
 
       root.querySelectorAll('.ecal-nav button').forEach(function (b) {
         b.addEventListener('click', function () {

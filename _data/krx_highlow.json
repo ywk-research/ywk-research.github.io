@@ -1,0 +1,478 @@
+{
+ "source": "한국거래소(KRX) Open API",
+ "d": "2026-11-23",
+ "window": 250,
+ "stored": 310,
+ "eligible": {
+  "kospi": 798,
+  "kosdaq": 1624
+ },
+ "series": [
+  {
+   "d": "2026-08-26",
+   "kospi_hi": 8,
+   "kospi_lo": 0,
+   "kosdaq_hi": 5,
+   "kosdaq_lo": 15
+  },
+  {
+   "d": "2026-08-27",
+   "kospi_hi": 4,
+   "kospi_lo": 2,
+   "kosdaq_hi": 2,
+   "kosdaq_lo": 12
+  },
+  {
+   "d": "2026-08-28",
+   "kospi_hi": 13,
+   "kospi_lo": 1,
+   "kosdaq_hi": 10,
+   "kosdaq_lo": 9
+  },
+  {
+   "d": "2026-08-31",
+   "kospi_hi": 6,
+   "kospi_lo": 1,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 9
+  },
+  {
+   "d": "2026-09-01",
+   "kospi_hi": 6,
+   "kospi_lo": 1,
+   "kosdaq_hi": 6,
+   "kosdaq_lo": 5
+  },
+  {
+   "d": "2026-09-02",
+   "kospi_hi": 1,
+   "kospi_lo": 4,
+   "kosdaq_hi": 3,
+   "kosdaq_lo": 22
+  },
+  {
+   "d": "2026-09-03",
+   "kospi_hi": 4,
+   "kospi_lo": 6,
+   "kosdaq_hi": 4,
+   "kosdaq_lo": 27
+  },
+  {
+   "d": "2026-09-04",
+   "kospi_hi": 2,
+   "kospi_lo": 3,
+   "kosdaq_hi": 6,
+   "kosdaq_lo": 11
+  },
+  {
+   "d": "2026-09-07",
+   "kospi_hi": 2,
+   "kospi_lo": 2,
+   "kosdaq_hi": 5,
+   "kosdaq_lo": 8
+  },
+  {
+   "d": "2026-09-08",
+   "kospi_hi": 2,
+   "kospi_lo": 7,
+   "kosdaq_hi": 5,
+   "kosdaq_lo": 19
+  },
+  {
+   "d": "2026-09-09",
+   "kospi_hi": 3,
+   "kospi_lo": 6,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 25
+  },
+  {
+   "d": "2026-09-10",
+   "kospi_hi": 2,
+   "kospi_lo": 4,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 27
+  },
+  {
+   "d": "2026-09-11",
+   "kospi_hi": 2,
+   "kospi_lo": 7,
+   "kosdaq_hi": 3,
+   "kosdaq_lo": 27
+  },
+  {
+   "d": "2026-09-14",
+   "kospi_hi": 3,
+   "kospi_lo": 8,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 41
+  },
+  {
+   "d": "2026-09-15",
+   "kospi_hi": 1,
+   "kospi_lo": 15,
+   "kosdaq_hi": 2,
+   "kosdaq_lo": 36
+  },
+  {
+   "d": "2026-09-16",
+   "kospi_hi": 2,
+   "kospi_lo": 20,
+   "kosdaq_hi": 4,
+   "kosdaq_lo": 38
+  },
+  {
+   "d": "2026-09-17",
+   "kospi_hi": 2,
+   "kospi_lo": 20,
+   "kosdaq_hi": 4,
+   "kosdaq_lo": 27
+  },
+  {
+   "d": "2026-09-18",
+   "kospi_hi": 7,
+   "kospi_lo": 20,
+   "kosdaq_hi": 5,
+   "kosdaq_lo": 30
+  },
+  {
+   "d": "2026-09-21",
+   "kospi_hi": 2,
+   "kospi_lo": 19,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 38
+  },
+  {
+   "d": "2026-09-22",
+   "kospi_hi": 4,
+   "kospi_lo": 22,
+   "kosdaq_hi": 4,
+   "kosdaq_lo": 43
+  },
+  {
+   "d": "2026-09-23",
+   "kospi_hi": 5,
+   "kospi_lo": 26,
+   "kosdaq_hi": 10,
+   "kosdaq_lo": 39
+  },
+  {
+   "d": "2026-09-28",
+   "kospi_hi": 4,
+   "kospi_lo": 8,
+   "kosdaq_hi": 13,
+   "kosdaq_lo": 36
+  },
+  {
+   "d": "2026-09-29",
+   "kospi_hi": 3,
+   "kospi_lo": 22,
+   "kosdaq_hi": 12,
+   "kosdaq_lo": 47
+  },
+  {
+   "d": "2026-09-30",
+   "kospi_hi": 2,
+   "kospi_lo": 21,
+   "kosdaq_hi": 6,
+   "kosdaq_lo": 50
+  },
+  {
+   "d": "2026-10-01",
+   "kospi_hi": 6,
+   "kospi_lo": 13,
+   "kosdaq_hi": 13,
+   "kosdaq_lo": 35
+  },
+  {
+   "d": "2026-10-02",
+   "kospi_hi": 6,
+   "kospi_lo": 13,
+   "kosdaq_hi": 11,
+   "kosdaq_lo": 26
+  },
+  {
+   "d": "2026-10-06",
+   "kospi_hi": 2,
+   "kospi_lo": 16,
+   "kosdaq_hi": 22,
+   "kosdaq_lo": 15
+  },
+  {
+   "d": "2026-10-07",
+   "kospi_hi": 9,
+   "kospi_lo": 17,
+   "kosdaq_hi": 12,
+   "kosdaq_lo": 15
+  },
+  {
+   "d": "2026-10-08",
+   "kospi_hi": 4,
+   "kospi_lo": 29,
+   "kosdaq_hi": 16,
+   "kosdaq_lo": 27
+  },
+  {
+   "d": "2026-10-12",
+   "kospi_hi": 3,
+   "kospi_lo": 55,
+   "kosdaq_hi": 4,
+   "kosdaq_lo": 76
+  },
+  {
+   "d": "2026-10-13",
+   "kospi_hi": 3,
+   "kospi_lo": 63,
+   "kosdaq_hi": 14,
+   "kosdaq_lo": 96
+  },
+  {
+   "d": "2026-10-14",
+   "kospi_hi": 4,
+   "kospi_lo": 23,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 57
+  },
+  {
+   "d": "2026-10-15",
+   "kospi_hi": 3,
+   "kospi_lo": 101,
+   "kosdaq_hi": 3,
+   "kosdaq_lo": 189
+  },
+  {
+   "d": "2026-10-16",
+   "kospi_hi": 3,
+   "kospi_lo": 10,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 21
+  },
+  {
+   "d": "2026-10-19",
+   "kospi_hi": 4,
+   "kospi_lo": 9,
+   "kosdaq_hi": 9,
+   "kosdaq_lo": 19
+  },
+  {
+   "d": "2026-10-20",
+   "kospi_hi": 1,
+   "kospi_lo": 38,
+   "kosdaq_hi": 5,
+   "kosdaq_lo": 53
+  },
+  {
+   "d": "2026-10-21",
+   "kospi_hi": 0,
+   "kospi_lo": 31,
+   "kosdaq_hi": 3,
+   "kosdaq_lo": 48
+  },
+  {
+   "d": "2026-10-22",
+   "kospi_hi": 1,
+   "kospi_lo": 71,
+   "kosdaq_hi": 1,
+   "kosdaq_lo": 88
+  },
+  {
+   "d": "2026-10-23",
+   "kospi_hi": 1,
+   "kospi_lo": 104,
+   "kosdaq_hi": 1,
+   "kosdaq_lo": 134
+  },
+  {
+   "d": "2026-10-26",
+   "kospi_hi": 0,
+   "kospi_lo": 169,
+   "kosdaq_hi": 2,
+   "kosdaq_lo": 193
+  },
+  {
+   "d": "2026-10-27",
+   "kospi_hi": 1,
+   "kospi_lo": 67,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 79
+  },
+  {
+   "d": "2026-10-28",
+   "kospi_hi": 3,
+   "kospi_lo": 34,
+   "kosdaq_hi": 12,
+   "kosdaq_lo": 60
+  },
+  {
+   "d": "2026-10-29",
+   "kospi_hi": 3,
+   "kospi_lo": 87,
+   "kosdaq_hi": 6,
+   "kosdaq_lo": 147
+  },
+  {
+   "d": "2026-10-30",
+   "kospi_hi": 2,
+   "kospi_lo": 109,
+   "kosdaq_hi": 4,
+   "kosdaq_lo": 241
+  },
+  {
+   "d": "2026-11-02",
+   "kospi_hi": 3,
+   "kospi_lo": 29,
+   "kosdaq_hi": 5,
+   "kosdaq_lo": 105
+  },
+  {
+   "d": "2026-11-03",
+   "kospi_hi": 4,
+   "kospi_lo": 67,
+   "kosdaq_hi": 4,
+   "kosdaq_lo": 232
+  },
+  {
+   "d": "2026-11-04",
+   "kospi_hi": 7,
+   "kospi_lo": 30,
+   "kosdaq_hi": 2,
+   "kosdaq_lo": 125
+  },
+  {
+   "d": "2026-11-05",
+   "kospi_hi": 5,
+   "kospi_lo": 71,
+   "kosdaq_hi": 0,
+   "kosdaq_lo": 234
+  },
+  {
+   "d": "2026-11-06",
+   "kospi_hi": 3,
+   "kospi_lo": 157,
+   "kosdaq_hi": 2,
+   "kosdaq_lo": 397
+  },
+  {
+   "d": "2026-11-09",
+   "kospi_hi": 4,
+   "kospi_lo": 122,
+   "kosdaq_hi": 3,
+   "kosdaq_lo": 259
+  },
+  {
+   "d": "2026-11-10",
+   "kospi_hi": 6,
+   "kospi_lo": 18,
+   "kosdaq_hi": 3,
+   "kosdaq_lo": 53
+  },
+  {
+   "d": "2026-11-11",
+   "kospi_hi": 5,
+   "kospi_lo": 15,
+   "kosdaq_hi": 6,
+   "kosdaq_lo": 40
+  },
+  {
+   "d": "2026-11-12",
+   "kospi_hi": 7,
+   "kospi_lo": 37,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 61
+  },
+  {
+   "d": "2026-11-13",
+   "kospi_hi": 6,
+   "kospi_lo": 40,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 74
+  },
+  {
+   "d": "2026-11-16",
+   "kospi_hi": 3,
+   "kospi_lo": 87,
+   "kosdaq_hi": 2,
+   "kosdaq_lo": 209
+  },
+  {
+   "d": "2026-11-17",
+   "kospi_hi": 3,
+   "kospi_lo": 172,
+   "kosdaq_hi": 3,
+   "kosdaq_lo": 312
+  },
+  {
+   "d": "2026-11-18",
+   "kospi_hi": 3,
+   "kospi_lo": 92,
+   "kosdaq_hi": 5,
+   "kosdaq_lo": 188
+  },
+  {
+   "d": "2026-11-19",
+   "kospi_hi": 6,
+   "kospi_lo": 45,
+   "kosdaq_hi": 5,
+   "kosdaq_lo": 89
+  },
+  {
+   "d": "2026-11-20",
+   "kospi_hi": 1,
+   "kospi_lo": 196,
+   "kosdaq_hi": 5,
+   "kosdaq_lo": 336
+  },
+  {
+   "d": "2026-11-23",
+   "kospi_hi": 0,
+   "kospi_lo": 308,
+   "kosdaq_hi": 0,
+   "kosdaq_lo": 469
+  }
+ ],
+ "high": [],
+ "high_total": 0,
+ "low": [
+  {
+   "name": "LG에너지솔루션",
+   "mkt": "kospi"
+  },
+  {
+   "name": "현대차",
+   "mkt": "kospi"
+  },
+  {
+   "name": "기아",
+   "mkt": "kospi"
+  },
+  {
+   "name": "한화에어로스페이스",
+   "mkt": "kospi"
+  },
+  {
+   "name": "두산에너빌리티",
+   "mkt": "kospi"
+  },
+  {
+   "name": "HD현대중공업",
+   "mkt": "kospi"
+  },
+  {
+   "name": "NAVER",
+   "mkt": "kospi"
+  },
+  {
+   "name": "POSCO홀딩스",
+   "mkt": "kospi"
+  },
+  {
+   "name": "한국전력",
+   "mkt": "kospi"
+  },
+  {
+   "name": "고려아연",
+   "mkt": "kospi"
+  }
+ ],
+ "low_total": 777,
+ "updated_at": "2026-11-24 17:09 KST"
+}

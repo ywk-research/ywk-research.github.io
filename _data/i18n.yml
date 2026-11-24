@@ -9,7 +9,12 @@ en:
   nav.aria: Menu
   nav.briefing: Briefing
   nav.data: Data
-  nav.watchlist: Watchlist Backtest
+  nav.watchlist: Backtest
+  nav.equity: Equity
+  nav.rate: Rate
+  nav.fx: FX
+  nav.commodity: Commodity
+  nav.calendar: Calendar
   nav.about: About
   nav.macro: Macro
   theme.aria: Toggle light/dark mode
@@ -73,18 +78,72 @@ en:
   movers.losers: Top losers
   movers.value: Most traded
   movers.note: 'Gainer and loser rankings: KOSPI {kospi}; KOSDAQ {kosdaq}. The most-traded ranking only excludes preferred shares and SPACs. Stock names are shown in Korean.'
+  cross.title: MA Crossovers <span class="krx-sub">{from}–{to} · last {n} trading days</span>
+  cross.golden: Golden cross
+  cross.dead: Death cross
+  cross.empty: None in the last {n} trading days.
+  cross.note: 'A golden cross is when the short moving average crosses above the long one; a death cross is the reverse. Dates show the trading day of the cross; % change is for {d} only. Universe: KOSPI {kospi}; KOSDAQ {kosdaq} ({stocks} stocks). Computed from daily closes, adjusted for splits and bonus issues using KRX base prices. Not investment advice · Source: Korea Exchange (KRX) Open API · Updated {updated}'
 
   # 홈: 세계 시장 뉴스 (_includes/tv-news.html)
   news.title: World Market News
   news.note: 'Click a headline to open the story on TradingView · News widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
 
   # 데이터 탭 (data.html, _includes/econ-calendar.html, tv-calendar.html) · 매크로 탭 (macro.html, _includes/macro.html)
+  etf.title: 'Most-traded ETFs <span class="krx-sub">as of {d}</span>'
+  etf.name: ETF
+  etf.index: Underlying index
+  etf.close: Close
+  etf.pct: Change
+  etf.value: Value traded
+  etf.aum: Net assets
+  etf.note: "{n} listed ETFs, total value traded ₩{total} (shown in Korean units) · Source: Korea Exchange (KRX) Open API. ETF names are shown in Korean."
+  hl.title: '52-week Highs & Lows <span class="krx-sub">as of {d}</span>'
+  hl.kospi_hi: KOSPI new highs
+  hl.kospi_lo: KOSPI new lows
+  hl.kosdaq_hi: KOSDAQ new highs
+  hl.kosdaq_lo: KOSDAQ new lows
+  hl.hi: New highs
+  hl.lo: New lows
+  hl.today_hi: New highs today
+  hl.today_lo: New lows today
+  hl.none: None.
+  hl.aria: Number of stocks at 52-week highs and lows
+  hl.note: "Based on closing prices: a stock makes a new high (low) when its close is above (below) every close of the previous {w} trading days (about 52 weeks), adjusted for splits. May differ from broker counts that use intraday highs and lows. Common stocks only, excluding those listed less than a year (KOSPI {a}, KOSDAQ {b} stocks). Lists show the 10 largest by market cap. Stock names are shown in Korean · Source: Korea Exchange (KRX) Open API"
+  # 상위 탭 페이지 (equity·rate·fx·commodity·calendar.html)
+  equity.title: Equity
+  equity.intro: "Sector trends and stock activity in the Korean equity market. Source: Korea Exchange (KRX) Open API"
+  rate.title: Rate
+  rate.intro: US and Korean Treasury yield curves, term spreads, the Korea–US rate gap and Korean short-term rates.
+  fx.title: FX
+  fx.intro: Korean won exchange rate trends.
+  fx.tv_title: Korean Won FX
+  fx.tv_note: Delayed quotes, last 1 year
+  cmd.title: Commodity
+  cmd.intro: Price trends for metals and energy.
+  cmd.tv_title: Commodities
+  cmd.tv_note: Spot / front-month delayed quotes, last 1 year
+  cal.title: Calendar
+  cal.intro: This month's major economic releases and rate decisions, with results.
+  tv.credit: Quote widget
   data.title: Data
+  sheat.title: 'Sector Heatmap <span class="krx-sub">as of {d}</span>'
+  sheat.d1: 1D
+  sheat.w1: 1W
+  sheat.m1: 1M
+  sheat.note_d1: "Change vs. previous trading day · Source: Korea Exchange (KRX) Open API"
+  sheat.note_base: "Change vs. close on {b} · Source: Korea Exchange (KRX) Open API"
   data.intro: Indicators and schedules one level deeper than the home page summary.
   ecal.title: Economic Calendar
   ecal.prev: Previous month
   ecal.next: Next month
   ecal.today: Today
+  ecal.now_today: Today's releases
+  ecal.now_next: Next releases
+  ecal.kst: Korea time
+  ecal.tbd: TBD
+  ecal.imp1: Low
+  ecal.imp2: Medium
+  ecal.imp3: High
   ecal.empty: No major events.
   ecal.note: "Korea time (KST). Only official release schedules published by governments, central banks and statistics agencies (US BLS, BEA, Census Bureau, Labor Department, ISM, Fed, ECB, Bank of Korea, Statistics Korea, Korea trade ministry, Bank of Japan, Japan Statistics Bureau, Cabinet Office, China NBS). Korea and China 2027 data dates will be added once the agencies publish them. Small grey items are weekly releases."
   tvcal.title: Indicator Details (Forecast &amp; Actual)
@@ -98,20 +157,60 @@ en:
   mc.gap: Korea–US Rate Gap <span class="krx-sub">Korea − US, pp</span>
   mc.short: Korea Short-term Rates <span class="krx-sub">%</span>
   mc.note: 'As of US {us}, Korea {kr} (local dates). US term spread is 10Y−2Y, Korea is 10Y−3Y. The Korea–US gap compares values on the same date (or the latest before it); the US policy rate is the upper bound of the Fed target range. Card changes in bp from the previous day · Sources: U.S. Treasury, Bank of Korea ECOS, FRED (Federal Reserve) · Updated {u}'
+  range.3y: 3Y
+  # 매크로 확장: 美 실질금리 (_includes/us-real-rate.html)
+  rr.title: US Real Yields &amp; Inflation Expectations
+  rr.split: 10Y = Real Yield + Breakeven <span class="krx-sub">%</span>
+  rr.bei: Breakeven Inflation (BEI) <span class="krx-sub">%</span>
+  rr.note: 'As of {d} (US date). Real yields are the TIPS yields published by the U.S. Treasury; breakeven inflation (BEI) is the nominal Treasury yield minus the real yield of the same maturity. Card changes in bp from the previous day · Source: U.S. Treasury · Updated {u}'
+  # 원화 환율 (_includes/krw-fx.html)
+  kfx.title: Korean Won Base Rates (BOK)
+  kfx.index: Indexed to 100 at the start of the period <span class="krx-sub">Higher = weaker won</span>
+  kfx.note: 'Base rates as of {d} (Seoul FX market; JPY per 100 yen). Card changes from the previous business day · Source: Bank of Korea ECOS · Updated {u}'
+  # 한국 월간 경제지표 (_includes/kr-monthly.html)
+  km.title: Korea Monthly Indicators
+  km.cpi: Consumer Price Inflation <span class="krx-sub">YoY, %</span>
+  km.exports: Export Growth <span class="krx-sub">YoY, %</span>
+  km.balance: Trade &amp; Current Account Balance <span class="krx-sub">USD 100m</span>
+  km.ip: All-industry Production <span class="krx-sub">YoY, %</span>
+  km.unemp: Unemployment Rate <span class="krx-sub">Seasonally adjusted, %</span>
+  km.csi: Consumer Sentiment Index <span class="krx-sub">100 = long-run average</span>
+  km.note: 'Card dates show each indicator''s latest reference month. CPI from Statistics Korea (core excludes agricultural products and oil), trade on a customs-clearance basis, current account, production and unemployment seasonally adjusted. Card changes from the previous month · Source: Bank of Korea ECOS · Updated {u}'
 
   # 관심종목 탭 (watchlist.html, _includes/tv-watchlist.html)
   wl.title: Watchlist Backtest
   wl.intro: "A hypothetical portfolio of US stocks I'm watching, held at fixed weights. Simple buy-and-hold: bought once on the base date and held (no rebalancing, no dividends)."
+  wl.intro2: A hypothetical portfolio of stocks I'm watching, held at fixed weights.
+  wl.tab_kr: Korea
+  wl.tab_us: US
+  wlk.mix: Holdings
+  wlk.code: Code
+  wlk.first: '{d} close'
+  wlk.last: '{d} close'
+  wlk.ret_all: Return
+  wlk.periods: Returns by Period
+  wlk.periods_note: Assumes the portfolio is bought at the weights on the first close of each period and held. Excess return is portfolio − KOSPI (pp).
+  wlk.p1w: 1W
+  wlk.p1m: 1M
+  wlk.p3m: 3M
+  wlk.p6m: 6M
+  wlk.pall: Full period
+  wlk.kospi: KOSPI
+  wlk.excess: Excess (pp)
+  wlk.strat: 'Full-period Performance <span class="krx-sub">{s} ~ {e}</span>'
+  wlk.hold: Buy and hold
+  wlk.rebal: Monthly rebalance
+  wlk.m_ret: Cumulative return
+  wlk.m_excess: vs KOSPI
+  wlk.m_mdd: Max drawdown
+  wlk.m_vol: Volatility (ann.)
+  wlk.m_sharpe: Sharpe ratio
+  wlk.chart: 'Cumulative Return <span class="krx-sub">start = 100</span>'
+  wlk.note: 'Price returns based on {n} trading days of KRX daily closes (adjusted for splits and bonus issues). Dividends are not in the price data and are excluded; trading costs and taxes are ignored. Monthly rebalance resets the weights at the first close of each month. Volatility is the annualized standard deviation of daily returns; Sharpe ratio is (annualized mean return − 91-day CD rate {rf}%) ÷ volatility. Not investment advice · {e} close · Source: Korea Exchange (KRX) Open API'
   wl.th_name: Stock
   wl.th_ticker: Ticker
   wl.th_weight: Weight
   wl.th_base: Base price ({d} close)
-  wl.periods: Portfolio returns by period
-  wl.p1w: 1W
-  wl.p1m: 1M
-  wl.p3m: 3M
-  wl.p1y: 1Y
-  wl.pnote: The % in each box is the portfolio return over that period (daily closes, delayed quotes).
   wl.note: 'Share counts are set from the target weights at the {d} close and held unchanged since (value 100 on the base date). Rebalancing, dividends, FX and fees are not included. Use the tabs above to switch between the portfolio and the benchmark.'
   wl.note2: 'Last 12 months, returns measured from the first day of the period. Delayed quotes, not investment advice · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
   wl.portfolio: Portfolio
@@ -148,15 +247,12 @@ en:
   st.no_inst: No 13F summary for this stock yet.
   st.edgar_note: 'Source: U.S. SEC EDGAR · Updated {u}'
   st.no_edgar: SEC EDGAR data is collected daily for Watchlist stocks only. This stock isn't covered yet.
-  st.krx_none: Korean stocks are covered if their market cap is at least ₩1tn (KOSPI) or ₩300bn (KOSDAQ), or they rank high in trading value. This stock isn't covered yet.
+  st.krx_none: Korean stock charts are available only for stocks listed on this site (movers, moving-average crosses, 52-week highs/lows, Korean backtest). This stock isn't on those lists right now.
   st.k_cap: Market cap
-  st.k_val: Trading value
   st.k_vol: Volume
-  st.k_shares_out: Shares outstanding
   st.chart: Price Chart
   st.close: Close
-  st.ohl: Open {o} · High {h} · Low {l}
-  st.krx_note: 'Daily prices as of the {d} close (not adjusted for splits) · Source: Korea Exchange (KRX) Open API'
+  st.krx_note: 'Daily close and volume as of {d} (not adjusted for splits) · Source: Korea Exchange (KRX) Open API'
   st.dart: Recent Filings
   st.no_dart: No filings in the last 90 days.
   st.dart_note: 'Last 90 days, up to 20 filings. Titles open the original filing on DART (in Korean) · Source: Financial Supervisory Service DART Open API · Updated {u}'
@@ -224,6 +320,10 @@ names:
   개인소득·지출(PCE 물가): Personal income and outlays (PCE)
   고용: Jobs
   금통위: BOK
+  코스피 200: KOSPI 200
+  코스피 200 선물지수: KOSPI 200 Futures
+  코스닥 150: KOSDAQ 150
+  코스닥 150 선물지수: KOSDAQ 150 Futures
   소매판매: Retail sales
   내구재 주문: Durable goods orders
   내구재: Durables
@@ -266,10 +366,37 @@ names:
   콜(1일): Call (1-day)
   CD(91일): CD (91-day)
   CP(91일): CP (91-day)
+  # 매크로 확장 (us-real-rate, krw-fx, kr-monthly)
+  美 10년 실질금리: US 10Y real yield
+  美 10년 BEI: US 10Y breakeven
+  美 5년 BEI: US 5Y breakeven
+  명목 10년: Nominal 10Y
+  실질 10년: Real 10Y
+  BEI 10년: 10Y BEI
+  BEI 5년: 5Y BEI
+  원/100엔: JPY/KRW (100 yen)
+  원/위안: CNY/KRW
+  원/유로: EUR/KRW
+  소비자물가: CPI
+  근원물가: Core CPI
+  근원(농산물·석유류 제외): Core (ex. agri & oil)
+  수출: Exports
+  경상수지: Current account
+  무역수지: Trade balance
+  실업률: Unemployment
+  소비자심리: Consumer sentiment
+  소비자심리지수: Consumer Sentiment Index
+  전산업생산: All-industry production
   # 관심종목 (_data/watchlist.yml)
   트랜스다임: TransDigm
   에퀴닉스: Equinix
   델타항공: Delta Air Lines
   GE 에어로스페이스: GE Aerospace
+  심텍: Simmtech
+  삼성E&A: Samsung E&A
+  OCI홀딩스: OCI Holdings
+  그대로 보유: Buy and hold
+  월별 리밸런싱: Monthly rebalance
+  코스피: KOSPI
   # 글 종류 (브리핑 front matter의 category_label)
   주간 코멘트: Weekly Comment

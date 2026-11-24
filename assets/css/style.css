@@ -54,7 +54,9 @@ a:hover { text-decoration: underline; }
 .site-header .head-top { display: flex; align-items: center; justify-content: space-between; height: 40px; }
 .brand { font-weight: 800; font-size: 14px; color: var(--muted); letter-spacing: 0.02em; }
 .brand:hover { color: var(--text); text-decoration: none; }
-.site-nav { display: flex; justify-content: center; gap: 6px; padding: 0 16px 12px; overflow-x: auto; scrollbar-width: none; }
+.site-nav { display: flex; justify-content: flex-start; gap: 6px; padding: 0 16px 12px; overflow-x: auto; scrollbar-width: none; }
+.site-nav a:first-child { margin-left: auto; }
+.site-nav a:last-child { margin-right: auto; } /* 넘칠 땐 왼쪽부터, 남을 땐 가운데 */
 .site-nav a { flex: none; padding: 8px 20px; border-radius: 999px; font-size: 17px; font-weight: 600; color: var(--muted); }
 .site-nav a:hover { color: var(--text); background: var(--soft); text-decoration: none; }
 .site-nav a.on { color: var(--text); background: var(--soft); box-shadow: inset 0 0 0 1px var(--line); }
@@ -225,6 +227,8 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .ecal-cell.today .ecal-num { display: inline-block; align-self: flex-start; padding: 1px 6px; border-radius: 999px; background: var(--accent); color: var(--bg); }
 .ecal-ev { display: block; font-size: 12px; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ecal-ev b { font-weight: 500; margin-left: 3px; }
+.flag { display: inline-block; vertical-align: -1px; border-radius: 2px; flex: none; }
+.ecal-ev .flag { width: 14px; height: 10px; }
 .ecal-ev.minor { font-size: 11px; color: var(--muted); }
 .ecal-more { font-size: 11px; color: var(--muted); }
 .ecal-day li.minor { color: var(--muted); }
@@ -248,12 +252,17 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .wl-table th { color: var(--muted); font-weight: 600; font-size: 13px; }
 .wl-table .num { text-align: right; font-variant-numeric: tabular-nums; }
 .wl-table th:nth-child(n+3) { text-align: right; }
-.wl-sub { margin: 0 0 8px; color: var(--muted); font-weight: 600; font-size: 13px; }
-.wl-pgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.wl-p { display: flex; flex-direction: column; height: 200px; padding: 8px 4px 0; background: var(--soft); border-radius: 12px; min-width: 0; overflow: hidden; }
-.wl-p .krx-name { padding: 0 8px; margin: 0; }
-.wl-p .tv-w .tradingview-widget-container { height: 100%; }
-@media (max-width: 760px) { .wl-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.wl-tabs { margin: 4px 0 8px; }
+.wl-tabs button { font-size: 14px; padding: 5px 16px; }
+.wl-lead { color: var(--muted); }
+.wl-kr h2 { margin-top: 28px; }
+.wl-scroll { overflow-x: auto; }
+.wl-scroll .wl-table { min-width: 520px; }
+.wl-table td.up { color: var(--up); } .wl-table td.down { color: var(--down); } .wl-table td.flat { color: var(--muted); }
+.wl-table tr.wl-strong td { font-weight: 700; }
+.wl-table td:first-child { white-space: nowrap; }
+.wl-kr-chart { margin-top: 16px; }
+.wl-kr-chart .mc-chart { height: 300px; }
 .tv-wl-box { height: 460px; }
 .tv-wl-chart { height: 480px; margin-top: 20px; }
 @media (max-width: 560px) { .tv-wl-box { height: 420px; } .tv-wl-chart { height: 380px; } }
@@ -274,11 +283,75 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 :root:not([data-lang="en"]) .en-only { display: none !important; }
 :root[data-lang="en"] .ko-only { display: none !important; }
 
+
+/* 업종별 등락 히트맵 (_includes/krx-sector-heat.html) */
+.sheat { margin-bottom: 40px; }
+.sheat .krx-head { flex-wrap: wrap; gap: 8px; }
+.sheat-ctl { display: flex; gap: 10px; flex-wrap: wrap; padding-bottom: 6px; }
+.sheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 4px; }
+.sheat-tile { display: flex; flex-direction: column; justify-content: space-between; min-height: 64px; padding: 8px 10px; border-radius: 8px; color: var(--text); }
+.sheat-name { font-size: 13px; line-height: 1.3; }
+.sheat-v { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .sheat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .sheat-tile { min-height: 56px; padding: 6px 8px; } }
+
+/* 이평선 크로스 (_includes/krx-cross.html) */
+.cross .krx-head h2 .krx-sub { margin-left: 6px; }
+.cross .krx-name .up { color: var(--up); } .cross .krx-name .down { color: var(--down); }
+.cross-pair[hidden] { display: none; }
+.cx-mkt { font-size: 11px; color: var(--muted); margin-left: 2px; }
+.cx-new { color: var(--text); font-weight: 600; }
+.cx-empty { margin: 10px 0 4px; }
+@media (max-width: 560px) { .cross .krx-head { flex-wrap: wrap; } }
+.cross .movers-list { max-height: 440px; overflow-y: auto; padding-right: 4px; }
+
+/* 원화 환율 카드 4칸 (_includes/krw-fx.html) */
+.gl-cards.kfx-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 760px) { .gl-cards.kfx-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ETF 거래대금 상위 (_includes/krx-etf.html) */
+.etf { margin-top: 40px; }
+.etf-wrap { overflow-x: auto; background: var(--soft); border-radius: 12px; padding: 6px 12px; }
+.etf-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.etf-table th { text-align: left; font-weight: 500; color: var(--muted); font-size: 13px; padding: 8px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.etf-table td { padding: 7px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.etf-table tr:last-child td { border-bottom: 0; }
+.etf-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.etf-table td.up { color: var(--up); font-weight: 600; } .etf-table td.down { color: var(--down); font-weight: 600; }
+.etf-rank { color: var(--muted); width: 1.5em; }
+.etf-name { font-weight: 600; }
+.etf-idx { color: var(--muted); }
+@media (max-width: 760px) { .etf-idx, .etf-aum { display: none; } }
+@media (max-width: 560px) { .etf-close, .etf-code { display: none; } .etf-table { font-size: 13px; } .etf-name { white-space: normal; } }
+
+/* 오늘 발표 지표 카드 (_includes/econ-calendar.html) */
+.ecal-now { margin-bottom: 32px; padding: 16px 20px; background: var(--soft); border-radius: 14px; box-shadow: inset 0 0 0 1px var(--line); }
+.ecal-now-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.ecal-now-head h2 { margin: 0; font-size: 19px; border: 0; padding: 0; }
+.ecal-now ul { list-style: none; margin: 0; padding: 0; }
+.ecal-now li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 15px; }
+.ecal-now li:first-child { border-top: 0; }
+.ecal-now li.done { opacity: .5; }
+.ecal-now li.minor { color: var(--muted); }
+.ecal-now .ecal-time { min-width: 52px; font-weight: 600; }
+.ecal-now .ecal-t { flex: 1; min-width: 0; }
+.ecal-imp { font-size: 9px; letter-spacing: 1px; color: var(--up); white-space: nowrap; }
+.ecal-imp i { font-style: normal; color: var(--line); }
+.ecal-imp.i2 { color: #e0a030; } .ecal-imp.i1 { color: var(--muted); }
+
+/* 52주 신고가·신저가 (_includes/krx-highlow.html) */
+.hl { margin-top: 40px; }
+.gl-cards.hl-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hl-cards .gl-close.up { color: var(--up); } .hl-cards .gl-close.down { color: var(--down); }
+.hl-chart { height: 260px; margin: 16px 0; }
+.hl-names { margin-top: 8px; }
+@media (max-width: 760px) { .gl-cards.hl-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+
 /* 종목 상세 탭 (stock.html) */
 a.mv-name { color: var(--text); }
 a.mv-name:hover { color: var(--accent); text-decoration: none; }
-.wl-table td a { color: var(--text); }
-.wl-table td a:hover { color: var(--accent); text-decoration: none; }
+.wl-table td a, .mv-name a { color: var(--text); }
+.wl-table td a:hover, .mv-name a:hover { color: var(--accent); text-decoration: none; }
 .st-search { display: flex; gap: 8px; margin-top: 20px; }
 .st-search input { flex: 1; min-width: 0; font: inherit; font-size: 15px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); color: var(--text); }
 .st-search input:focus { outline: none; border-color: var(--accent); }

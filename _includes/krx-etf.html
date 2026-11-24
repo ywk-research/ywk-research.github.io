@@ -1,0 +1,39 @@
+<!-- 국내 ETF 거래대금 상위 (_data/krx_etf.json, 자료: KRX Open API ETF 일별매매정보) -->
+{% assign ef = site.data.krx_etf %}
+{% if ef and ef.top.size > 0 %}
+<section class="krx etf" id="krx-etf">
+  <div class="krx-head">
+    <h2 data-i18n="etf.title" data-d="{{ ef.d | date: '%b %-d' }}">ETF 거래대금 상위 <span class="krx-sub">{{ ef.d | date: "%m.%d" }} 기준</span></h2>
+  </div>
+  <div class="etf-wrap">
+    <table class="etf-table">
+      <thead><tr>
+        <th>#</th><th data-i18n="etf.name">종목</th><th data-i18n="etf.index" class="etf-idx">기초지수</th>
+        <th data-i18n="etf.close" class="num etf-close">종가</th><th data-i18n="etf.pct" class="num">등락률</th>
+        <th data-i18n="etf.value" class="num">거래대금</th><th data-i18n="etf.aum" class="num etf-aum">순자산</th>
+      </tr></thead>
+      <tbody>
+        {% for r in ef.top %}
+        <tr>
+          <td class="etf-rank">{{ forloop.index }}</td>
+          <td class="etf-name">{{ r.name }} <span class="krx-sub etf-code">{{ r.code }}</span></td>
+          <td class="etf-idx" data-tn="{{ r.index }}">{{ r.index }}</td>
+          <td class="num etf-close">{{ r.close_txt }}</td>
+          <td class="num {% if r.pct > 0 %}up{% elsif r.pct < 0 %}down{% else %}flat{% endif %}">{% if r.pct > 0 %}+{% elsif r.pct < 0 %}−{% endif %}{{ r.pct | abs | round: 2 }}%</td>
+          <td class="num" data-en="₩{{ r.value | divided_by: 10000.0 | round: 2 }}tn">{{ r.value_txt }}</td>
+          <td class="num etf-aum"{% if r.aum > 0 %} data-en="₩{{ r.aum | divided_by: 10000.0 | round: 2 }}tn"{% endif %}>{{ r.aum_txt }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="note" data-i18n="etf.note" data-n="{{ ef.count }}" data-total="{{ ef.total_txt }}">상장 ETF {{ ef.count }}개, 전체 거래대금 {{ ef.total_txt }} 원 · 자료: 한국거래소(KRX) Open API</p>
+  <script>
+    (function () {
+      if (LANG !== 'en') return;
+      var root = document.getElementById('krx-etf');
+      root.querySelectorAll('[data-tn]').forEach(function (el) { el.textContent = tn(el.dataset.tn); });
+    })();
+  </script>
+</section>
+{% endif %}

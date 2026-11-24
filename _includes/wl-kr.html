@@ -1,0 +1,71 @@
+<!-- 국내 관심종목 백테스트. 데이터: _data/watchlist_kr.json (tools/krx_backtest.py, 종목·비중은 _data/watchlist_kr.yml) -->
+{% assign bk = site.data.watchlist_kr %}
+{% if bk and bk.series %}
+{% include mc-common.html %}
+<section class="krx wl-kr" id="watchlist-kr">
+  <h2 data-i18n="wlk.mix">구성</h2>
+  <div class="wl-scroll"><table class="wl-table" id="wlk-mix"></table></div>
+
+  <h2 data-i18n="wlk.periods">기간별 수익률</h2>
+  <div class="wl-scroll"><table class="wl-table" id="wlk-periods"></table></div>
+  <p class="note" data-i18n="wlk.periods_note">각 기간 첫날 종가에 비중대로 사서 그대로 들고 있었다고 가정해요. 초과수익은 포트폴리오 − 코스피(%p).</p>
+
+  <h2 data-i18n="wlk.strat" data-s="{{ bk.start }}" data-e="{{ bk.end }}">전체 기간 성과 <span class="krx-sub">{{ bk.start }} ~ {{ bk.end }}</span></h2>
+  <div class="wl-scroll"><table class="wl-table" id="wlk-strat"></table></div>
+  <div class="mc-box wl-kr-chart"><p class="krx-name" data-i18n="wlk.chart">누적 수익률 <span class="krx-sub">시작일 = 100</span></p><div class="mc-chart"><canvas id="wlk-chart" aria-label="포트폴리오와 코스피 누적 수익률"></canvas></div></div>
+  <p class="note" data-i18n="wlk.note" data-n="{{ bk.days }}" data-rf="{{ bk.rf }}" data-e="{{ bk.end }}">KRX 일별 종가(분할·증자 보정) {{ bk.days }}거래일 기준 가격 수익률이에요. 배당은 시세에 없어 빠지고, 거래비용·세금도 반영하지 않아요. 월별 리밸런싱은 매달 첫 거래일 종가에 비중을 다시 맞춘 경우예요. 변동성은 일간 수익률의 연율 표준편차, 샤프지수는 (연율 평균 수익률 − CD 91일물 {{ bk.rf }}%) ÷ 변동성. 투자 권유가 아니에요 · {{ bk.end }} 종가 · 자료: 한국거래소(KRX) Open API</p>
+  <script>
+    (function () {
+      var B = {{ bk | jsonify }};
+      var T = window.t || function (k, ko) { return ko; }, N = window.tn || function (x) { return x; };
+      function f(v, d) { return v == null ? '-' : Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+      function pct(v, cls) {
+        if (v == null) return '<td class="num">-</td>';
+        var c = v > 0 ? 'up' : v < 0 ? 'down' : 'flat';
+        return '<td class="num' + (cls === false ? '' : ' ' + c) + '">' + (v > 0 ? '+' : v < 0 ? '−' : '') + f(v, 2) + '%</td>';
+      }
+      function head(cols) { return '<thead><tr>' + cols.map(function (c, i) { return '<th' + (i ? ' class="num"' : '') + '>' + c + '</th>'; }).join('') + '</tr></thead>'; }
+
+      // 구성
+      var all = B.periods[B.periods.length - 1];
+      document.getElementById('wlk-mix').innerHTML = head([T('wl.th_name', '종목'), T('wlk.code', '코드'), T('wl.th_weight', '비중'),
+        T('wlk.first', '시작일 종가', { d: B.start.slice(5).replace('-', '/') }), T('wlk.last', '최근 종가', { d: B.end.slice(5).replace('-', '/') }), T('wlk.ret_all', '수익률')]) +
+        '<tbody>' + B.stocks.map(function (s) {
+          return '<tr><td><a href="{{ '/stock/' | relative_url }}?s=' + s.code + '">' + N(s.name) + '</a></td><td class="num">' + s.code + '</td><td class="num">' + f(s.weight, 1) + '%</td><td class="num">' +
+            f(s.first, 0) + '</td><td class="num">' + f(s.last, 0) + '</td>' + pct(all.stocks[s.code]) + '</tr>';
+        }).join('') + '</tbody>';
+
+      // 기간별 수익률
+      var PL = { '1w': T('wlk.p1w', '1주'), '1m': T('wlk.p1m', '1개월'), '3m': T('wlk.p3m', '3개월'), '6m': T('wlk.p6m', '6개월'), 'all': T('wlk.pall', '전체') };
+      var P = B.periods;
+      function row(label, get, cls, strong) {
+        return '<tr' + (strong ? ' class="wl-strong"' : '') + '><td>' + label + '</td>' + P.map(function (p) { return pct(get(p), cls); }).join('') + '</tr>';
+      }
+      document.getElementById('wlk-periods').innerHTML = head([''].concat(P.map(function (p) { return PL[p.key]; }))) + '<tbody>' +
+        row(T('wl.portfolio', '포트폴리오'), function (p) { return p.port; }, true, true) +
+        row(T('wlk.kospi', '코스피'), function (p) { return p.kospi; }) +
+        row(T('wlk.excess', '초과수익(%p)'), function (p) { return p.excess; }, true, true) +
+        B.stocks.map(function (s) { return row(N(s.name), function (p) { return p.stocks[s.code]; }); }).join('') + '</tbody>';
+
+      // 전체 기간 전략 비교
+      var S = B.strategies, ST = [['hold', T('wlk.hold', '그대로 보유')], ['rebal', T('wlk.rebal', '월별 리밸런싱')], ['kospi', T('wlk.kospi', '코스피')]];
+      document.getElementById('wlk-strat').innerHTML = head(['', T('wlk.m_ret', '누적 수익률'), T('wlk.m_excess', '코스피 대비'), T('wlk.m_mdd', '최대 낙폭'),
+        T('wlk.m_vol', '변동성(연율)'), T('wlk.m_sharpe', '샤프지수')]) + '<tbody>' + ST.map(function (x) {
+          var m = S[x[0]];
+          return '<tr' + (x[0] !== 'kospi' ? ' class="wl-strong"' : '') + '><td>' + x[1] + '</td>' + pct(m.ret) + (x[0] === 'kospi' ? '<td class="num">-</td>' : pct(m.excess)) +
+            pct(m.mdd, false) + '<td class="num">' + f(m.vol, 1) + '%</td><td class="num">' + (m.sharpe == null ? '-' : (m.sharpe < 0 ? '−' : '') + f(m.sharpe, 2)) + '</td></tr>';
+        }).join('') + '</tbody>';
+
+      // 누적 수익률 차트 (숨겨진 탭 안에 있으면 보일 때 다시 그림)
+      var D = B.series.d;
+      function pairs(k) { return D.map(function (d, i) { return [d, B.series[k][i]]; }); }
+      function draw() {
+        MC.line(document.getElementById('wlk-chart'), [['그대로 보유', pairs('hold'), 0], ['월별 리밸런싱', pairs('rebal'), 1], ['코스피', pairs('kospi'), 3]],
+          { zeroAt: 100, digits: 1 });
+      }
+      draw();
+      document.addEventListener('wl-tab', function (e) { if (e.detail === 'kr') draw(); });
+    })();
+  </script>
+</section>
+{% endif %}

@@ -4,6 +4,9 @@
 - _data/krx_index.json : 코스피·코스닥·VKOSPI 일별 종가 누적
   (처음 받는 시리즈는 최근 BACKFILL_DAYS일을 채우고, 이후에는 마지막 저장일 다음 날부터 받는다)
 - _data/krx_movers.json : 직전 거래일 코스피·코스닥 등락률 상·하위, 거래대금 상위
+- _data/krx_cross.json : 이평선 골든·데드크로스 종목 (tools/krx_cross.py)
+  과거 종가 원본(tools/state/)은 저장소에 커밋하지 않고 GitHub Actions 캐시에만 둔다(KRX 약관: 제3자 제공 금지).
+- _data/watchlist_kr.json : 국내 관심종목 백테스트 (tools/krx_backtest.py, 같은 과거 종가 사용)
 - 이용 신청이 안 된 부가 서비스(VKOSPI, 종목 시세)는 건너뛰고 나머지는 계속 받는다.
 """
 import datetime as dt
@@ -15,10 +18,17 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+import krx_backtest
+import krx_cross
+import krx_highlow
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_PATH = os.path.join(ROOT, "_data", "krx_index.json")
 MOVERS_PATH = os.path.join(ROOT, "_data", "krx_movers.json")
 SECTORS_PATH = os.path.join(ROOT, "_data", "krx_sectors.json")
+ETF_PATH = os.path.join(ROOT, "_data", "krx_etf.json")
+ETF_ENDPOINT = "etp/etf_bydd_trd"
+ETF_TOP_N = 10
 BASE = "https://data-dbg.krx.co.kr/svc/apis/"
 KST = dt.timezone(dt.timedelta(hours=9))
 BACKFILL_DAYS = int(os.environ.get("BACKFILL_DAYS", "400"))
@@ -104,8 +114,6 @@ def update_index(key, today):
                         series.append({
                             "d": day.isoformat(), "close": close,
                             "chg": num(row.get("CMPPREVDD_IDX")), "pct": num(row.get("FLUC_RT")),
-                            "open": num(row.get("OPNPRC_IDX")), "high": num(row.get("HGPRC_IDX")),
-                            "low": num(row.get("LWPRC_IDX")),
                         })
                         added += 1
                     time.sleep(0.25)
@@ -140,13 +148,36 @@ def last_trading_day(key, today):
     return None
 
 
+def closes_on_or_before(endpoint, day, key):
+    """day 또는 그 직전 거래일의 {지수명: 종가}. (거래일, 값) 반환"""
+    for back in range(10):
+        d = day - dt.timedelta(days=back)
+        if d.weekday() >= 5:
+            continue
+        rows = fetch(endpoint, d.strftime("%Y%m%d"), key)
+        if rows:
+            return d, {r.get("IDX_NM", ""): num(r.get("CLSPRC_IDX")) for r in rows}
+        time.sleep(0.25)
+    return None, {}
+
+
+def chg(now, then):
+    return round((now / then - 1) * 100, 2) if now and then else None
+
+
 def update_sectors(key, day):
     out = {"source": "한국거래소(KRX) Open API", "d": day.isoformat()}
     for mkt in ("kospi", "kosdaq"):
         rows = fetch(SERIES[mkt][0], day.strftime("%Y%m%d"), key)
         names = [r.get("IDX_NM", "") for r in rows]
         print(f"{mkt} 지수 시리즈 {len(names)}개: " + ", ".join(names))
-        sec = [{"name": r["IDX_NM"], "close": num(r.get("CLSPRC_IDX")), "pct": num(r.get("FLUC_RT"))}
+        # 1주·1개월 등락: 7일·1개월 전(휴장이면 그 직전 거래일) 종가와 비교
+        w_day, w_close = closes_on_or_before(SERIES[mkt][0], day - dt.timedelta(days=7), key)
+        m_day, m_close = closes_on_or_before(SERIES[mkt][0], day - dt.timedelta(days=30), key)
+        out[mkt + "_base"] = {"w1": w_day and w_day.isoformat(), "m1": m_day and m_day.isoformat()}
+        sec = [{"name": r["IDX_NM"], "pct": num(r.get("FLUC_RT")),
+                "w1": chg(num(r.get("CLSPRC_IDX")), w_close.get(r["IDX_NM"])),
+                "m1": chg(num(r.get("CLSPRC_IDX")), m_close.get(r["IDX_NM"]))}
                for r in rows if is_sector(r.get("IDX_NM", "")) and num(r.get("FLUC_RT")) is not None]
         out[mkt] = sorted(sec, key=lambda x: x["pct"], reverse=True)
         print(f"{mkt} 업종 {len(sec)}개 선택: " + ", ".join(x["name"] for x in sec))
@@ -183,32 +214,96 @@ def won_txt(eok):
 def slim(r):
     eok = round((num(r.get("ACC_TRDVAL")) or 0) / 1e8)
     return {
-        "name": r["ISU_NM"], "code": r["ISU_CD"],
-        "close": num(r.get("TDD_CLSPRC")), "pct": num(r.get("FLUC_RT")),
+        "name": r["ISU_NM"], "code": r["ISU_CD"], "pct": num(r.get("FLUC_RT")),
         "value": eok, "value_txt": won_txt(eok).strip(),  # 거래대금, 억 원
     }
 
 
-def update_movers(key, day):
+def fetch_stocks(key, day):
+    """시장별 종목 일별매매정보. 휴장일이면 빈 목록."""
+    out = {}
+    for mkt, (endpoint, _) in STOCKS.items():
+        out[mkt] = fetch(endpoint, day.strftime("%Y%m%d"), key)
+        time.sleep(0.25)
+    return out
+
+
+def ranked(rows, min_cap):
+    return [r for r in rows if is_common_stock(r)
+            and (num(r.get("MKTCAP")) or 0) >= min_cap and num(r.get("FLUC_RT")) is not None]
+
+
+def update_movers(stocks, day):
     out = {"source": "한국거래소(KRX) Open API", "d": day.isoformat(), "rules": {}}
-    bas_dd = day.strftime("%Y%m%d")
-    try:
-        for mkt, (endpoint, min_cap) in STOCKS.items():
-            rows = [r for r in fetch(endpoint, bas_dd, key) if is_common_stock(r)]
-            big = [r for r in rows if (num(r.get("MKTCAP")) or 0) >= min_cap and num(r.get("FLUC_RT")) is not None]
-            by_pct = sorted(big, key=lambda r: num(r["FLUC_RT"]))
-            by_val = sorted(rows, key=lambda r: num(r.get("ACC_TRDVAL")) or 0, reverse=True)
-            out[mkt] = {
-                "gainers": [slim(r) for r in reversed(by_pct[-TOP_N:])],
-                "losers": [slim(r) for r in by_pct[:TOP_N]],
-                "value": [slim(r) for r in by_val[:TOP_N]],
-            }
-            out["rules"][mkt] = f"시가총액 {won_txt(min_cap // 100_000_000).strip()} 원 이상, 우선주·스팩 제외"
-            time.sleep(0.25)
-    except NotApproved as e:
-        print(f"건너뜀 — KRX API 인증 실패({e}): 유가증권·코스닥 일별매매정보 이용 승인 여부를 확인하세요.")
-        return 0
+    for mkt, (endpoint, min_cap) in STOCKS.items():
+        rows = [r for r in stocks[mkt] if is_common_stock(r)]
+        by_pct = sorted(ranked(rows, min_cap), key=lambda r: num(r["FLUC_RT"]))
+        by_val = sorted(rows, key=lambda r: num(r.get("ACC_TRDVAL")) or 0, reverse=True)
+        out[mkt] = {
+            "gainers": [slim(r) for r in reversed(by_pct[-TOP_N:])],
+            "losers": [slim(r) for r in by_pct[:TOP_N]],
+            "value": [slim(r) for r in by_val[:TOP_N]],
+        }
+        out["rules"][mkt] = rule_txt(min_cap)
     return write_if_changed(MOVERS_PATH, out)
+
+
+def rule_txt(min_cap):
+    return f"시가총액 {won_txt(min_cap // 100_000_000).strip()} 원 이상, 우선주·스팩 제외"
+
+
+def update_cross(key, stocks, day):
+    """이평선 골든·데드크로스 (tools/krx_cross.py). 처음 한 번은 과거 종가를 채운다."""
+    days = krx_cross.sync(lambda d: fetch_stocks(key, d), day, stocks)
+    if len(days) < krx_cross.MIN_DAYS:  # 캐시가 없고 다시 채우기도 덜 됐으면 이전 결과를 그대로 둔다
+        print(f"과거 종가 {len(days)}거래일뿐이라 크로스·신고가 갱신을 건너뜀 (필요 {krx_cross.MIN_DAYS})")
+        return 0
+    universe = {}
+    for mkt, (endpoint, min_cap) in STOCKS.items():
+        for r in ranked(stocks[mkt], min_cap):
+            universe[r["ISU_CD"]] = {"name": r["ISU_NM"], "mkt": mkt,
+                                     "cap": num(r.get("MKTCAP")), "pct": num(r.get("FLUC_RT"))}
+    out = krx_cross.build(days, universe, day)
+    out["rules"] = {mkt: rule_txt(min_cap) for mkt, (_, min_cap) in STOCKS.items()}
+    changed = write_if_changed(krx_cross.OUT_PATH, out)
+    # 52주 신고가·신저가: 같은 과거 종가로, 시가총액 조건 없이 보통주 전체
+    try:
+        common = {}
+        for mkt in STOCKS:
+            for r in stocks[mkt]:
+                if is_common_stock(r):
+                    common[r["ISU_CD"]] = {"name": r["ISU_NM"], "mkt": mkt, "cap": num(r.get("MKTCAP"))}
+        changed |= write_if_changed(krx_highlow.OUT_PATH, krx_highlow.build(days, common, day))
+    except Exception as e:  # 신고가 계산이 실패해도 크로스 결과는 남긴다
+        print(f"52주 신고가·신저가 실패: {type(e).__name__}: {e}")
+    return changed
+
+
+def update_etf(key, day):
+    """국내 ETF 거래대금 상위 (ETF 일별매매정보). 승인 전이면 건너뛴다."""
+    try:
+        rows = fetch(ETF_ENDPOINT, day.strftime("%Y%m%d"), key)
+    except NotApproved as e:
+        print(f"건너뜀 — KRX API 인증 실패({e}): ETF 일별매매정보 이용 승인 여부를 확인하세요.")
+        return 0
+    if not rows:
+        print("ETF 응답 0건")
+        return 0
+    rows = sorted(rows, key=lambda r: num(r.get("ACC_TRDVAL")) or 0, reverse=True)
+    top = []
+    for r in rows[:ETF_TOP_N]:
+        eok = round((num(r.get("ACC_TRDVAL")) or 0) / 1e8)
+        nav_eok = round((num(r.get("INVSTASST_NETASST_TOTAMT")) or 0) / 1e8)
+        top.append({"name": r.get("ISU_NM", ""), "code": r.get("ISU_CD", ""),
+                    "close": num(r.get("TDD_CLSPRC")), "close_txt": f"{int(num(r.get('TDD_CLSPRC')) or 0):,}",
+                    "pct": num(r.get("FLUC_RT")),
+                    "value": eok, "value_txt": won_txt(eok).strip(),
+                    "aum": nav_eok, "aum_txt": won_txt(nav_eok).strip() if nav_eok else "",
+                    "index": r.get("IDX_IND_NM", "")})
+    total = round(sum(num(r.get("ACC_TRDVAL")) or 0 for r in rows) / 1e8)
+    out = {"source": "한국거래소(KRX) Open API", "d": day.isoformat(), "count": len(rows),
+           "total_txt": won_txt(total).strip(), "top": top}
+    return write_if_changed(ETF_PATH, out)
 
 
 def main():
@@ -222,8 +317,28 @@ def main():
         print("최근 거래일을 찾지 못했습니다.")
         return
     sec = update_sectors(key, day)
-    moved = update_movers(key, day)
-    print(f"{day} 기준 · 지수 추가 {added}건, 업종 {'갱신' if sec else '변경 없음'}, 종목 {'갱신' if moved else '변경 없음'}")
+    moved = cross = 0
+    try:
+        stocks = fetch_stocks(key, day)
+    except NotApproved as e:
+        print(f"건너뜀 — KRX API 인증 실패({e}): 유가증권·코스닥 일별매매정보 이용 승인 여부를 확인하세요.")
+    else:
+        moved = update_movers(stocks, day)
+        try:
+            cross = update_cross(key, stocks, day)
+        except Exception as e:  # 크로스 계산이 실패해도 다른 데이터는 저장한다
+            print(f"이평선 크로스 실패: {type(e).__name__}: {e}")
+        try:  # 국내 관심종목 백테스트 (종목 이름은 KRX 응답으로 확인)
+            names = {r.get("ISU_CD", ""): r.get("ISU_NM", "") for rows in stocks.values() for r in rows}
+            if len(krx_cross._load_all()) >= krx_cross.MIN_DAYS:
+                krx_backtest.update(names=names)
+            else:
+                print("과거 종가가 부족해 국내 백테스트 갱신을 건너뜀")
+        except Exception as e:
+            print(f"국내 백테스트 실패: {type(e).__name__}: {e}")
+    etf = update_etf(key, day)
+    print(f"{day} 기준 · 지수 추가 {added}건, 업종 {'갱신' if sec else '변경 없음'}, "
+          f"종목 {'갱신' if moved else '변경 없음'}, 크로스 {'갱신' if cross else '변경 없음'}, ETF {'갱신' if etf else '변경 없음'}")
 
 
 if __name__ == "__main__":

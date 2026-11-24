@@ -201,7 +201,7 @@ def f13_holdings(url, cusips):
         a[0] += sh
         a[1] += val
         issuer[c] = r.get("NAMEOFISSUER")
-    # 단가(평가액 ÷ 주식 수)가 다른 기관들과 3배 넘게 다르면 입력 오류로 보고 뺀다
+    # 단가(평가액 ÷ 주식 수)가 다른 기관들과 3배 넘게 다르면(천 달러 단위 평가액은 허용) 입력 오류로 보고 뺀다
     # (예: 평가액을 주식 수 칸에 적은 보고서)
     clean = {}
     for c in cusips:
@@ -209,7 +209,9 @@ def f13_holdings(url, cusips):
         mid = px[len(px) // 2] if px else 0
         ok, bad = {}, []
         for who, (s, v) in out[c].items():
-            if mid and s and (v / s < mid / 3 or v / s > mid * 3):
+            r = v / s if s else 0
+            fine = mid / 3 <= r <= mid * 3 or mid / 3000 <= r <= mid * 3 / 1000  # 평가액을 천 달러 단위로 낸 경우는 주식 수가 맞음
+            if mid and s and not fine:
                 bad.append(who)
             else:
                 ok[who] = s

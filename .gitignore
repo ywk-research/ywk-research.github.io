@@ -1,1 +1,3 @@
 __pycache__/
+# KRX 원본 종가: 저장소에 올리지 않고 GitHub Actions 캐시에만 둔다
+tools/state/

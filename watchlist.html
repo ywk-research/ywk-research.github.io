@@ -7,7 +7,34 @@ wide: true
 ---
 <section class="intro">
   <h1 data-i18n="wl.title">관심종목 백테스트</h1>
-  <p data-i18n="wl.intro">관심 있는 미국 종목을 정해 둔 비중으로 들고 있었다면 어땠을지 보는 가상 포트폴리오예요. 기준일에 한 번 사서 그대로 들고 있는 단순 매수·보유 방식이에요(리밸런싱·배당 제외).</p>
+  <p data-i18n="wl.intro2">관심 종목을 정해 둔 비중으로 들고 있었다면 어땠을지 보는 가상 포트폴리오예요.</p>
 </section>
 
+<div class="krx-range wl-tabs" id="wl-tabs" role="tablist" aria-label="국내/해외">
+  <button type="button" role="tab" data-tab="kr" class="on" data-i18n="wl.tab_kr">국내</button>
+  <button type="button" role="tab" data-tab="us" data-i18n="wl.tab_us">해외</button>
+</div>
+
+<div class="wl-pane" data-pane="kr">
+{% include wl-kr.html %}
+</div>
+
+<div class="wl-pane" data-pane="us" hidden>
+  <p class="wl-lead" data-i18n="wl.intro">관심 있는 미국 종목을 정해 둔 비중으로 들고 있었다면 어땠을지 보는 가상 포트폴리오예요. 기준일에 한 번 사서 그대로 들고 있는 단순 매수·보유 방식이에요(리밸런싱·배당 제외).</p>
 {% include tv-watchlist.html %}
+</div>
+
+<script>
+  (function () {
+    var btns = document.querySelectorAll('#wl-tabs button'), panes = document.querySelectorAll('.wl-pane');
+    function show(k) {
+      btns.forEach(function (b) { var on = b.dataset.tab === k; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+      panes.forEach(function (p) { p.hidden = p.dataset.pane !== k; });
+      document.dispatchEvent(new CustomEvent('wl-tab', { detail: k }));
+    }
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () { show(b.dataset.tab); try { history.replaceState(null, '', '#' + b.dataset.tab); } catch (e) {} });
+    });
+    show(location.hash === '#us' ? 'us' : 'kr');
+  })();
+</script>

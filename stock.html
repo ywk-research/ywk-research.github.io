@@ -182,7 +182,7 @@ wide: true
     krxIndex.then(function (ix) {
       var s = ix && ix.stocks[code];
       if (!s) {
-        body.innerHTML = '<p class="note st-empty">' + esc(t('st.krx_none', '국내 종목은 코스피 시가총액 1조 원, 코스닥 3천억 원 이상이거나 거래대금 상위인 종목만 받아 둬요. 이 종목은 아직 없어요.')) + '</p>';
+        body.innerHTML = '<p class="note st-empty">' + esc(t('st.krx_none', '국내 종목은 사이트에 나오는 종목(종목 등락, 이평선 크로스, 52주 신고가·신저가, 국내 백테스트)만 차트를 제공해요. 이 종목은 지금 목록에 없어요.')) + '</p>';
         return;
       }
       document.title = s.n + ' · ' + document.title.split(' · ').pop();
@@ -190,12 +190,9 @@ wide: true
       var cap = LANG === 'en' ? '₩' + fmt(s.cap / 10000, 1) + 'tn' : (s.cap >= 10000 ? fmt(Math.floor(s.cap / 10000)) + '조 ' + fmt(s.cap % 10000) + '억' : fmt(s.cap) + '억');
       var mk = s.m === 'KOSPI' ? t('mkt.kospi', '코스피') : t('mkt.kosdaq', '코스닥');
       body.innerHTML =
-        '<div class="st-head"><h2 class="st-name">' + esc(s.n) + ' <span class="krx-sub">' + code + ' · ' + esc(mk) + (s.sect ? ' ' + esc(s.sect) : '') + '</span></h2>' +
+        '<div class="st-head"><h2 class="st-name">' + esc(s.n) + ' <span class="krx-sub">' + code + ' · ' + esc(mk) + '</span></h2>' +
         '<p class="st-price"><b>' + fmt(s.close) + '</b> <span class="krx-chg ' + cls + '">' + (s.chg > 0 ? '▲' : s.chg < 0 ? '▼' : '') + ' ' + fmt(Math.abs(s.chg)) + ' (' + (s.pct > 0 ? '+' : '') + fmt(s.pct, 2) + '%)</span></p></div>' +
-        '<div class="st-kpis four">' +
-          kpi(t('st.k_cap', '시가총액'), cap) + kpi(t('st.k_val', '거래대금'), LANG === 'en' ? '₩' + fmt(s.val / 10, 0) + 'bn' : fmt(s.val) + '억') +
-          kpi(t('st.k_vol', '거래량'), fmt(s.vol)) + kpi(t('st.k_shares_out', '상장주식수'), fmt(s.sh)) +
-        '</div>' +
+        '<div class="st-kpis">' + kpi(t('st.k_cap', '시가총액'), cap) + kpi(t('st.k_vol', '거래량'), fmt(s.vol)) + '</div>' +
         '<div class="krx-head"><h2>' + esc(t('st.chart', '주가 차트')) + '</h2><div class="krx-range" id="st-range">' +
           '<button type="button" data-days="22">' + esc(t('range.1m', '1개월')) + '</button>' +
           '<button type="button" data-days="66">' + esc(t('range.3m', '3개월')) + '</button>' +
@@ -207,11 +204,8 @@ wide: true
         '<h2>' + esc(t('st.flow', '투자자별 수급')) + '</h2><p class="note">' + esc(t('st.flow_none', 'KRX Open API가 투자자별 거래실적(외국인·기관·개인)을 제공하지 않아서, 공식 출처가 생기면 붙일게요.')) + '</p>';
 
       dart(code);
-      Promise.all([getJSON(BASE + 'krx/h/' + code + '.json').catch(function () { return []; }),
-                   getJSON(BASE + 'krx/recent.json').catch(function () { return {}; })]).then(function (r) {
-        var seen = {}, bars = r[0].concat(r[1][code] || []).filter(function (b) { if (seen[b[0]]) return false; seen[b[0]] = 1; return true; });
-        bars.sort(function (a, b) { return a[0] < b[0] ? -1 : 1; });
-        document.getElementById('st-krx-note').textContent = t('st.krx_note', '{d} 종가 기준 일별 시세(수정주가 아님) · 자료: 한국거래소(KRX) Open API', { d: ix.d });
+      getJSON(BASE + 'krx/c/' + code + '.json').catch(function () { return []; }).then(function (bars) {
+        document.getElementById('st-krx-note').textContent = t('st.krx_note', '{d} 종가 기준 일별 종가·거래량(수정주가 아님) · 자료: 한국거래소(KRX) Open API', { d: ix.d });
         if (!bars.length) return;
         drawKrx(bars, 260);
         document.querySelectorAll('#st-range button').forEach(function (b) {
@@ -246,24 +240,24 @@ wide: true
   var charts = {};
   function drawKrx(all, days) {
     var s = all.slice(-days);
-    var up = s[s.length - 1][4] >= s[0][4];
+    var up = s[s.length - 1][1] >= s[0][1];
     var labels = s.map(function (b) { return b[0].slice(2).replace(/-/g, '/'); });
     var tick = { color: color('--muted') };
     if (charts.p) charts.p.destroy();
     if (charts.v) charts.v.destroy();
     charts.p = new Chart(document.getElementById('st-price'), {
       type: 'line',
-      data: { labels: labels, datasets: [{ data: s.map(function (b) { return b[4]; }), borderColor: color(up ? '--up' : '--down'), borderWidth: 1.8, pointRadius: 0, tension: 0.1 }] },
+      data: { labels: labels, datasets: [{ data: s.map(function (b) { return b[1]; }), borderColor: color(up ? '--up' : '--down'), borderWidth: 1.8, pointRadius: 0, tension: 0.1 }] },
       options: { animation: false, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
         plugins: { legend: { display: false }, tooltip: { callbacks: {
-          label: function (c) { var b = s[c.dataIndex]; return [t('st.close', '종가') + ' ' + fmt(b[4]), t('st.ohl', '시가 {o} · 고가 {h} · 저가 {l}', { o: fmt(b[1]), h: fmt(b[2]), l: fmt(b[3]) })]; } } } },
+          label: function (c) { return t('st.close', '종가') + ' ' + fmt(c.parsed.y); } } } },
         scales: { x: { ticks: Object.assign({ maxTicksLimit: 6 }, tick), grid: { display: false } },
                   y: { ticks: Object.assign({ maxTicksLimit: 5, callback: function (v) { return fmt(v); } }, tick), grid: { color: color('--line') } } } }
     });
     charts.v = new Chart(document.getElementById('st-vol'), {
       type: 'bar',
-      data: { labels: labels, datasets: [{ data: s.map(function (b) { return b[5]; }),
-        backgroundColor: s.map(function (b, i) { var p = i ? s[i - 1][4] : b[1]; return color(b[4] >= p ? '--up' : '--down') + '99'; }) }] },
+      data: { labels: labels, datasets: [{ data: s.map(function (b) { return b[2]; }),
+        backgroundColor: s.map(function (b, i) { var p = i ? s[i - 1][1] : b[1]; return color(b[1] >= p ? '--up' : '--down') + '99'; }) }] },
       options: { animation: false, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
         plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (c) { return t('st.k_vol', '거래량') + ' ' + fmt(c.parsed.y); } } } },
         scales: { x: { display: false }, y: { ticks: Object.assign({ maxTicksLimit: 2, callback: function (v) { return v >= 1e6 ? fmt(v / 1e6, 1) + 'M' : fmt(v); } }, tick), grid: { display: false } } } }
