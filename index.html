@@ -9,12 +9,14 @@ wide: true
   <p data-i18n="home.intro">{{ site.description }}. 미국·아시아 증시, 금리·환율·원자재, 전일 주요 뉴스와 오늘 일정을 한 장에 정리합니다.</p>
 </section>
 
+{% include key-strip.html %}
+
 <div class="home-grid">
 <div class="home-data">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-{% include tv-global.html %}
-{% include global-index.html %}
 {% include krx-index.html %}
+{% include global-index.html %}
+{% include tv-global.html %}
 </div>
 
 <aside class="home-brief">

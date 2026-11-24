@@ -1,0 +1,39 @@
+<!-- 홈 맨 위 핵심 숫자 한 줄: 직접 받아 쌓는 공식 데이터만 쓴다 (KRX, ECOS, 미 재무부, Cboe, FRED/EIA) -->
+{% assign ki = site.data.krx_index %}{% assign fx = site.data.krw_fx %}{% assign mc = site.data.macro %}{% assign gi = site.data.global_index %}{% assign cm = site.data.commodity %}
+<section class="keystrip" id="key-numbers" aria-label="핵심 숫자" data-i18n-aria="ks.aria">
+  <div class="ks-row" id="ks-row"></div>
+  <p class="note" data-i18n="ks.note">전 거래일 종가 기준, 날짜는 각 지표의 기준일(현지) · 자료: 한국거래소, 한국은행 ECOS, 미 재무부, Cboe, FRED(EIA)</p>
+  <script>
+    (function () {
+      var KI = {{ ki | jsonify }}, FX = {{ fx | jsonify }}, MC = {{ mc | jsonify }}, GI = {{ gi | jsonify }}, CM = {{ cm | jsonify }};
+      function fmt(v, d) { return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+      function md(d) { return d.slice(5).replace('-', '/'); }
+      var items = [];
+      // 값 [날짜, 값] 배열 두 개(최근, 직전)로 카드 하나를 만든다. kind: 'pct'(등락률) 또는 'bp'(금리 변동)
+      function add(key, ko, rows, dec, kind, unit) {
+        if (!rows || rows.length < 2) return;
+        var a = rows[rows.length - 2], b = rows[rows.length - 1];
+        if (a[1] == null || b[1] == null) return;
+        var d = b[1] - a[1], chg;
+        if (kind === 'bp') chg = (d > 0 ? '+' : d < 0 ? '−' : '') + Math.abs(Math.round(d * 100)) + 'bp';
+        else { var p = d / a[1] * 100; chg = (p > 0 ? '+' : p < 0 ? '−' : '') + fmt(Math.abs(p), 2) + '%'; }
+        items.push({ key: key, name: t('ks.' + key, ko), d: b[0], v: fmt(b[1], dec) + (unit || ''), chg: chg, cls: d > 0 ? 'up' : d < 0 ? 'down' : 'flat' });
+      }
+      function pairs(list) { return (list || []).map(function (r) { return [r.d, r.close]; }); }
+      if (KI) { add('kospi', '코스피', pairs(KI.kospi), 2, 'pct'); add('kosdaq', '코스닥', pairs(KI.kosdaq), 2, 'pct'); }
+      if (FX && FX.series) add('usdkrw', '원/달러', FX.series.usd, 1, 'pct');
+      if (MC) {
+        var i10 = (MC.us_tenors || []).indexOf('10Y'), i3 = (MC.kr_tenors || []).indexOf('3Y');
+        if (i10 >= 0) add('us10y', '美 10년물', (MC.us || []).map(function (r) { return [r[0], r[1][i10]]; }), 2, 'bp', '%');
+        if (i3 >= 0) add('kr3y', '국고 3년', (MC.kr || []).map(function (r) { return [r[0], r[1][i3]]; }), 2, 'bp', '%');
+      }
+      if (GI && GI.series) GI.series.forEach(function (s) { if (s.key === 'vix') add('vix', 'VIX', pairs(s.data), 2, 'pct'); });
+      if (CM && CM.energy) CM.energy.series.forEach(function (s) { if (s.key === 'wti') add('wti', 'WTI', s.data, 2, 'pct', ''); });
+      var row = document.getElementById('ks-row');
+      row.innerHTML = items.map(function (x) {
+        return '<div class="ks-item"><p class="ks-name">' + x.name + ' <span class="krx-sub">' + md(x.d) + '</span></p>' +
+          '<p class="ks-val">' + x.v + '</p><p class="ks-chg ' + x.cls + '">' + x.chg + '</p></div>';
+      }).join('');
+    })();
+  </script>
+</section>
