@@ -1,8 +1,11 @@
 ---
 layout: default
 title: 소개
+title_en: About
 permalink: /about/
 ---
+
+<div class="ko-only" markdown="1">
 
 # 소개
 
@@ -23,3 +26,30 @@ permalink: /about/
 
 <!-- 이름, 관심 분야, 연락처(링크드인 등)를 여기에 적어 주세요. -->
 글로벌 주식과 ETF를 공부하고 기록합니다.
+
+</div>
+
+<div class="en-only" markdown="1">
+
+# About
+
+**YWK Research** is a one-page recap of the previous day's global markets, published every morning before the Korean stock market opens.
+
+## What it covers
+
+- **Pre-market Briefing (every weekday):** US and Asian equities, rates, FX and commodities, notable stocks, key overnight news and today's schedule
+- **Weekly Comment (once a week):** a look back at the week and what to watch next week
+
+Briefings are written in Korean for now. An English edition is planned.
+
+## Principles
+
+- All figures are as of the previous close and cross-checked against public sources.
+- Schedules are in Korea time (KST).
+- Nothing here is investment advice or a stock recommendation.
+
+## Author
+
+I study and write about global equities and ETFs.
+
+</div>

@@ -1,14 +1,22 @@
 # 관심종목 가상 포트폴리오 (관심종목 탭 /watchlist/)
 # base_price: 기준일 종가. 비중(weight)과 기준가로 주식 수를 정해, 기준일 가치가 100이 되게 함
-# 종목을 바꾸면 기준일과 기준가도 같은 날 종가로 함께 고칠 것
-base_date: "2026-11-23"
+# 비중은 합이 100이 아니어도 됨(합으로 나눠 씀). 종목을 바꾸면 기준가도 기준일 종가로 함께 고칠 것
+base_date: "2026-11-20"
 benchmark: AMEX:SPY
 stocks:
   - symbol: NYSE:TDG
     name: 트랜스다임
-    weight: 50
+    weight: 25
     base_price: 1121.80
   - symbol: NASDAQ:EQIX
     name: 에퀴닉스
-    weight: 50
+    weight: 25
     base_price: 968.22
+  - symbol: NYSE:DAL
+    name: 델타항공
+    weight: 25
+    base_price: 80.01
+  - symbol: NYSE:GE
+    name: GE 에어로스페이스
+    weight: 25
+    base_price: 309.62

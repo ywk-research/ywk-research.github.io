@@ -225,6 +225,9 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .ecal-cell.today .ecal-num { display: inline-block; align-self: flex-start; padding: 1px 6px; border-radius: 999px; background: var(--accent); color: var(--bg); }
 .ecal-ev { display: block; font-size: 12px; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ecal-ev b { font-weight: 500; margin-left: 3px; }
+.ecal-ev.minor { font-size: 11px; color: var(--muted); }
+.ecal-more { font-size: 11px; color: var(--muted); }
+.ecal-day li.minor { color: var(--muted); }
 .ecal-day { margin-top: 14px; padding: 12px 16px; background: var(--soft); border-radius: 12px; }
 .ecal-day h3 { margin: 0 0 6px; font-size: 16px; }
 .ecal-day ul { list-style: none; margin: 0; padding: 0; }
@@ -239,19 +242,31 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 }
 /* 관심종목 탭 */
 .tv-wl { margin-top: 28px; }
-.wl-mix { margin: 0 0 10px; font-weight: 600; color: var(--muted); font-size: 14px; }
+.wl-top { display: grid; gap: 18px; margin-bottom: 20px; }
+.wl-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.wl-table th, .wl-table td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+.wl-table th { color: var(--muted); font-weight: 600; font-size: 13px; }
+.wl-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.wl-table th:nth-child(n+3) { text-align: right; }
+.wl-sub { margin: 0 0 8px; color: var(--muted); font-weight: 600; font-size: 13px; }
+.wl-pgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.wl-p { display: flex; flex-direction: column; height: 200px; padding: 8px 4px 0; background: var(--soft); border-radius: 12px; min-width: 0; overflow: hidden; }
+.wl-p .krx-name { padding: 0 8px; margin: 0; }
+.wl-p .tv-w .tradingview-widget-container { height: 100%; }
+@media (max-width: 760px) { .wl-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .tv-wl-box { height: 460px; }
 .tv-wl-chart { height: 480px; margin-top: 20px; }
 @media (max-width: 560px) { .tv-wl-box { height: 420px; } .tv-wl-chart { height: 380px; } }
 
 /* 데이터 탭: 매크로(한미 금리) */
-.macro { margin-top: 40px; }
+.macro { margin-top: 24px; }
 .mc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
 .mc-box { padding: 12px 14px 8px; background: var(--soft); border-radius: 12px; min-width: 0; }
 .mc-wide { grid-column: 1 / -1; }
 .mc-chart { position: relative; height: 240px; margin-top: 6px; }
 @media (max-width: 560px) { .mc-grid { grid-template-columns: 1fr; } }
 
+<<<<<<< HEAD
 /* 이평선 크로스 (데이터 탭) */
 .cross .krx-head h2 .krx-sub { margin-left: 6px; }
 .cross .krx-name .up { color: var(--up); } .cross .krx-name .down { color: var(--down); }
@@ -261,3 +276,12 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .cx-empty { margin: 10px 0 4px; }
 @media (max-width: 560px) { .cross .krx-head { flex-wrap: wrap; } }
 .cross .movers-list { max-height: 440px; overflow-y: auto; padding-right: 4px; }
+=======
+/* 한/영 전환 (헤더 EN 버튼) */
+.head-tools { display: inline-flex; gap: 6px; align-items: center; }
+.lang-toggle { min-width: 30px; font-size: 12px; font-weight: 700; color: var(--muted); }
+.lang-toggle:hover { color: var(--text); }
+/* 언어별로만 보이는 블록: 영어 안내 문구, 소개 페이지 영어판 */
+:root:not([data-lang="en"]) .en-only { display: none !important; }
+:root[data-lang="en"] .ko-only { display: none !important; }
+>>>>>>> origin/main
