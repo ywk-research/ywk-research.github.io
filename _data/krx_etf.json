@@ -1,0 +1,128 @@
+{
+ "source": "한국거래소(KRX) Open API",
+ "d": "2026-11-23",
+ "count": 1190,
+ "total_txt": "17조 9,564억",
+ "top": [
+  {
+   "name": "KODEX 200",
+   "code": "069500",
+   "close": 73770.0,
+   "pct": -3.2,
+   "value": 21734,
+   "value_txt": "2조 1,734억",
+   "aum_txt": "18조 9,784억",
+   "index": "코스피 200",
+   "close_txt": "73,770",
+   "aum": 189784
+  },
+  {
+   "name": "KODEX 200선물인버스2X",
+   "code": "252670",
+   "close": 140.0,
+   "pct": 6.06,
+   "value": 16882,
+   "value_txt": "1조 6,882억",
+   "aum_txt": "1조 405억",
+   "index": "코스피 200 선물지수",
+   "close_txt": "140",
+   "aum": 10405
+  },
+  {
+   "name": "KODEX 인버스",
+   "code": "114800",
+   "close": 1427.0,
+   "pct": 3.26,
+   "value": 15907,
+   "value_txt": "1조 5,907억",
+   "aum_txt": "8,373억",
+   "index": "코스피 200 선물지수",
+   "close_txt": "1,427",
+   "aum": 8373
+  },
+  {
+   "name": "KODEX 레버리지",
+   "code": "122630",
+   "close": 46585.0,
+   "pct": -6.69,
+   "value": 14285,
+   "value_txt": "1조 4,285억",
+   "aum_txt": "3조 2,595억",
+   "index": "코스피 200",
+   "close_txt": "46,585",
+   "aum": 32595
+  },
+  {
+   "name": "TIGER 200",
+   "code": "102110",
+   "close": 73450.0,
+   "pct": -3.39,
+   "value": 8078,
+   "value_txt": "8,078억",
+   "aum_txt": "7조 5,561억",
+   "index": "코스피 200",
+   "close_txt": "73,450",
+   "aum": 75561
+  },
+  {
+   "name": "KODEX 코스닥150",
+   "code": "229200",
+   "close": 10365.0,
+   "pct": -1.38,
+   "value": 7926,
+   "value_txt": "7,926억",
+   "aum_txt": "3조 9,244억",
+   "index": "코스닥 150",
+   "close_txt": "10,365",
+   "aum": 39244
+  },
+  {
+   "name": "KODEX 코스닥150레버리지",
+   "code": "233740",
+   "close": 3510.0,
+   "pct": -2.9,
+   "value": 7015,
+   "value_txt": "7,015억",
+   "aum_txt": "2조 6,154억",
+   "index": "코스닥 150",
+   "close_txt": "3,510",
+   "aum": 26154
+  },
+  {
+   "name": "TIGER 미국S&P500",
+   "code": "360750",
+   "close": 23585.0,
+   "pct": -0.34,
+   "value": 6611,
+   "value_txt": "6,611억",
+   "aum_txt": "19조 3,237억",
+   "index": "S&P 500",
+   "close_txt": "23,585",
+   "aum": 193237
+  },
+  {
+   "name": "TIGER 미국나스닥100",
+   "code": "133690",
+   "close": 153575.0,
+   "pct": -1.06,
+   "value": 5544,
+   "value_txt": "5,544억",
+   "aum_txt": "10조 2,974억",
+   "index": "NASDAQ 100",
+   "close_txt": "153,575",
+   "aum": 102974
+  },
+  {
+   "name": "KODEX 미국나스닥100",
+   "code": "379810",
+   "close": 22950.0,
+   "pct": -0.99,
+   "value": 5229,
+   "value_txt": "5,229억",
+   "aum_txt": "8조 5,874억",
+   "index": "NASDAQ 100",
+   "close_txt": "22,950",
+   "aum": 85874
+  }
+ ]
+}

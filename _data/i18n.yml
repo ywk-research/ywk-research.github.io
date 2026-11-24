@@ -88,6 +88,14 @@ en:
   news.note: 'Click a headline to open the story on TradingView · News widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
 
   # 데이터 탭 (data.html, _includes/econ-calendar.html, tv-calendar.html) · 매크로 탭 (macro.html, _includes/macro.html)
+  etf.title: 'Most-traded ETFs <span class="krx-sub">as of {d}</span>'
+  etf.name: ETF
+  etf.index: Underlying index
+  etf.close: Close
+  etf.pct: Change
+  etf.value: Value traded
+  etf.aum: Net assets
+  etf.note: "{n} listed ETFs, total value traded ₩{total} (shown in Korean units) · Source: Korea Exchange (KRX) Open API. ETF names are shown in Korean."
   # 상위 탭 페이지 (equity·rate·fx·commodity·calendar.html)
   equity.title: Equity
   equity.intro: "Sector trends and stock activity in the Korean equity market. Source: Korea Exchange (KRX) Open API"
@@ -222,6 +230,10 @@ names:
   개인소득·지출(PCE 물가): Personal income and outlays (PCE)
   고용: Jobs
   금통위: BOK
+  코스피 200: KOSPI 200
+  코스피 200 선물지수: KOSPI 200 Futures
+  코스닥 150: KOSDAQ 150
+  코스닥 150 선물지수: KOSDAQ 150 Futures
   소매판매: Retail sales
   내구재 주문: Durable goods orders
   내구재: Durables

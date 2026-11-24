@@ -22,6 +22,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX_PATH = os.path.join(ROOT, "_data", "krx_index.json")
 MOVERS_PATH = os.path.join(ROOT, "_data", "krx_movers.json")
 SECTORS_PATH = os.path.join(ROOT, "_data", "krx_sectors.json")
+ETF_PATH = os.path.join(ROOT, "_data", "krx_etf.json")
+ETF_ENDPOINT = "etp/etf_bydd_trd"
+ETF_TOP_N = 10
 BASE = "https://data-dbg.krx.co.kr/svc/apis/"
 KST = dt.timezone(dt.timedelta(hours=9))
 BACKFILL_DAYS = int(os.environ.get("BACKFILL_DAYS", "400"))
@@ -261,6 +264,33 @@ def update_cross(key, stocks, day):
     return write_if_changed(krx_cross.OUT_PATH, out)
 
 
+def update_etf(key, day):
+    """국내 ETF 거래대금 상위 (ETF 일별매매정보). 승인 전이면 건너뛴다."""
+    try:
+        rows = fetch(ETF_ENDPOINT, day.strftime("%Y%m%d"), key)
+    except NotApproved as e:
+        print(f"건너뜀 — KRX API 인증 실패({e}): ETF 일별매매정보 이용 승인 여부를 확인하세요.")
+        return 0
+    if not rows:
+        print("ETF 응답 0건")
+        return 0
+    rows = sorted(rows, key=lambda r: num(r.get("ACC_TRDVAL")) or 0, reverse=True)
+    top = []
+    for r in rows[:ETF_TOP_N]:
+        eok = round((num(r.get("ACC_TRDVAL")) or 0) / 1e8)
+        nav_eok = round((num(r.get("INVSTASST_NETASST_TOTAMT")) or 0) / 1e8)
+        top.append({"name": r.get("ISU_NM", ""), "code": r.get("ISU_CD", ""),
+                    "close": num(r.get("TDD_CLSPRC")), "close_txt": f"{int(num(r.get('TDD_CLSPRC')) or 0):,}",
+                    "pct": num(r.get("FLUC_RT")),
+                    "value": eok, "value_txt": won_txt(eok).strip(),
+                    "aum": nav_eok, "aum_txt": won_txt(nav_eok).strip() if nav_eok else "",
+                    "index": r.get("IDX_IND_NM", "")})
+    total = round(sum(num(r.get("ACC_TRDVAL")) or 0 for r in rows) / 1e8)
+    out = {"source": "한국거래소(KRX) Open API", "d": day.isoformat(), "count": len(rows),
+           "total_txt": won_txt(total).strip(), "top": top}
+    return write_if_changed(ETF_PATH, out)
+
+
 def main():
     key = os.environ.get("KRX_API_KEY", "").strip()
     if not key:
@@ -283,8 +313,9 @@ def main():
             cross = update_cross(key, stocks, day)
         except Exception as e:  # 크로스 계산이 실패해도 다른 데이터는 저장한다
             print(f"이평선 크로스 실패: {type(e).__name__}: {e}")
+    etf = update_etf(key, day)
     print(f"{day} 기준 · 지수 추가 {added}건, 업종 {'갱신' if sec else '변경 없음'}, "
-          f"종목 {'갱신' if moved else '변경 없음'}, 크로스 {'갱신' if cross else '변경 없음'}")
+          f"종목 {'갱신' if moved else '변경 없음'}, 크로스 {'갱신' if cross else '변경 없음'}, ETF {'갱신' if etf else '변경 없음'}")
 
 
 if __name__ == "__main__":
