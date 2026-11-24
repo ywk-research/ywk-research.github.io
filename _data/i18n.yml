@@ -1,0 +1,217 @@
+# 한/영 전환용 영어 문자열 (헤더 EN 버튼, _layouts/default.html)
+# 페이지는 한국어로 빌드되고, 영어 모드일 때만 스크립트가 바꾼다.
+#  - en: 템플릿의 data-i18n="키" 요소와 스크립트의 t('키', '한국어')가 쓰는 문장. {이름}은 요소의 data-이름 값으로 채움
+#  - names: 데이터 파일(_data/*.json, *.yml)에서 오는 한국어 이름 → 영어. 목록에 없으면 한국어 그대로 보임
+# 브리핑 글 본문은 번역하지 않는다(영어 모드에서는 한국어 안내 문구만 보임).
+
+en:
+  # 공통: 헤더·푸터
+  nav.aria: Menu
+  nav.briefing: Briefing
+  nav.data: Data
+  nav.watchlist: Watchlist
+  nav.about: About
+  nav.macro: Macro
+  theme.aria: Toggle light/dark mode
+  theme.to_light: Switch to light mode
+  theme.to_dark: Switch to dark mode
+  footer.disclaimer: This site organizes public information for reference only and is not investment advice. Investment decisions and their outcomes are the investor's own responsibility.
+  brief.korean_only: Briefings are written in Korean for now. An English edition is planned.
+
+  # 홈
+  home.title: Pre-market Briefing
+  home.intro: A daily recap of global markets, read before the Korean market opens. US and Asian equities, rates, FX and commodities, key overnight news and today's schedule on one page.
+  home.latest: Latest briefing
+  home.read_more: Read full briefing →
+  home.archive: Past briefings
+
+  # 브리핑 글
+  post.kicker: Pre-market Briefing
+  post.meta: Published {d} · All figures as of the previous close
+  post.prev: ← {d} briefing
+  post.next: "{d} briefing →"
+
+  # 홈: 공통
+  range.aria: Period
+  range.1m: 1M
+  range.3m: 3M
+  range.1y: 1Y
+  mkt.kospi: KOSPI
+  mkt.kosdaq: KOSDAQ
+
+  # 홈: 해외 지수·원자재, S&P500 섹터 (_includes/tv-global.html)
+  gl.title: Global Indices & Commodities
+  gl.qqq: Nasdaq-100 ETF
+  gl.dia: Dow ETF
+  gl.soxx: Semiconductor ETF
+  gl.wti: WTI (USD/bbl)
+  gl.gold: Gold (USD/oz)
+  gl.nky: Nikkei 225 <span class="krx-sub">Prev. close</span>
+  gl.hsi: Hang Seng <span class="krx-sub">Prev. close</span>
+  gl.sse: Shanghai Composite <span class="krx-sub">Prev. close</span>
+  gl.note: 'US indices are not available in the widget, so tracking ETFs are shown instead: SPY (S&amp;P 500), QQQ (Nasdaq-100), DIA (Dow), SOXX (semiconductors). Nikkei 225, Hang Seng and Shanghai Composite are the indices themselves; gold and WTI are spot and front-month. Delayed quotes, 3-month charts. Widget colors follow the US convention (green up, red down) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  sec.title: S&amp;P 500 Sectors
+  sec.heat_note: 'S&amp;P 500 heatmap grouped by sector. Block size is market cap, color is the change from the previous close (delayed quotes, US colors: green up)'
+  sec.note: 'The 11 SPDR sector ETFs, change from the previous close (delayed quotes, US colors: green up) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  sec.group: Sector ETFs
+
+  # 홈: 변동성·금리·환율 (_includes/global-index.html)
+  rates.title: Volatility, Rates & FX
+  rates.note: "Each card's date is the latest observation (local date). 'Lagged' means its date is behind the other US indicators. Rate changes in bp, charts show the last 3 months · Source: {src} · Updated {u}"
+  rates.lagged: lagged
+
+  # 홈: 국내 지수·업종·종목 (_includes/krx-*.html)
+  krx.title: Korean Indices
+  krx.vol: Volatility Index
+  krx.note: 'Close as of {d} · Source: Korea Exchange (KRX) Open API · Updated {u}'
+  krx.empty: Index data is being prepared. KOSPI and KOSDAQ closes and charts will appear after the first update.
+  krxsec.title: Sector Performance <span class="krx-sub">as of {d}</span>
+  krxsec.aria: Bar chart of sector index changes
+  movers.title: Top Movers <span class="krx-sub">as of {d}</span>
+  movers.gainers: Top gainers
+  movers.losers: Top losers
+  movers.value: Most traded
+  movers.note: 'Gainer and loser rankings: KOSPI {kospi}; KOSDAQ {kosdaq}. The most-traded ranking only excludes preferred shares and SPACs. Stock names are shown in Korean.'
+
+  # 홈: 세계 시장 뉴스 (_includes/tv-news.html)
+  news.title: World Market News
+  news.note: 'Click a headline to open the story on TradingView · News widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+
+  # 데이터 탭 (data.html, _includes/econ-calendar.html, tv-calendar.html) · 매크로 탭 (macro.html, _includes/macro.html)
+  data.title: Data
+  data.intro: Indicators and schedules one level deeper than the home page summary.
+  ecal.title: Economic Calendar
+  ecal.prev: Previous month
+  ecal.next: Next month
+  ecal.today: Today
+  ecal.empty: No major events.
+  ecal.note: "Korea time (KST). Only official release schedules published by governments, central banks and statistics agencies (US BLS, BEA, Census Bureau, Labor Department, ISM, Fed, ECB, Bank of Korea, Statistics Korea, Korea trade ministry, Bank of Japan, Japan Statistics Bureau, Cabinet Office, China NBS). Korea and China 2027 data dates will be added once the agencies publish them. Small grey items are weekly releases."
+  tvcal.title: Indicator Details (Forecast &amp; Actual)
+  tvcal.note: 'US, Korea, Japan, China and the euro area, medium importance and above. Times follow your device time zone (KST in Korea) · Calendar widget: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  macro.title: Macro
+  macro.intro: US and Korean Treasury yield curves, term spreads, the Korea–US rate gap and Korean short-term rates.
+  mc.title: Korea–US Rates
+  mc.us_curve: US Treasury Yield Curve
+  mc.kr_curve: Korea Treasury Yield Curve
+  mc.spread: Term Spread <span class="krx-sub">pp</span>
+  mc.gap: Korea–US Rate Gap <span class="krx-sub">Korea − US, pp</span>
+  mc.short: Korea Short-term Rates <span class="krx-sub">%</span>
+  mc.note: 'As of US {us}, Korea {kr} (local dates). US term spread is 10Y−2Y, Korea is 10Y−3Y. The Korea–US gap compares values on the same date (or the latest before it); the US policy rate is the upper bound of the Fed target range. Card changes in bp from the previous day · Sources: U.S. Treasury, Bank of Korea ECOS, FRED (Federal Reserve) · Updated {u}'
+
+  # 관심종목 탭 (watchlist.html, _includes/tv-watchlist.html)
+  wl.title: Watchlist Returns
+  wl.intro: A hypothetical portfolio of US stocks I'm watching, held at fixed weights.
+  wl.note: 'Share counts are set from the target weights at the {d} close and held unchanged since (value 100 on the base date). Rebalancing, dividends, FX and fees are not included. Use the tabs above to switch between the portfolio and the benchmark.'
+  wl.note2: 'Last 12 months, returns measured from the first day of the period. Delayed quotes, not investment advice · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  wl.portfolio: Portfolio
+
+
+names:
+  # 지표 이름·출처 (_data/global_index.json)
+  美 10년물: US 10Y
+  원/달러: USD/KRW
+  미 재무부: U.S. Treasury
+  한국은행 ECOS: Bank of Korea ECOS
+  # 종목 순위 조건 (_data/krx_movers.json)
+  시가총액 1조 원 이상, 우선주·스팩 제외: market cap of KRW 1tn or more, excluding preferred shares and SPACs
+  시가총액 3,000억 원 이상, 우선주·스팩 제외: market cap of KRW 300bn or more, excluding preferred shares and SPACs
+  # S&P500 섹터 ETF (_includes/tv-global.html)
+  기술: Technology
+  커뮤니케이션: Communication Services
+  경기소비재: Consumer Discretionary
+  금융: Financials
+  헬스케어: Health Care
+  산업재: Industrials
+  필수소비재: Consumer Staples
+  에너지: Energy
+  유틸리티: Utilities
+  소재: Materials
+  부동산: Real Estate
+  # KRX 업종 (_data/krx_sectors.json)
+  의료·정밀기기: Medical & Precision Instruments
+  음식료·담배: Food, Beverages & Tobacco
+  증권: Securities
+  화학: Chemicals
+  전기전자: Electrical & Electronics
+  제조: Manufacturing
+  섬유·의류: Textiles & Apparel
+  기계·장비: Machinery & Equipment
+  비금속: Non-metallic Minerals
+  금속: Metals
+  전기·가스: Electricity & Gas
+  종이·목재: Paper & Wood
+  운송장비·부품: Transport Equipment & Parts
+  유통: Distribution
+  운송·창고: Transportation & Warehousing
+  오락·문화: Entertainment & Culture
+  제약: Pharmaceuticals
+  통신: Telecommunications
+  보험: Insurance
+  일반서비스: General Services
+  건설: Construction
+  IT 서비스: IT Services
+  기타제조: Other Manufacturing
+  출판·매체복제: Publishing & Media
+  # 경제 일정 (_data/econ_events.yml, econ_calendar.json)
+  FOMC 금리 결정: FOMC rate decision
+  한국은행 금통위 기준금리 결정: Bank of Korea rate decision
+  일본은행 금융정책결정회의 결과: Bank of Japan policy decision
+  ECB 통화정책회의 결과: ECB monetary policy decision
+  소비자물가(CPI): Consumer Price Index (CPI)
+  생산자물가(PPI): Producer Price Index (PPI)
+  고용보고서(비농업 고용·실업률): Employment report (payrolls, unemployment)
+  구인·이직 보고서(JOLTS): Job openings and labor turnover (JOLTS)
+  GDP 속보치: GDP (advance)
+  GDP 잠정치: GDP (second estimate)
+  GDP 확정치: GDP (third estimate)
+  개인소득·지출(PCE 물가): Personal income and outlays (PCE)
+  고용: Jobs
+  금통위: BOK
+  소매판매: Retail sales
+  내구재 주문: Durable goods orders
+  내구재: Durables
+  주택착공·허가: Housing starts & permits
+  주택착공: Housing starts
+  ISM 제조업 PMI: ISM manufacturing PMI
+  ISM 서비스업 PMI: ISM services PMI
+  ISM제조: ISM Mfg
+  ISM서비스: ISM Svcs
+  신규 실업수당 청구: Initial jobless claims
+  실업수당: Claims
+  수출입동향: Exports & imports
+  수출입: Trade
+  소비자물가동향: Consumer prices (CPI)
+  고용동향: Employment
+  산업활동동향: Industrial activity
+  산업활동: Industry
+  제조업·비제조업 PMI(국가통계국): Official manufacturing & non-manufacturing PMI (NBS)
+  소비자·생산자물가(CPI·PPI): Consumer & producer prices (CPI, PPI)
+  산업생산·소매판매 등 월간 실물지표: Monthly activity data (industrial output, retail sales)
+  실물지표: Activity
+  전국 소비자물가(CPI): National CPI
+  GDP 1차 속보: GDP (preliminary)
+  GDP 2차 속보: GDP (second preliminary)
+  일본은행 단칸(기업단기경제관측): BOJ Tankan survey
+  단칸: Tankan
+  # 매크로 (_includes/macro.html)
+  美 2년: US 2Y
+  美 10년: US 10Y
+  美 10년−2년: US 10Y−2Y
+  韓 10년−3년: KR 10Y−3Y
+  韓 국고 3년: KR 3Y
+  韓 국고 10년: KR 10Y
+  한미 기준금리차: KR−US policy rate gap
+  최근: Latest
+  1개월 전: 1M ago
+  1년 전: 1Y ago
+  기준금리: Policy rate
+  10년물: 10Y
+  콜(1일): Call (1-day)
+  CD(91일): CD (91-day)
+  CP(91일): CP (91-day)
+  # 관심종목 (_data/watchlist.yml)
+  트랜스다임: TransDigm
+  에퀴닉스: Equinix
+  델타항공: Delta Air Lines
+  # 글 종류 (브리핑 front matter의 category_label)
+  주간 코멘트: Weekly Comment

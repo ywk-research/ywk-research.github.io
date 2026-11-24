@@ -2,13 +2,13 @@
 {% if sc and sc.kospi.size > 0 %}
 <div class="sectors">
   <div class="krx-head sub">
-    <h3>업종별 등락 <span class="krx-sub">{{ sc.d | date: "%m.%d" }} 기준</span></h3>
+    <h3 data-i18n="krxsec.title" data-d="{{ sc.d | date: '%b %-d' }}">업종별 등락 <span class="krx-sub">{{ sc.d | date: "%m.%d" }} 기준</span></h3>
     <div class="krx-range sector-tabs">
-      <button type="button" data-mkt="kospi" class="on">코스피</button>
-      <button type="button" data-mkt="kosdaq">코스닥</button>
+      <button type="button" data-mkt="kospi" class="on" data-i18n="mkt.kospi">코스피</button>
+      <button type="button" data-mkt="kosdaq" data-i18n="mkt.kosdaq">코스닥</button>
     </div>
   </div>
-  <div class="sector-box"><canvas id="sector-chart" aria-label="업종별 등락률 막대 차트"></canvas></div>
+  <div class="sector-box"><canvas id="sector-chart" aria-label="업종별 등락률 막대 차트" data-i18n-aria="krxsec.aria"></canvas></div>
   <script>
     (function () {
       var SC = {{ sc | jsonify }};
@@ -21,7 +21,7 @@
         if (chart) chart.destroy();
         chart = new Chart(document.getElementById('sector-chart'), {
           type: 'bar',
-          data: { labels: rows.map(function (r) { return r.name; }),
+          data: { labels: rows.map(function (r) { return tn(r.name); }),
             datasets: [{ data: rows.map(function (r) { return r.pct; }),
               backgroundColor: rows.map(function (r) { return r.pct >= 0 ? c('--up') : c('--down'); }),
               borderRadius: 3, barPercentage: 0.8, categoryPercentage: 0.9 }] },

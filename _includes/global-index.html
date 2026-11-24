@@ -2,10 +2,10 @@
 {% if gi and gi.series.size > 0 %}
 <section class="krx gl" id="global-rates">
   <div class="krx-head">
-    <h2>변동성·금리·환율</h2>
+    <h2 data-i18n="rates.title">변동성·금리·환율</h2>
   </div>
   <div class="gl-cards" id="gl-cards"></div>
-  <p class="note">각 카드의 날짜가 해당 지표의 최근 값 기준일입니다(현지 날짜). '지연'은 다른 지표보다 기준일이 늦은 경우입니다. 금리 변동은 bp, 차트는 최근 3개월 · 자료: {{ gi.source }} · 업데이트 {{ gi.updated_at }}</p>
+  <p class="note" data-i18n="rates.note" data-src="{{ gi.source }}" data-u="{{ gi.updated_at }}">각 카드의 날짜가 해당 지표의 최근 값 기준일입니다(현지 날짜). '지연'은 다른 지표보다 기준일이 늦은 경우입니다. 금리 변동은 bp, 차트는 최근 3개월 · 자료: {{ gi.source }} · 업데이트 {{ gi.updated_at }}</p>
   <script>
     (function () {
       var GI = {{ gi | jsonify }};
@@ -20,14 +20,14 @@
       GI.series.forEach(function (s) {
         var rows = s.data; if (!rows.length) return;
         var last = rows[rows.length - 1];
-                var val = s.unit === 'usd' ? '$' + fmt(last.close, 2) : s.unit === 'pct' ? fmt(last.close, 2) + '%' : s.unit === 'krw' ? fmt(last.close, 1) + '원' : fmt(last.close, 2);
+                var val = s.unit === 'usd' ? '$' + fmt(last.close, 2) : s.unit === 'pct' ? fmt(last.close, 2) + '%' : s.unit === 'krw' ? (LANG === 'en' ? '₩' + fmt(last.close, 1) : fmt(last.close, 1) + '원') : fmt(last.close, 2);
         var cls = last.chg > 0 ? 'up' : last.chg < 0 ? 'down' : 'flat';
         var arrow = last.chg > 0 ? '▲' : last.chg < 0 ? '▼' : '';
         var chg = s.unit === 'pct' ? arrow + ' ' + Math.abs(Math.round(last.chg * 100)) + 'bp'
-                : arrow + ' ' + fmt(Math.abs(last.chg), s.unit === 'krw' ? 1 : 2) + (s.unit === 'krw' ? '원' : '') + ' (' + (last.pct > 0 ? '+' : '') + fmt(last.pct, 2) + '%)';
+                : arrow + ' ' + fmt(Math.abs(last.chg), s.unit === 'krw' ? 1 : 2) + (s.unit === 'krw' && LANG !== 'en' ? '원' : '') + ' (' + (last.pct > 0 ? '+' : '') + fmt(last.pct, 2) + '%)';
         var el = document.createElement('div');
         el.className = 'gl-card';
-        el.innerHTML = '<p class="krx-name">' + s.label + ' <span class="krx-sub">' + last.d.slice(5).replace('-', '/') + (s.key !== 'usdkrw' && last.d < LATEST ? ' · 지연' : '') + '</span></p>' +
+        el.innerHTML = '<p class="krx-name">' + tn(s.label) + ' <span class="krx-sub">' + last.d.slice(5).replace('-', '/') + (s.key !== 'usdkrw' && last.d < LATEST ? ' · ' + t('rates.lagged', '지연') : '') + '</span></p>' +
           '<p class="gl-close">' + val + '</p><p class="krx-chg ' + cls + '">' + chg + '</p><div class="gl-spark"><canvas></canvas></div>';
         wrap.appendChild(el);
         var cut = new Date(last.d); cut.setMonth(cut.getMonth() - 3);

@@ -1,23 +1,25 @@
 <!-- 월간 경제 일정 달력: 중앙은행 회의(_data/econ_events.yml, 손으로 관리) + 미국 지표 발표(_data/econ_calendar.json, BLS·BEA 공식 .ics 자동 수집) -->
 <section class="ecal" id="econ-month">
   <div class="krx-head">
-    <h2>경제 일정</h2>
+    <h2 data-i18n="ecal.title">경제 일정</h2>
     <div class="ecal-nav">
-      <button type="button" data-step="-1" aria-label="이전 달">‹</button>
+      <button type="button" data-step="-1" aria-label="이전 달" data-i18n-aria="ecal.prev">‹</button>
       <span class="ecal-title"></span>
-      <button type="button" data-step="1" aria-label="다음 달">›</button>
-      <button type="button" data-step="0" class="ecal-today">오늘</button>
+      <button type="button" data-step="1" aria-label="다음 달" data-i18n-aria="ecal.next">›</button>
+      <button type="button" data-step="0" class="ecal-today" data-i18n="ecal.today">오늘</button>
     </div>
   </div>
   <div class="ecal-grid" role="grid"></div>
   <div class="ecal-day" aria-live="polite"></div>
-  <p class="note">한국시간 기준. 각국 정부·중앙은행·통계기관이 공개한 공식 발표 일정만 넣었어요(미 BLS·BEA·인구조사국·노동부, ISM, 연준·ECB, 한국은행·국가데이터처·산업통상부, 일본은행·총무성·내각부, 중국 국가통계국). 한국·중국 2027년 지표 일정은 기관이 공개하면 추가해요. 회색 작은 글씨는 매주 나오는 일정이에요.</p>
+  <p class="note" data-i18n="ecal.note">한국시간 기준. 각국 정부·중앙은행·통계기관이 공개한 공식 발표 일정만 넣었어요(미 BLS·BEA·인구조사국·노동부, ISM, 연준·ECB, 한국은행·국가데이터처·산업통상부, 일본은행·총무성·내각부, 중국 국가통계국). 한국·중국 2027년 지표 일정은 기관이 공개하면 추가해요. 회색 작은 글씨는 매주 나오는 일정이에요.</p>
   <script>
     (function () {
       var manual = {{ site.data.econ_events | jsonify }} || [];
       var auto = ({{ site.data.econ_calendar | jsonify }} || {}).events || [];
       var FLAG = { us: '🇺🇸', kr: '🇰🇷', jp: '🇯🇵', cn: '🇨🇳', eu: '🇪🇺' };
-      var WD = ['일', '월', '화', '수', '목', '금', '토'];
+      var EN = LANG === 'en';
+      var WD = EN ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : ['일', '월', '화', '수', '목', '금', '토'];
+      var MON = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       var byDate = {};
       manual.concat(auto).forEach(function (e) { (byDate[e.date] = byDate[e.date] || []).push(e); });
       Object.keys(byDate).forEach(function (d) {
@@ -41,11 +43,11 @@
         grid.querySelectorAll('.ecal-cell').forEach(function (c) { c.classList.toggle('sel', c.dataset.d === k); });
         var p = k.split('-'), wd = WD[new Date(+p[0], +p[1] - 1, +p[2]).getDay()];
         var list = byDate[k] || [];
-        day.innerHTML = '<h3>' + (+p[1]) + '월 ' + (+p[2]) + '일 (' + wd + ')</h3>' + (list.length
+        day.innerHTML = '<h3>' + (EN ? wd + ', ' + MON[+p[1] - 1].slice(0, 3) + ' ' + (+p[2]) : (+p[1]) + '월 ' + (+p[2]) + '일 (' + wd + ')') + '</h3>' + (list.length
           ? '<ul>' + list.map(function (e) {
-              return '<li' + (e.minor ? ' class="minor"' : '') + '><span class="ecal-time">' + (e.time || '—') + '</span><span class="ecal-flag">' + (FLAG[e.c] || '') + '</span>' + esc(e.t) + '</li>';
+              return '<li' + (e.minor ? ' class="minor"' : '') + '><span class="ecal-time">' + (e.time || '—') + '</span><span class="ecal-flag">' + (FLAG[e.c] || '') + '</span>' + esc(tn(e.t)) + '</li>';
             }).join('') + '</ul>'
-          : '<p class="ecal-empty">주요 일정이 없어요.</p>');
+          : '<p class="ecal-empty">' + t('ecal.empty', '주요 일정이 없어요.') + '</p>');
       }
 
       // 칸에는 주요 일정 먼저 최대 MAX개, 나머지는 +n. 매주 나오는 일정(minor)은 회색으로 작게
@@ -54,13 +56,13 @@
         var major = list.filter(function (e) { return !e.minor; }), minor = list.filter(function (e) { return e.minor; });
         var shown = major.concat(minor).slice(0, MAX), rest = list.length - shown.length;
         return shown.map(function (e) {
-          return '<span class="ecal-ev ' + e.c + (e.minor ? ' minor' : '') + '">' + (FLAG[e.c] || '') + '<b>' + esc(e.s || e.t) + '</b></span>';
+          return '<span class="ecal-ev ' + e.c + (e.minor ? ' minor' : '') + '">' + (FLAG[e.c] || '') + '<b>' + esc(tn(e.s || e.t)) + '</b></span>';
         }).join('') + (rest > 0 ? '<span class="ecal-more">+' + rest + '</span>' : '');
       }
 
       function render() {
         var y = cur.y, m = cur.m;
-        title.textContent = y + '년 ' + (m + 1) + '월';
+        title.textContent = EN ? MON[m] + ' ' + y : y + '년 ' + (m + 1) + '월';
         var first = new Date(y, m, 1).getDay(), days = new Date(y, m + 1, 0).getDate();
         var html = WD.map(function (w, i) { return '<div class="ecal-wd' + (i === 0 ? ' sun' : i === 6 ? ' sat' : '') + '">' + w + '</div>'; }).join('');
         for (var i = 0; i < first; i++) html += '<div class="ecal-cell blank"></div>';
