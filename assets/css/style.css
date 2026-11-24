@@ -54,7 +54,9 @@ a:hover { text-decoration: underline; }
 .site-header .head-top { display: flex; align-items: center; justify-content: space-between; height: 40px; }
 .brand { font-weight: 800; font-size: 14px; color: var(--muted); letter-spacing: 0.02em; }
 .brand:hover { color: var(--text); text-decoration: none; }
-.site-nav { display: flex; justify-content: center; gap: 6px; padding: 0 16px 12px; overflow-x: auto; scrollbar-width: none; }
+.site-nav { display: flex; justify-content: flex-start; gap: 6px; padding: 0 16px 12px; overflow-x: auto; scrollbar-width: none; }
+.site-nav a:first-child { margin-left: auto; }
+.site-nav a:last-child { margin-right: auto; } /* 넘칠 땐 왼쪽부터, 남을 땐 가운데 */
 .site-nav a { flex: none; padding: 8px 20px; border-radius: 999px; font-size: 17px; font-weight: 600; color: var(--muted); }
 .site-nav a:hover { color: var(--text); background: var(--soft); text-decoration: none; }
 .site-nav a.on { color: var(--text); background: var(--soft); box-shadow: inset 0 0 0 1px var(--line); }
@@ -267,3 +269,14 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 /* 언어별로만 보이는 블록: 영어 안내 문구, 소개 페이지 영어판 */
 :root:not([data-lang="en"]) .en-only { display: none !important; }
 :root[data-lang="en"] .ko-only { display: none !important; }
+
+
+/* 업종별 등락 히트맵 (_includes/krx-sector-heat.html) */
+.sheat { margin-bottom: 40px; }
+.sheat .krx-head { flex-wrap: wrap; gap: 8px; }
+.sheat-ctl { display: flex; gap: 10px; flex-wrap: wrap; padding-bottom: 6px; }
+.sheat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 4px; }
+.sheat-tile { display: flex; flex-direction: column; justify-content: space-between; min-height: 64px; padding: 8px 10px; border-radius: 8px; color: var(--text); }
+.sheat-name { font-size: 13px; line-height: 1.3; }
+.sheat-v { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .sheat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .sheat-tile { min-height: 56px; padding: 6px 8px; } }
