@@ -1,0 +1,36 @@
+---
+layout: default
+title: 브리핑
+---
+<section class="intro">
+  <h1>개장 전 브리핑</h1>
+  <p>{{ site.description }}. 미국·아시아 증시, 금리·환율·원자재, 전일 주요 뉴스와 오늘 일정을 한 장에 정리합니다.</p>
+</section>
+
+{% assign latest = site.posts | first %}
+{% if latest %}
+<section class="latest">
+  <p class="kicker">최신 브리핑</p>
+  <h2><a href="{{ latest.url | relative_url }}">{{ latest.title }}</a></h2>
+  {% if latest.summary %}<p>{{ latest.summary }}</p>{% endif %}
+  <a class="more" href="{{ latest.url | relative_url }}">전체 보기 →</a>
+</section>
+{% endif %}
+
+<section class="archive">
+  <h2>지난 브리핑</h2>
+  {% assign by_month = site.posts | group_by_exp: "p", "p.date | date: '%Y년 %m월'" %}
+  {% for month in by_month %}
+    <h3>{{ month.name }}</h3>
+    <ul>
+      {% for p in month.items %}
+      <li>
+        <a href="{{ p.url | relative_url }}">
+          <span class="date">{{ p.date | date: "%m.%d" }}</span>
+          <span class="title">{{ p.summary | default: p.title }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+</section>
