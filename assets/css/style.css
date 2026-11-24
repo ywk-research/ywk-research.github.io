@@ -136,3 +136,23 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 @media (max-width: 760px) { .krx-cards.three { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .krx-cards.three, .movers-grid { grid-template-columns: 1fr; } }
 .sector-box { position: relative; padding: 10px 12px; background: var(--soft); border-radius: 12px; }
+
+/* 첫 화면: 왼쪽 데이터, 오른쪽 브리핑 */
+.wrap.wide { max-width: 1240px; }
+.home-grid { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 40px; align-items: start; margin-top: 28px; }
+.home-grid .krx { margin-top: 0; }
+.home-brief .latest { margin-top: 0; }
+.home-brief .archive h2 { margin-top: 32px; }
+.home-brief .archive .date { width: 42px; }
+.home-brief .archive li a { font-size: 15px; }
+@media (min-width: 1001px) {
+  .home-brief { position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow-y: auto; scrollbar-width: thin; }
+}
+@media (max-width: 1000px) {
+  /* 좁은 화면: 최신 브리핑 → 데이터 → 지난 브리핑 순서 */
+  .home-grid { display: flex; flex-direction: column; gap: 0; }
+  .home-brief { display: contents; }
+  .home-brief .latest { order: -1; margin-bottom: 8px; }
+  .home-data { order: 0; }
+  .home-brief .archive { order: 1; }
+}

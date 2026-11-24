@@ -11,7 +11,7 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap">
+    <div class="wrap{% if page.wide %} wide{% endif %}">
       <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
       <nav>
         <a href="{{ '/' | relative_url }}">브리핑</a>
@@ -20,12 +20,12 @@
     </div>
   </header>
 
-  <main class="wrap">
+  <main class="wrap{% if page.wide %} wide{% endif %}">
     {{ content }}
   </main>
 
   <footer class="site-footer">
-    <div class="wrap">
+    <div class="wrap{% if page.wide %} wide{% endif %}">
       <p>공개 자료를 정리한 정보 제공 목적의 글이며, 투자 권유가 아닙니다. 투자 판단과 그 결과의 책임은 투자자 본인에게 있습니다.</p>
       <p>© {{ site.time | date: "%Y" }} {{ site.title }}</p>
     </div>

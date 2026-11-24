@@ -1,13 +1,19 @@
 ---
 layout: default
 title: 브리핑
+wide: true
 ---
 <section class="intro">
   <h1>개장 전 브리핑</h1>
   <p>{{ site.description }}. 미국·아시아 증시, 금리·환율·원자재, 전일 주요 뉴스와 오늘 일정을 한 장에 정리합니다.</p>
 </section>
 
+<div class="home-grid">
+<div class="home-data">
 {% include krx-index.html %}
+</div>
+
+<aside class="home-brief">
 
 {% assign latest = site.posts | first %}
 {% if latest %}
@@ -36,3 +42,5 @@ title: 브리핑
     </ul>
   {% endfor %}
 </section>
+</aside>
+</div>
