@@ -7,6 +7,8 @@
   --accent: #1f4ed8;
   --up: #d93a3a;
   --down: #2563eb;
+  --sun: #d93a3a;
+  --sat: #2563eb;
   --s1: #2a78d6;
   --s2: #eb6834;
   --s3: #1baf7a;
@@ -24,11 +26,18 @@
   --accent: #7aa2ff;
   --up: #ff6b6b;
   --down: #6ea8ff;
+  --sun: #ff6b6b;
+  --sat: #6ea8ff;
   --s1: #3987e5;
   --s2: #d95926;
   --s3: #199e70;
   --s4: #c98500;
 }
+
+/* 상승·하락 색: 한국어는 한국식(상승 빨강·하락 파랑), 영어는 미국식(상승 초록·하락 빨강).
+   달력의 일·토요일 색(--sun, --sat)은 언어와 상관없이 그대로 */
+:root[data-lang="en"] { --up: #15803d; --down: #d93a3a; }
+:root[data-lang="en"][data-theme="dark"] { --up: #3ccf7a; --down: #ff6b6b; }
 
 * { box-sizing: border-box; }
 
@@ -217,8 +226,8 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .ecal-title { min-width: 96px; text-align: center; font-weight: 700; }
 .ecal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 .ecal-wd { text-align: center; font-size: 13px; color: var(--muted); padding: 2px 0; }
-.ecal-wd.sun, .ecal-cell.sun .ecal-num { color: var(--up); }
-.ecal-wd.sat, .ecal-cell.sat .ecal-num { color: var(--down); }
+.ecal-wd.sun, .ecal-cell.sun .ecal-num { color: var(--sun); }
+.ecal-wd.sat, .ecal-cell.sat .ecal-num { color: var(--sat); }
 .ecal-cell { display: flex; flex-direction: column; align-items: stretch; gap: 3px; min-height: 92px; padding: 6px; font: inherit; text-align: left; color: var(--text); background: var(--soft); border: 1px solid transparent; border-radius: 8px; cursor: pointer; overflow: hidden; }
 .ecal-cell.blank { background: transparent; cursor: default; }
 .ecal-cell:hover { border-color: var(--line); }
@@ -334,7 +343,7 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 .ecal-now li.minor { color: var(--muted); }
 .ecal-now .ecal-time { min-width: 52px; font-weight: 600; }
 .ecal-now .ecal-t { flex: 1; min-width: 0; }
-.ecal-imp { font-size: 9px; letter-spacing: 1px; color: var(--up); white-space: nowrap; }
+.ecal-imp { font-size: 9px; letter-spacing: 1px; color: var(--sun); white-space: nowrap; }
 .ecal-imp i { font-style: normal; color: var(--line); }
 .ecal-imp.i2 { color: #e0a030; } .ecal-imp.i1 { color: var(--muted); }
 
@@ -392,3 +401,15 @@ a.mv-name:hover { color: var(--accent); text-decoration: none; }
 .st-dart a { flex: 1; min-width: 0; color: var(--text); }
 .st-dart a:hover { color: var(--accent); text-decoration: none; }
 .st-dart-d { flex: none; width: 3em; color: var(--muted); font-variant-numeric: tabular-nums; }
+/* Commodity: 직접 수집 데이터 */
+.cm-gold-chart { height: 260px; }
+.cm-table-wrap { overflow-x: auto; }
+.cm-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.cm-table th { text-align: left; font-weight: 500; color: var(--muted); font-size: 13px; padding: 8px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.cm-table td { padding: 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.cm-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.cm-table td.up { color: var(--up); } .cm-table td.down { color: var(--down); }
+.cm-table tr.cm-group th { color: var(--text); font-weight: 600; font-size: 13px; padding-top: 14px; border-bottom: 1px solid var(--line); }
+.cm-table th.cm-spark-h, .cm-table td.cm-spark-c { width: 130px; text-align: right; }
+.cm-spark { width: 120px; height: 28px; display: inline-block; vertical-align: middle; }
+@media (max-width: 560px) { .cm-table { font-size: 13px; } .cm-table td, .cm-table th { padding-left: 4px; padding-right: 4px; } .cm-table .num .krx-sub { display: block; font-size: 11px; } .cm-spark-h, .cm-spark-c { display: none; } }

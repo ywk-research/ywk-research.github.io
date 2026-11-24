@@ -6,6 +6,8 @@
 - 미 재무부 실질 수익률 곡선 CSV: 5·10년 실질금리(TIPS) → _data/macro.json의 us_real
 - ECOS 731Y001 매매기준율: 원/달러·원/100엔·원/위안·원/유로 → _data/krw_fx.json
 - ECOS 월간 지표: 소비자물가·근원물가, 수출입, 경상수지, 실업률, 산업생산, 소비자심리 → _data/kr_monthly.json
+- FRED 미국 월간 지표(원자료 BLS·BEA·인구조사국·연준, 모두 미 정부 공개 자료): CPI·근원 CPI, PCE·근원 PCE,
+  비농업 고용, 실업률, 소매판매, 실질 GDP(분기) → _data/us_monthly.json
 
 키는 출력하지 않는다. 한 소스가 실패하면 그 부분만 이전 값을 유지한다.
 """
@@ -41,6 +43,17 @@ KR_MONTHLY = [
     ("unemp", "901Y027", "I61BC/I28B"), # 실업률 계절조정 (%)
     ("ip", "901Y033", "A00/2"),         # 전산업생산지수 계절조정 (2020=100)
     ("csi", "511Y002", "FME/99988"),    # 소비자심리지수
+]
+# FRED 미국 월간 지표: (키, 시리즈 ID). 저작권 제한이 있는 민간 지표(미시간대·ISM·컨퍼런스보드)는 넣지 않는다
+US_MONTHLY = [
+    ("cpi", "CPIAUCSL"),               # CPI 전체, 계절조정 (BLS)
+    ("core", "CPILFESL"),              # 근원 CPI(식품·에너지 제외) (BLS)
+    ("pce", "PCEPI"),                  # PCE 물가지수 (BEA)
+    ("core_pce", "PCEPILFE"),          # 근원 PCE (BEA)
+    ("nfp", "PAYEMS"),                 # 비농업 고용, 천 명 (BLS)
+    ("unemp", "UNRATE"),               # 실업률 (BLS)
+    ("retail", "RSAFS"),               # 소매·외식 판매, 백만 달러 (인구조사국)
+    ("gdp", "A191RL1Q225SBEA"),        # 실질 GDP 전기 대비 연율 %, 분기 (BEA)
 ]
 # ECOS 817Y002 시장금리(일별) 항목 코드
 KR_TENORS = [("010190000", "1Y"), ("010195000", "2Y"), ("010200000", "3Y"), ("010200001", "5Y"),
@@ -123,15 +136,31 @@ def kr_short(start):
     return {name: sorted([d, v] for d, v in ecos(t, code, start).items()) for name, t, code in KR_SHORT}
 
 
-def fed_upper(start):
+def fred(series, start):
     key = os.environ["FRED_API_KEY"].strip()
-    q = urllib.parse.urlencode({"series_id": "DFEDTARU", "api_key": key, "file_type": "json",
+    q = urllib.parse.urlencode({"series_id": series, "api_key": key, "file_type": "json",
                                 "observation_start": start.isoformat()})
     try:
         obs = json.loads(get("https://api.stlouisfed.org/fred/series/observations?" + q))["observations"]
-    except Exception as e:
-        raise RuntimeError(type(e).__name__) from None
+    except Exception as e:  # 오류 메시지에 키가 들어간 URL이 섞이지 않게
+        raise RuntimeError(f"{series}: {type(e).__name__}") from None
     return [[o["date"], float(o["value"])] for o in obs if o["value"] not in (".", "")]
+
+
+def fed_upper(start):
+    return fred("DFEDTARU", start)
+
+
+def us_monthly(start):
+    # 전년 대비 계산용으로 5년치. 날짜는 YYYY-MM(분기 GDP는 분기 첫 달)
+    m0 = start.replace(day=1, year=start.year - 4)
+    out = {}
+    for name, series in US_MONTHLY:
+        try:
+            out[name] = [[d[:7], v] for d, v in fred(series, m0)]
+        except Exception as e:  # 지표 하나가 실패해도 나머지는 싣는다
+            print(f"  실패 — {name}: {str(e)[:100]}")
+    return out
 
 
 def krw_fx(start):
@@ -159,12 +188,14 @@ PARTS = [
     ("macro", "us_real", "미 재무부", None, us_real),
     ("krw_fx", "series", "한국은행 ECOS", "ECOS_API_KEY", krw_fx),
     ("kr_monthly", "series", "한국은행 ECOS", "ECOS_API_KEY", kr_monthly),
+    ("us_monthly", "series", "FRED(BLS·BEA·인구조사국·연준)", "FRED_API_KEY", us_monthly),
 ]
 FIXED = {"macro": {"us_tenors": [t for _, t in US_TENORS], "kr_tenors": [t for _, t in KR_TENORS],
                    "us_real_tenors": [t for _, t in US_REAL],
                    "source": "미 재무부, 한국은행 ECOS, FRED"},
          "krw_fx": {"source": "한국은행 ECOS"},
-         "kr_monthly": {"source": "한국은행 ECOS"}}
+         "kr_monthly": {"source": "한국은행 ECOS"},
+         "us_monthly": {"source": "FRED (BLS, BEA, U.S. Census Bureau, Federal Reserve)"}}
 
 
 def main():

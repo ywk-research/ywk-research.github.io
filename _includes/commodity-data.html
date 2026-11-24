@@ -1,0 +1,143 @@
+<!-- 원자재 직접 수집 데이터 (_data/commodity.json, tools/fetch_commodity.py). 자료: EIA, 한국거래소(KRX), 세계은행 Pink Sheet -->
+{% assign cm = site.data.commodity %}
+{% if cm %}
+{% include mc-common.html %}
+
+{% if cm.energy %}
+{% assign en_last = cm.energy.series | first %}{% assign en_last = en_last.data | last %}
+<section class="krx macro" id="cm-energy">
+  <div class="krx-head">
+    <h2 data-i18n="cm.energy_title">에너지 현물가격</h2>
+    <div class="krx-range" id="cm-energy-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-months="3" data-i18n="range.3m">3개월</button>
+      <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>
+    </div>
+  </div>
+  <div class="gl-cards" id="cm-energy-cards"></div>
+  <div class="mc-grid">
+    <div class="mc-box"><p class="krx-name" data-i18n="cm.oil">원유 <span class="krx-sub">달러/배럴</span></p><div class="mc-chart"><canvas id="cm-oil" aria-label="WTI·브렌트 현물가격" data-i18n-aria="cm.oil_aria"></canvas></div></div>
+    <div class="mc-box"><p class="krx-name" data-i18n="cm.gas">천연가스 (헨리허브) <span class="krx-sub">달러/MMBtu</span></p><div class="mc-chart"><canvas id="cm-gas" aria-label="헨리허브 천연가스 현물가격" data-i18n-aria="cm.gas_aria"></canvas></div></div>
+  </div>
+  <p class="note" data-i18n="cm.energy_note" data-d="{{ en_last[0] }}">{{ en_last[0] }} 기준(미국 날짜). 미 에너지정보청(EIA)이 일별 현물가격을 주 1회 몰아서 공표해서 최대 1주가량 늦어요. 실시간 흐름은 위 차트를 보세요. 카드 변동은 1주 전 대비 · 자료: 미 에너지정보청(EIA){% if cm.energy.via == "FRED" %}, FRED 경유{% endif %}</p>
+</section>
+{% endif %}
+
+{% if cm.gold_krx and cm.gold_krx.data.size > 0 %}
+{% assign gd_last = cm.gold_krx.data | last %}
+<section class="krx macro" id="cm-gold">
+  <div class="krx-head">
+    <h2 data-i18n="cm.gold_title">국내 금 시세</h2>
+    <div class="krx-range" id="cm-gold-range" role="group" aria-label="기간" data-i18n-aria="range.aria">
+      <button type="button" data-months="3" data-i18n="range.3m">3개월</button>
+      <button type="button" data-months="12" class="on" data-i18n="range.1y">1년</button>
+    </div>
+  </div>
+  <div class="gl-cards" id="cm-gold-cards"></div>
+  <div class="mc-chart cm-gold-chart"><canvas id="cm-gold-line" aria-label="KRX 금시장 종가" data-i18n-aria="cm.gold_aria"></canvas></div>
+  <p class="note" data-i18n="cm.gold_note" data-d="{{ gd_last[0] }}" data-n="{{ cm.gold_krx.name }}">{{ gd_last[0] }} 기준. KRX 금시장 {{ cm.gold_krx.name }} 종가(원/g)예요 · 자료: 한국거래소(KRX) Open API</p>
+</section>
+{% endif %}
+
+{% if cm.monthly %}
+<section class="krx macro" id="cm-monthly">
+  <div class="krx-head">
+    <h2 data-i18n="cm.month_title" data-m="{{ cm.monthly.month | replace: '-', '.' }}">월간 원자재 가격 <span class="krx-sub">{{ cm.monthly.month | replace: "-", "." }} 평균</span></h2>
+  </div>
+  <div class="cm-table-wrap">
+    <table class="cm-table">
+      <thead><tr>
+        <th data-i18n="cm.col_item">품목</th><th class="num" data-i18n="cm.col_price">가격</th>
+        <th class="num" data-i18n="cm.col_mom">전월비</th><th class="num" data-i18n="cm.col_yoy">전년비</th>
+        <th class="cm-spark-h" data-i18n="cm.col_trend">3년 추이</th>
+      </tr></thead>
+      <tbody id="cm-month-body"></tbody>
+    </table>
+  </div>
+  <p class="note" data-i18n="cm.month_note" data-p="{{ cm.monthly.published }}">월평균 가격(달러 기준)이에요. 세계은행이 매달 초 전월 값을 공표해요(최근 공표 {{ cm.monthly.published }}). 자료: World Bank Commodity Price Data (The Pink Sheet), CC BY 4.0</p>
+</section>
+{% endif %}
+
+<script>
+  (function () {
+    var CM = {{ cm | jsonify }};
+    var EN = window.LANG === 'en';
+    var css = getComputedStyle(document.documentElement);
+    function c(n) { return css.getPropertyValue(n).trim(); }
+    function nm(o) { return EN ? o.en : o.ko; }
+    function fmt(v, d) { return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+    function digits(v) { return v >= 1000 ? 0 : v >= 100 ? 1 : 2; }
+    function pct(a, b) { return b ? (a / b - 1) * 100 : null; }
+    function arrow(p) { return p == null ? '-' : (p > 0 ? '▲ ' : p < 0 ? '▼ ' : '') + Math.abs(p).toFixed(1) + '%'; }
+    function md(d) { return +d.slice(5, 7) + '/' + +d.slice(8, 10); }
+    // d 이전(포함) 가장 가까운 값
+    function at(data, d) { for (var i = data.length - 1; i >= 0; i--) if (data[i][0] <= d) return data[i][1]; return null; }
+    function daysBack(d, n) { var x = new Date(d + 'T00:00:00Z'); x.setUTCDate(x.getUTCDate() - n); return x.toISOString().slice(0, 10); }
+
+    // 에너지
+    if (CM.energy && document.getElementById('cm-energy')) {
+      var S = {}; CM.energy.series.forEach(function (s) { S[s.key] = s; });
+      var wrap = document.getElementById('cm-energy-cards');
+      CM.energy.series.forEach(function (s) {
+        var last = s.data[s.data.length - 1], prev = at(s.data, daysBack(last[0], 7));
+        var p = pct(last[1], prev);
+        MC.card(wrap, { label: nm(s), date: md(last[0]), value: '$' + fmt(last[1], 2), chg: arrow(p), dir: p || 0 });
+      });
+      MC.range(document.getElementById('cm-energy-range'), function (months) {
+        var oil = [];
+        if (S.wti) oil.push([nm(S.wti), S.wti.data, 0]);
+        if (S.brent) oil.push([nm(S.brent), S.brent.data, 1]);
+        MC.line(document.getElementById('cm-oil'), oil, { months: months });
+        if (S.hh) MC.line(document.getElementById('cm-gas'), [[nm(S.hh), S.hh.data, 2]], { months: months });
+      });
+    }
+
+    // 국내 금
+    if (CM.gold_krx && document.getElementById('cm-gold')) {
+      var g = CM.gold_krx.data, gl = g[g.length - 1], gp = g.length > 1 ? g[g.length - 2][1] : null;
+      var gw = document.getElementById('cm-gold-cards'), d1 = pct(gl[1], gp);
+      MC.card(gw, { label: EN ? 'KRX Gold (KRW/g)' : '금 (원/g)', date: md(gl[0]), value: fmt(gl[1], 0), chg: arrow(d1), dir: d1 || 0 });
+      [[30, EN ? '1M change' : '1개월 변화'], [365, EN ? '1Y change' : '1년 변화']].forEach(function (x) {
+        var b = at(g, daysBack(gl[0], x[0])); if (b == null || g[0][0] > daysBack(gl[0], x[0])) return;
+        var p = pct(gl[1], b);
+        MC.card(gw, { label: x[1], value: (p > 0 ? '+' : '') + p.toFixed(1) + '%', dir: 0 });
+      });
+      MC.range(document.getElementById('cm-gold-range'), function (months) {
+        MC.line(document.getElementById('cm-gold-line'), [[EN ? 'Gold (KRW/g)' : '금 (원/g)', g, 3]], { months: months, digits: 0 });
+      });
+    }
+
+    // 월간 표
+    var body = document.getElementById('cm-month-body');
+    if (CM.monthly && body) {
+      var GROUPS = [['precious', '귀금속', 'Precious metals'], ['base', '산업금속', 'Base metals'], ['energy', '에너지', 'Energy'], ['agri', '농산물', 'Agriculture']];
+      var UNIT_EN = { '달러/온스': 'USD/oz', '달러/톤': 'USD/t', '달러/MMBtu': 'USD/MMBtu', '달러/kg': 'USD/kg' };
+      function spark(data, up) {
+        var v = data.map(function (p) { return p[1]; }), lo = Math.min.apply(null, v), hi = Math.max.apply(null, v);
+        var W = 120, H = 28, n = v.length - 1 || 1;
+        var pts = v.map(function (x, i) { return (i / n * W).toFixed(1) + ',' + (H - 2 - (hi === lo ? 0.5 : (x - lo) / (hi - lo)) * (H - 4)).toFixed(1); });
+        return '<svg class="cm-spark" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="' +
+          c(up ? '--up' : '--down') + '" stroke-width="1.5" vector-effect="non-scaling-stroke" points="' + pts.join(' ') + '"/></svg>';
+      }
+      function ym(s, k) { var y = +s.slice(0, 4), m = +s.slice(5, 7) - k; while (m < 1) { m += 12; y--; } return y + '-' + (m < 10 ? '0' : '') + m; }
+      var html = '';
+      GROUPS.forEach(function (gr) {
+        var items = CM.monthly.items.filter(function (it) { return it.group === gr[0]; });
+        if (!items.length) return;
+        html += '<tr class="cm-group"><th colspan="5">' + (EN ? gr[2] : gr[1]) + '</th></tr>';
+        items.forEach(function (it) {
+          var d = it.data, last = d[d.length - 1], m = {};
+          d.forEach(function (p) { m[p[0]] = p[1]; });
+          var mom = pct(last[1], m[ym(last[0], 1)]), yoy = pct(last[1], m[ym(last[0], 12)]);
+          var cls = function (p) { return p == null ? '' : p > 0 ? 'up' : p < 0 ? 'down' : ''; };
+          var stale = last[0] < CM.monthly.month ? ' <span class="krx-sub">' + last[0].replace('-', '.') + '</span>' : '';
+          html += '<tr><td>' + nm(it) + stale + '</td>' +
+            '<td class="num">' + fmt(last[1], digits(last[1])) + ' <span class="krx-sub">' + (EN ? UNIT_EN[it.unit] || it.unit : it.unit) + '</span></td>' +
+            '<td class="num ' + cls(mom) + '">' + arrow(mom) + '</td><td class="num ' + cls(yoy) + '">' + arrow(yoy) + '</td>' +
+            '<td class="cm-spark-c">' + spark(d, d.length < 2 || last[1] >= d[0][1]) + '</td></tr>';
+        });
+      });
+      body.innerHTML = html;
+    }
+  })();
+</script>
+{% endif %}

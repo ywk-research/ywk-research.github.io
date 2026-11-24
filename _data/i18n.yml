@@ -55,10 +55,10 @@ en:
   gl.nky: Nikkei 225 <span class="krx-sub">Prev. close</span>
   gl.hsi: Hang Seng <span class="krx-sub">Prev. close</span>
   gl.sse: Shanghai Composite <span class="krx-sub">Prev. close</span>
-  gl.note: 'US indices are not available in the widget, so tracking ETFs are shown instead: SPY (S&amp;P 500), QQQ (Nasdaq-100), DIA (Dow), SOXX (semiconductors). Nikkei 225, Hang Seng and Shanghai Composite are the indices themselves; gold and WTI are spot and front-month. Delayed quotes, 3-month charts. Widget colors follow the US convention (green up, red down) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  gl.note: 'US indices are not available in the widget, so tracking ETFs are shown instead: SPY (S&amp;P 500), QQQ (Nasdaq-100), DIA (Dow), SOXX (semiconductors). Nikkei 225, Hang Seng and Shanghai Composite are the indices themselves; gold and WTI are spot and front-month. Delayed quotes, 3-month charts. · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
   sec.title: S&amp;P 500 Sectors
-  sec.heat_note: 'S&amp;P 500 heatmap grouped by sector. Block size is market cap, color is the change from the previous close (delayed quotes, US colors: green up)'
-  sec.note: 'The 11 SPDR sector ETFs, change from the previous close (delayed quotes, US colors: green up) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
+  sec.heat_note: 'S&amp;P 500 heatmap grouped by sector. Block size is market cap, color is the change from the previous close (delayed quotes)'
+  sec.note: 'The 11 SPDR sector ETFs, change from the previous close (delayed quotes) · Quote widgets: <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">TradingView</a>'
   sec.group: Sector ETFs
 
   # 홈: 변동성·금리·환율 (_includes/global-index.html)
@@ -119,9 +119,25 @@ en:
   fx.tv_title: Korean Won FX
   fx.tv_note: Delayed quotes, last 1 year
   cmd.title: Commodity
-  cmd.intro: Price trends for metals and energy.
+  cmd.intro: Price trends for energy, metals and agriculture.
   cmd.tv_title: Commodities
   cmd.tv_note: Spot / front-month delayed quotes, last 1 year
+  cm.energy_title: Energy Spot Prices
+  cm.oil: Crude oil <span class="krx-sub">USD/bbl</span>
+  cm.gas: Natural gas (Henry Hub) <span class="krx-sub">USD/MMBtu</span>
+  cm.oil_aria: WTI and Brent spot prices
+  cm.gas_aria: Henry Hub natural gas spot price
+  cm.energy_note: 'As of {d} (US date). The U.S. Energy Information Administration (EIA) publishes daily spot prices once a week, so data can lag by up to a week; see the charts above for live moves. Card changes vs. one week earlier · Source: U.S. Energy Information Administration (EIA)'
+  cm.gold_title: Korea Gold Price
+  cm.gold_aria: KRX gold market closing price
+  cm.gold_note: 'As of {d}. Closing price of KRX Gold Market {n} (KRW per gram) · Source: Korea Exchange (KRX) Open API'
+  cm.month_title: 'Monthly Commodity Prices <span class="krx-sub">{m} average</span>'
+  cm.col_item: Item
+  cm.col_price: Price
+  cm.col_mom: MoM
+  cm.col_yoy: YoY
+  cm.col_trend: 3Y trend
+  cm.month_note: 'Monthly average prices in US dollars. The World Bank publishes the previous month early each month (latest release {p}). Source: World Bank Commodity Price Data (The Pink Sheet), CC BY 4.0'
   cal.title: Calendar
   cal.intro: This month's major economic releases and rate decisions, with results.
   tv.credit: Quote widget
@@ -168,6 +184,14 @@ en:
   kfx.index: Indexed to 100 at the start of the period <span class="krx-sub">Higher = weaker won</span>
   kfx.note: 'Base rates as of {d} (Seoul FX market; JPY per 100 yen). Card changes from the previous business day · Source: Bank of Korea ECOS · Updated {u}'
   # 한국 월간 경제지표 (_includes/kr-monthly.html)
+  um.title: US Monthly Indicators
+  um.cpi: CPI Inflation <span class="krx-sub">YoY, %</span>
+  um.pce: PCE Inflation <span class="krx-sub">YoY, %</span>
+  um.nfp: Nonfarm Payrolls <span class="krx-sub">MoM change, thousands</span>
+  um.unemp: Unemployment Rate <span class="krx-sub">Seasonally adjusted, %</span>
+  um.retail: Retail Sales <span class="krx-sub">MoM, %</span>
+  um.gdp: Real GDP Growth <span class="krx-sub">QoQ annualized, %</span>
+  um.note: 'Card dates show each indicator''s latest reference month (quarter for GDP). All series are seasonally adjusted; core excludes food and energy. Months not published because of the US government shutdown, such as October 2025, are left blank. Card changes from the previous release · Sources: U.S. Bureau of Labor Statistics, Bureau of Economic Analysis, Census Bureau, via FRED · This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis. · Updated {u}'
   km.title: Korea Monthly Indicators
   km.cpi: Consumer Price Inflation <span class="krx-sub">YoY, %</span>
   km.exports: Export Growth <span class="krx-sub">YoY, %</span>
@@ -387,6 +411,11 @@ names:
   소비자심리: Consumer sentiment
   소비자심리지수: Consumer Sentiment Index
   전산업생산: All-industry production
+  근원 PCE: Core PCE
+  비농업 고용: Nonfarm payrolls
+  실질 GDP: Real GDP
+  PCE 물가: PCE prices
+  근원(식품·에너지 제외): Core (ex. food & energy)
   # 관심종목 (_data/watchlist.yml)
   트랜스다임: TransDigm
   에퀴닉스: Equinix

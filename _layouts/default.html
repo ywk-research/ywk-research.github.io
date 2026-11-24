@@ -36,7 +36,25 @@
     })();
   </script>
   <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
-  <meta name="description" content="{{ page.description | default: site.description }}">
+  {%- assign meta_desc = page.description | default: page.summary | default: site.description | strip_html | strip_newlines | truncate: 160 -%}
+  {%- capture meta_title -%}{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}{%- endcapture %}
+  <meta name="description" content="{{ meta_desc | escape }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <link rel="icon" href="{{ '/assets/img/favicon.svg' | relative_url }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ '/assets/img/apple-touch-icon.png' | relative_url }}">
+  <meta name="theme-color" content="#15171a">
+  <!-- 링크 공유 미리보기(카카오톡·링크드인·슬랙 등) -->
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta property="og:title" content="{{ meta_title | escape }}">
+  <meta property="og:description" content="{{ meta_desc | escape }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:type" content="{% if page.date %}article{% else %}website{% endif %}">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:image" content="{{ '/assets/img/og.png' | absolute_url }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  {% feed_meta %}
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
@@ -57,7 +75,7 @@
       <a href="{{ '/fx/' | relative_url }}"{% if page.url contains '/fx/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.fx">FX</a>
       <a href="{{ '/commodity/' | relative_url }}"{% if page.url contains '/commodity/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.commodity">Commodity</a>
       <a href="{{ '/calendar/' | relative_url }}"{% if page.url contains '/calendar/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.calendar">Calendar</a>
-      <a href="{{ '/watchlist/' | relative_url }}"{% if page.url contains '/watchlist/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.watchlist">백테스트</a>
+      <a href="{{ '/backtest/' | relative_url }}"{% if page.url contains '/backtest/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.watchlist">백테스트</a>
       <a href="{{ '/about/' | relative_url }}"{% if page.url contains '/about/' %} class="on" aria-current="page"{% endif %} data-i18n="nav.about">소개</a>
     </nav>
     <script>(function () { var a = document.querySelector('.site-nav a.on'), n = a && a.parentNode; if (a && n.scrollWidth > n.clientWidth) n.scrollLeft = a.offsetLeft - (n.clientWidth - a.offsetWidth) / 2; })();</script>
@@ -70,7 +88,7 @@
   <footer class="site-footer">
     <div class="wrap{% if page.wide %} wide{% endif %}">
       <p data-i18n="footer.disclaimer">공개 자료를 정리한 정보 제공 목적의 글이며, 투자 권유가 아닙니다. 투자 판단과 그 결과의 책임은 투자자 본인에게 있습니다.</p>
-      <p>© {{ site.time | date: "%Y" }} {{ site.title }}</p>
+      <p>© {{ site.time | date: "%Y" }} {{ site.title }} · <a href="{{ '/feed.xml' | relative_url }}">RSS</a> · <a href="https://github.com/ywk-research/ywk-research.github.io" rel="noopener" target="_blank">GitHub</a></p>
     </div>
   </footer>
   <script>
