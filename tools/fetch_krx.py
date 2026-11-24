@@ -4,7 +4,8 @@
 - _data/krx_index.json : 코스피·코스닥·VKOSPI 일별 종가 누적
   (처음 받는 시리즈는 최근 BACKFILL_DAYS일을 채우고, 이후에는 마지막 저장일 다음 날부터 받는다)
 - _data/krx_movers.json : 직전 거래일 코스피·코스닥 등락률 상·하위, 거래대금 상위
-- _data/krx_cross.json : 이평선 골든·데드크로스 종목 (tools/krx_cross.py, 과거 종가는 tools/state/)
+- _data/krx_cross.json : 이평선 골든·데드크로스 종목 (tools/krx_cross.py)
+  과거 종가 원본(tools/state/)은 저장소에 커밋하지 않고 GitHub Actions 캐시에만 둔다(KRX 약관: 제3자 제공 금지).
 - _data/watchlist_kr.json : 국내 관심종목 백테스트 (tools/krx_backtest.py, 같은 과거 종가 사용)
 - 이용 신청이 안 된 부가 서비스(VKOSPI, 종목 시세)는 건너뛰고 나머지는 계속 받는다.
 """
@@ -113,8 +114,6 @@ def update_index(key, today):
                         series.append({
                             "d": day.isoformat(), "close": close,
                             "chg": num(row.get("CMPPREVDD_IDX")), "pct": num(row.get("FLUC_RT")),
-                            "open": num(row.get("OPNPRC_IDX")), "high": num(row.get("HGPRC_IDX")),
-                            "low": num(row.get("LWPRC_IDX")),
                         })
                         added += 1
                     time.sleep(0.25)
@@ -176,7 +175,7 @@ def update_sectors(key, day):
         w_day, w_close = closes_on_or_before(SERIES[mkt][0], day - dt.timedelta(days=7), key)
         m_day, m_close = closes_on_or_before(SERIES[mkt][0], day - dt.timedelta(days=30), key)
         out[mkt + "_base"] = {"w1": w_day and w_day.isoformat(), "m1": m_day and m_day.isoformat()}
-        sec = [{"name": r["IDX_NM"], "close": num(r.get("CLSPRC_IDX")), "pct": num(r.get("FLUC_RT")),
+        sec = [{"name": r["IDX_NM"], "pct": num(r.get("FLUC_RT")),
                 "w1": chg(num(r.get("CLSPRC_IDX")), w_close.get(r["IDX_NM"])),
                 "m1": chg(num(r.get("CLSPRC_IDX")), m_close.get(r["IDX_NM"]))}
                for r in rows if is_sector(r.get("IDX_NM", "")) and num(r.get("FLUC_RT")) is not None]
@@ -215,8 +214,7 @@ def won_txt(eok):
 def slim(r):
     eok = round((num(r.get("ACC_TRDVAL")) or 0) / 1e8)
     return {
-        "name": r["ISU_NM"], "code": r["ISU_CD"],
-        "close": num(r.get("TDD_CLSPRC")), "pct": num(r.get("FLUC_RT")),
+        "name": r["ISU_NM"], "code": r["ISU_CD"], "pct": num(r.get("FLUC_RT")),
         "value": eok, "value_txt": won_txt(eok).strip(),  # 거래대금, 억 원
     }
 
@@ -257,6 +255,9 @@ def rule_txt(min_cap):
 def update_cross(key, stocks, day):
     """이평선 골든·데드크로스 (tools/krx_cross.py). 처음 한 번은 과거 종가를 채운다."""
     days = krx_cross.sync(lambda d: fetch_stocks(key, d), day, stocks)
+    if len(days) < krx_cross.MIN_DAYS:  # 캐시가 없고 다시 채우기도 덜 됐으면 이전 결과를 그대로 둔다
+        print(f"과거 종가 {len(days)}거래일뿐이라 크로스·신고가 갱신을 건너뜀 (필요 {krx_cross.MIN_DAYS})")
+        return 0
     universe = {}
     for mkt, (endpoint, min_cap) in STOCKS.items():
         for r in ranked(stocks[mkt], min_cap):
@@ -329,7 +330,10 @@ def main():
             print(f"이평선 크로스 실패: {type(e).__name__}: {e}")
         try:  # 국내 관심종목 백테스트 (종목 이름은 KRX 응답으로 확인)
             names = {r.get("ISU_CD", ""): r.get("ISU_NM", "") for rows in stocks.values() for r in rows}
-            krx_backtest.update(names=names)
+            if len(krx_cross._load_all()) >= krx_cross.MIN_DAYS:
+                krx_backtest.update(names=names)
+            else:
+                print("과거 종가가 부족해 국내 백테스트 갱신을 건너뜀")
         except Exception as e:
             print(f"국내 백테스트 실패: {type(e).__name__}: {e}")
     etf = update_etf(key, day)
