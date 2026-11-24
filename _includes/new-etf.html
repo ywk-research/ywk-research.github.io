@@ -14,19 +14,35 @@
   </div>
 
   <div class="ne-pane" data-k="us">
+    {% assign pd = ne.us.prev_day %}
+    {% assign today_list = nus | where: "ld", pd %}
+    <div class="ne-prev">
+      <p class="krx-name"><span data-i18n="ne.prev_title" data-d="{{ pd | date: '%b %-d' }}">전 거래일({{ pd | date: "%m.%d" }}) 상장 미국 ETF</span> <span class="krx-sub">{{ today_list.size }}</span></p>
+      {% if today_list.size > 0 %}
+      <ul class="ne-prev-list">
+        {% for r in today_list %}
+        <li><span class="ne-tk">{% if r.ticker != "" %}{{ r.ticker }}{% else %}—{% endif %}</span>
+          <span class="ne-pn">{{ r.name | default: r.issuer }}</span>
+          <span class="krx-sub">{{ r.issuer }}{% if r.exchange != "" %} · {{ r.exchange }}{% endif %}</span>
+          <a class="ne-link" href="{{ r.url }}" target="_blank" rel="noopener" title="SEC EDGAR">8-A</a></li>
+        {% endfor %}
+      </ul>
+      {% else %}<p class="note" data-i18n="ne.prev_none">전 거래일에 새로 상장한 ETF가 없어요.</p>{% endif %}
+    </div>
     {% if nus.size > 0 %}
+    <p class="krx-name ne-all" data-i18n="ne.all">최근 45일</p>
     <div class="etf-wrap ne-wrap">
       <table class="etf-table">
         <thead><tr>
-          <th data-i18n="ne.date_us">8-A 제출일</th><th data-i18n="ne.ticker">티커</th><th data-i18n="ne.fund">펀드</th>
+          <th data-i18n="ne.date_us">상장일(추정)</th><th data-i18n="ne.ticker">티커</th><th data-i18n="ne.fund">펀드</th>
           <th data-i18n="ne.issuer" class="etf-idx">운용사·신탁</th><th data-i18n="ne.exch" class="ne-exch">거래소</th><th></th>
         </tr></thead>
         <tbody>
           {% for r in nus %}
-          <tr{% if forloop.index > 1 %}{% assign pi = forloop.index0 | minus: 1 %}{% if nus[pi].d != r.d %} class="ne-day"{% endif %}{% endif %}>
-            <td class="ne-d" data-dt="{{ r.d }}">{{ r.d | date: "%m.%d" }}</td>
+          <tr{% if forloop.index > 1 %}{% assign pi = forloop.index0 | minus: 1 %}{% if nus[pi].ld != r.ld %} class="ne-day"{% endif %}{% endif %}>
+            <td class="ne-d" data-dt="{{ r.ld }}">{{ r.ld | date: "%m.%d" }}</td>
             <td class="ne-tk">{% if r.ticker != "" %}{{ r.ticker }}{% else %}<span class="krx-sub">—</span>{% endif %}</td>
-            <td class="etf-name ne-nm">{{ r.name }}</td>
+            <td class="etf-name ne-nm">{{ r.name | default: "—" }}</td>
             <td class="etf-idx ne-is">{{ r.issuer }}</td>
             <td class="ne-exch">{{ r.exchange }}</td>
             <td class="num"><a class="ne-link" href="{{ r.url }}" target="_blank" rel="noopener" title="SEC EDGAR">8-A</a></td>
@@ -35,8 +51,8 @@
         </tbody>
       </table>
     </div>
-    {% else %}<p class="note" data-i18n="ne.none">최근 신규 상장이 없어요.</p>{% endif %}
-    <p class="note" data-i18n="ne.note_us" data-n="{{ nus.size }}">최근 45일 {{ nus.size }}개 펀드. ETF를 거래소에 상장하려면 운용사가 SEC에 Form 8-A(증권거래법 12(b) 등록)를 내요. 보통 첫 거래일 하루 전이나 당일이라 제출일을 상장(예정)일로 봤어요. 실제 첫 거래일과 하루 이틀 다를 수 있고, 같은 날 여러 펀드를 한 번에 등록하기도 해요 · 자료: SEC EDGAR</p>
+    {% endif %}
+    <p class="note" data-i18n="ne.note_us" data-n="{{ nus.size }}">ETF를 거래소에 상장하려면 운용사가 SEC에 Form 8-A(증권거래법 12(b) 등록)를 내요. 보통 첫 거래 전 영업일에 내므로 제출일 다음 거래일을 상장일로 추정했어요. 실제 첫 거래일과 하루 다를 수 있고, 티커는 SEC 펀드 목록에 등록된 뒤에 채워져요. 텍사스 거래소 교차상장은 뺐어요 · 자료: SEC EDGAR</p>
   </div>
 
   <div class="ne-pane" data-k="kr" hidden>

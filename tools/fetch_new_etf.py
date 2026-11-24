@@ -255,6 +255,7 @@ def series_page(cik):
     tab = {}
     try:
         for start in range(0, 1000, 100):
+            time.sleep(1.0)  # 이 목록 페이지는 자동 요청이 잦으면 503을 주므로 천천히
             page = sec_get(f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK={cik}&scd=series&count=100&start={start}")
             if not page:
                 break
@@ -328,6 +329,26 @@ def clean_company(name):
     return " ".join(out)
 
 
+# 미국 증시 휴장일(NYSE·Nasdaq). 해마다 거래소 발표를 보고 추가
+US_HOLIDAYS = {
+    "2026-01-01", "2026-01-19", "2026-02-16", "2026-04-03", "2026-05-25", "2026-06-19", "2026-07-03",
+    "2026-09-07", "2026-11-26", "2026-12-25",
+    "2027-01-01", "2027-01-18", "2027-02-15", "2027-03-26", "2027-05-31", "2027-06-18", "2027-07-05",
+    "2027-09-06", "2027-11-25", "2027-12-24",
+}
+
+
+def us_trading(d):
+    return d.weekday() < 5 and d.isoformat() not in US_HOLIDAYS
+
+
+def next_trading(d):
+    d += dt.timedelta(days=1)
+    while not us_trading(d):
+        d += dt.timedelta(days=1)
+    return d
+
+
 def update_us(today, prev):
     if not UA:
         print("미국 건너뜀 — SEC_USER_AGENT가 없습니다.")
@@ -384,7 +405,15 @@ def update_us(today, prev):
             it["ticker"] = find_ticker(it["cik"], it["name"], today.year,
                                        recent=(today - dt.date.fromisoformat(it["d"])).days <= 21)
     save(SEEN, sorted(seen)[-5000:], compact=True)
-    return {"source": "SEC EDGAR Form 8-A12B", "updated": today.isoformat(),
+    # 8-A는 보통 첫 거래 전 영업일에 내므로, 제출일 다음 거래일을 상장일(추정)로 둔다
+    for it in keep:
+        it["ld"] = next_trading(dt.date.fromisoformat(it["d"])).isoformat()
+    keep.sort(key=lambda it: (it["ld"], it["issuer"], it["name"]), reverse=True)
+    # 전 거래일: 발간일(한국 날짜) 이전의 마지막 미국 거래일
+    prev_day = today - dt.timedelta(days=1)
+    while not us_trading(prev_day):
+        prev_day -= dt.timedelta(days=1)
+    return {"source": "SEC EDGAR Form 8-A12B", "updated": today.isoformat(), "prev_day": prev_day.isoformat(),
             "days": sorted(x for x in done if x >= cutoff.isoformat()), "items": keep}
 
 

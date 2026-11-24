@@ -160,7 +160,10 @@ en:
   ne.title: Newly listed ETFs
   ne.us: US
   ne.kr: Korea
-  ne.date_us: 8-A filed
+  ne.date_us: Listed (est.)
+  ne.prev_title: "US ETFs listed on the previous trading day ({d})"
+  ne.prev_none: No new ETFs listed on the previous trading day.
+  ne.all: Last 45 days
   ne.date_kr: Listed
   ne.ticker: Ticker
   ne.fund: Fund
@@ -169,7 +172,7 @@ en:
   ne.close1: First-day close
   ne.aum1: First-day net assets
   ne.none: No new listings recently.
-  ne.note_us: "{n} funds in the last 45 days. To list an ETF on an exchange, the issuer files Form 8-A (Exchange Act Section 12(b) registration) with the SEC, usually the day before or the day of the first trade, so the filing date is used as the (expected) listing date. It may differ from the actual first trading day by a day or two, and one filing can register several funds · Source: SEC EDGAR"
+  ne.note_us: "To list an ETF, the issuer files Form 8-A (Exchange Act Section 12(b) registration) with the SEC, usually on the business day before the first trade, so the listing date is estimated as the next trading day after the filing. It may be off by a day; tickers appear once the fund is registered in the SEC fund list. Cross-listings on the new Texas exchanges are excluded · Source: SEC EDGAR"
   ne.note_kr: "{n} in the last 45 days · {total} ETFs listed in total. The listing date is the first day a code appears in KRX daily ETF data. ETF names are shown in Korean · Source: Korea Exchange (KRX) Open API"
   hl.title: '52-week Highs & Lows <span class="krx-sub">as of {d}</span>'
   hl.kospi_hi: KOSPI new highs

@@ -59,6 +59,13 @@ jobs:
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
         run: python tools/fetch_edgar.py
 
+      - name: 신규 상장 ETF(미국 SEC EDGAR 8-A, 한국 KRX ETF 일별매매정보) 받아오기
+        continue-on-error: true
+        env:
+          KRX_API_KEY: ${{ secrets.KRX_API_KEY }}
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+        run: python tools/fetch_new_etf.py
+
       - name: KRX 과거 종가 캐시 저장
         if: always() && hashFiles('tools/state/krx_closes/*.json') != ''
         uses: actions/cache/save@v4
