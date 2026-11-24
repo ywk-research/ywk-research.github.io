@@ -186,5 +186,7 @@ h3 { font-size: 16px; margin: 24px 0 8px; }
 /* 세계 시장 뉴스 (오른쪽 칸, 최신 브리핑 아래) */
 .tv-news h2 { margin-top: 32px; }
 .tv-news-box { height: 420px; }
+.tv-cal-box { height: 720px; }
+@media (max-width: 560px) { .tv-cal-box { height: 600px; } }
 .tv-news-box .tradingview-widget-container { height: 100%; }
 @media (max-width: 1000px) { .home-brief .tv-news { order: -1; margin-bottom: 8px; } }
