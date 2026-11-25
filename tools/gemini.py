@@ -1,7 +1,7 @@
 """Gemini API(구글 검색 그라운딩) 호출 도우미. 표준 라이브러리만 쓴다.
 
 - 키: 환경변수 GEMINI_API_KEY (GitHub Secrets). 키는 출력하지 않는다.
-- 모델: 환경변수 GEMINI_MODELS(쉼표 구분, 앞에서부터 시도). 기본 gemini-2.5-flash → gemini-2.5-flash-lite
+- 모델: 환경변수 GEMINI_MODELS(쉼표 구분)가 있으면 그것, 없으면 모델 목록에서 최신 flash → flash-lite를 고름
 - ask()는 (답 텍스트, 검색에 실제로 쓰인 출처 목록)을 돌려준다.
   출처 목록은 그라운딩 메타데이터의 링크를 실제 주소로 풀어 둔 것이라,
   모델이 쓴 출처가 이 목록(같은 사이트)에 없으면 "검색으로 확인하지 않은 것"으로 보고 버릴 수 있다.
@@ -18,8 +18,44 @@ API = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateC
 UA = "Mozilla/5.0 (compatible; desk-notes-bot/1.0; +https://ywk-research.github.io)"
 
 
+_MODELS = None
+
+
+def _ver(name):
+    m = re.search(r"gemini-(\d+(?:\.\d+)?)", name)
+    return float(m.group(1)) if m else 0.0
+
+
 def models():
-    return [m.strip() for m in os.environ.get("GEMINI_MODELS", "gemini-2.5-flash,gemini-2.5-flash-lite").split(",") if m.strip()]
+    """쓸 모델 순서. GEMINI_MODELS가 있으면 그대로, 없으면 API 모델 목록에서
+    generateContent를 지원하는 정식(미리보기 아님) flash 계열 최신 → flash-lite 순으로 고른다(모델이 은퇴해도 자동으로 따라감)"""
+    global _MODELS
+    if _MODELS is not None:
+        return _MODELS
+    env = [m.strip() for m in os.environ.get("GEMINI_MODELS", "").split(",") if m.strip()]
+    if env:
+        _MODELS = env
+        return env
+    names = []
+    try:
+        key = os.environ.get("GEMINI_API_KEY", "").strip()
+        url = "https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000"
+        with urllib.request.urlopen(urllib.request.Request(url, headers={"x-goog-api-key": key}), timeout=30) as r:
+            for m in json.load(r).get("models", []):
+                if "generateContent" in m.get("supportedGenerationMethods", []):
+                    names.append(m["name"].removeprefix("models/"))
+    except Exception as e:
+        print(f"  모델 목록 실패: {e}")
+    bad = ("image", "tts", "audio", "live", "embedding", "thinking", "exp", "preview", "-001", "-002", "learnlm", "robotics", "computer")
+    flash = [n for n in names if "flash" in n and not any(b in n for b in bad)]
+    full = sorted([n for n in flash if "lite" not in n], key=_ver, reverse=True)
+    lite = sorted([n for n in flash if "lite" in n], key=_ver, reverse=True)
+    pick = (full[:2] + lite[:1]) or ["gemini-flash-latest", "gemini-flash-lite-latest"]
+    print(f"  모델 후보: {', '.join(pick)} (전체 {len(names)}개 중)")
+    if not full and not lite and names:
+        print("  사용 가능 모델: " + ", ".join(names[:40]))
+    _MODELS = pick
+    return pick
 
 
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
