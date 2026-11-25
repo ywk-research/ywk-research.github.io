@@ -5,8 +5,12 @@ name: 브리핑 전일 종가 받기
 # 06:08 브리핑 예약 작업은 이 파일이 그날 것이 아니면 이 워크플로를 직접 실행하고 기다린다(tools/briefing_task.md).
 on:
   schedule:
-    # 평일 한국시간 06:02 (UTC 21:02 일~목). 예약 실행은 몇 분 늦을 수 있다
+    # 평일 한국시간 06:02·06:13·06:26·06:41 (UTC 일~목). 예약 실행이 수십 분 늦는 날이 있어(11/26: 06:02 → 06:56)
+    # 여러 번 걸어 두고, 이미 오늘 06시 뒤에 받은 파일이 있으면 건너뛴다
     - cron: "2 21 * * 0-4"
+    - cron: "13 21 * * 0-4"
+    - cron: "26 21 * * 0-4"
+    - cron: "41 21 * * 0-4"
   workflow_dispatch:
 
 permissions:
@@ -21,7 +25,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: 이미 받았는지 확인
+        id: chk
+        if: github.event_name == 'schedule'
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, datetime as dt
+          kst = dt.timezone(dt.timedelta(hours=9))
+          now = dt.datetime.now(kst)
+          try:
+              u = json.load(open("_data/briefing_quotes.json")).get("updated_at", "")
+          except Exception:
+              u = ""
+          print("skip=" + ("1" if u >= now.strftime("%Y-%m-%d 06:00") else "0"))
+          PY
       - name: Worker에서 전일 종가 받기
+        if: steps.chk.outputs.skip != '1'
         env:
           DESK_PVT_URL: ${{ secrets.DESK_PVT_URL }}
           DESK_CLOSE_TOKEN: ${{ secrets.DESK_CLOSE_TOKEN }}
