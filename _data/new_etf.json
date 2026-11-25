@@ -32,9 +32,43 @@
    "2026-11-18",
    "2026-11-19",
    "2026-11-20",
-   "2026-11-23"
+   "2026-11-23",
+   "2026-11-24"
   ],
   "items": [
+   {
+    "key": "1100663:ishares msci usa select screened etf",
+    "d": "2026-11-24",
+    "name": "iShares MSCI USA Select Screened ETF",
+    "ticker": "MLRX",
+    "cik": "1100663",
+    "issuer": "iSHARES TRUST",
+    "exchange": "NYSE Arca",
+    "url": "https://www.sec.gov/Archives/edgar/data/1100663/000119312526473674/0001193125-26-473674-index.htm",
+    "ld": "2026-11-25"
+   },
+   {
+    "key": "1683471:alphadroid sweet 16 stocks & defensive asset rotation etf",
+    "d": "2026-11-24",
+    "name": "AlphaDroid Sweet 16 Stocks & Defensive Asset Rotation ETF",
+    "ticker": "EZSX",
+    "cik": "1683471",
+    "issuer": "Listed Funds Trust",
+    "exchange": "Nasdaq",
+    "url": "https://www.sec.gov/Archives/edgar/data/1683471/000089418926031658/0000894189-26-031658-index.htm",
+    "ld": "2026-11-25"
+   },
+   {
+    "key": "1683471:alphadroid nextgen defensive momentum etf",
+    "d": "2026-11-24",
+    "name": "AlphaDroid NextGen Defensive Momentum ETF",
+    "ticker": "EZAI",
+    "cik": "1683471",
+    "issuer": "Listed Funds Trust",
+    "exchange": "Nasdaq",
+    "url": "https://www.sec.gov/Archives/edgar/data/1683471/000089418926031658/0000894189-26-031658-index.htm",
+    "ld": "2026-11-25"
+   },
    {
     "key": "2055464:wedbush analog economy etf",
     "d": "2026-11-23",
