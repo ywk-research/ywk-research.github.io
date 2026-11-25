@@ -277,10 +277,17 @@ def build(pub, now):
             L.append(f"- **코스피 상승 1위(시총 1조↑):** {g[0]['name']} {pct(g[0]['pct'])}")
         if lo:
             L.append(f"- **코스피 하락 1위(시총 1조↑):** {lo[0]['name']} {pct(lo[0]['pct'])}")
-    # 미국 주요 종목: Yahoo 종가 중 D에 가장 많이 움직인 4개(이유는 예약 작업이 덧붙임)
-    movers = sorted((r for r in ys.values() if r.get("d") == us_d.isoformat()), key=lambda r: -abs(r["pct"]))[:4]
-    for r in movers:
+    # 주요 종목: Yahoo 종가로 등락률·종가를 미리 넣는다(이유는 예약 작업이 덧붙임)
+    # 미국은 D에 가장 많이 움직인 4개, 국내 대형주(.KS)는 K에 가장 많이 움직인 2개
+    isk = lambda r: str(r.get("symbol", "")).endswith(".KS")
+    us_mv = sorted((r for r in ys.values() if not isk(r) and r.get("d") == us_d.isoformat()), key=lambda r: -abs(r["pct"]))[:4]
+    kr_mv = sorted((r for r in ys.values() if isk(r) and r.get("d") == kr_d.isoformat()), key=lambda r: -abs(r["pct"]))[:2]
+    for r in us_mv:
         L.append(f"- **{r['name']} {pct(r['pct'])} (${r['close']:,.2f})**")
+    for r in kr_mv:
+        L.append(f"- **{r['name']} {pct(r['pct'])} ({r['close']:,.0f}원)**")
+    if not us_mv:
+        missing.append("미국 주요 종목")
     L.append("<!-- US_STOCKS -->")
     L.append("")
 
