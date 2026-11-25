@@ -1,120 +1,120 @@
 {
  "source": "한국거래소(KRX) Open API",
+ "d": "2026-11-24",
  "rules": {
   "kospi": "시가총액 1조 원 이상, 우선주·스팩 제외",
   "kosdaq": "시가총액 3,000억 원 이상, 우선주·스팩 제외"
  },
- "updated_at": "2026-11-24 13:47 KST",
  "kospi": {
   "gainers": [
    {
-    "name": "에이피알",
-    "code": "278470",
-    "pct": 9.13,
-    "value": 1407,
-    "value_txt": "1,407억"
+    "name": "현대오토에버",
+    "code": "307950",
+    "pct": 29.93,
+    "value": 1020,
+    "value_txt": "1,020억"
    },
    {
-    "name": "세아베스틸지주",
-    "code": "001430",
-    "pct": 5.77,
-    "value": 79,
-    "value_txt": "79억"
+    "name": "이수스페셜티케미컬",
+    "code": "457190",
+    "pct": 19.83,
+    "value": 459,
+    "value_txt": "459억"
    },
    {
-    "name": "가온전선",
-    "code": "000500",
-    "pct": 3.11,
-    "value": 234,
-    "value_txt": "234억"
+    "name": "롯데에너지머티리얼즈",
+    "code": "020150",
+    "pct": 19.53,
+    "value": 231,
+    "value_txt": "231억"
+   },
+   {
+    "name": "LG전자",
+    "code": "066570",
+    "pct": 15.86,
+    "value": 1901,
+    "value_txt": "1,901억"
    },
    {
     "name": "두산",
     "code": "000150",
-    "pct": 2.66,
-    "value": 792,
-    "value_txt": "792억"
-   },
-   {
-    "name": "이수페타시스",
-    "code": "007660",
-    "pct": 2.3,
-    "value": 982,
-    "value_txt": "982억"
+    "pct": 14.6,
+    "value": 1059,
+    "value_txt": "1,059억"
    }
   ],
   "losers": [
    {
-    "name": "NHN",
-    "code": "181710",
-    "pct": -18.3,
-    "value": 342,
-    "value_txt": "342억"
+    "name": "롯데웰푸드",
+    "code": "280360",
+    "pct": -5.55,
+    "value": 106,
+    "value_txt": "106억"
    },
    {
-    "name": "삼성에스디에스",
-    "code": "018260",
-    "pct": -15.42,
-    "value": 1511,
-    "value_txt": "1,511억"
+    "name": "코리안리",
+    "code": "003690",
+    "pct": -3.54,
+    "value": 56,
+    "value_txt": "56억"
    },
    {
-    "name": "LG씨엔에스",
-    "code": "064400",
-    "pct": -13.93,
-    "value": 1213,
-    "value_txt": "1,213억"
+    "name": "에스원",
+    "code": "012750",
+    "pct": -1.17,
+    "value": 125,
+    "value_txt": "125억"
    },
    {
-    "name": "GS건설",
-    "code": "006360",
-    "pct": -12.57,
-    "value": 675,
-    "value_txt": "675억"
+    "name": "GS리테일",
+    "code": "007070",
+    "pct": -0.48,
+    "value": 29,
+    "value_txt": "29억"
    },
    {
-    "name": "삼성에피스홀딩스",
-    "code": "0126Z0",
-    "pct": -10.17,
-    "value": 212,
-    "value_txt": "212억"
+    "name": "서울보증보험",
+    "code": "031210",
+    "pct": -0.27,
+    "value": 34,
+    "value_txt": "34억"
    }
   ],
   "value": [
    {
     "name": "SK하이닉스",
     "code": "000660",
-    "pct": -2.52,
-    "value": 42582,
-    "value_txt": "4조 2,582억"
+    "pct": 6.73,
+    "value": 42454,
+    "value_txt": "4조 2,454억"
    },
    {
     "name": "삼성전자",
     "code": "005930",
-    "pct": -3.06,
-    "value": 34560,
-    "value_txt": "3조 4,560억"
+    "pct": 6.7,
+    "value": 32572,
+    "value_txt": "3조 2,572억"
    },
    {
     "name": "삼성전기",
     "code": "009150",
-    "pct": 0.52,
-    "value": 7067,
-    "value_txt": "7,067억"
+    "pct": 10.28,
+    "value": 7451,
+    "value_txt": "7,451억"
    },
    {
     "name": "SK스퀘어",
     "code": "402340",
-    "pct": 0.44,
-    "value": 4481,
-    "value_txt": "4,481억"
+    "pct": 5.15,
+    "value": 4344,
+    "value_txt": "4,344억"
    },
    {
-    "name": "삼성E&A",
-    "code": "028050",
-    "pct": -7.96,
-    "value": 2371,
-    "value_txt": "2,371억"
+    "name": "삼성SDI",
+    "code": "006400",
+    "pct": 13.64,
+    "value": 3425,
+    "value_txt": "3,425억"
    }
   ]
  },
@@ -123,113 +123,113 @@
    {
     "name": "휴림로봇",
     "code": "090710",
-    "pct": 30.0,
-    "value": 564,
-    "value_txt": "564억"
+    "pct": 29.9,
+    "value": 1535,
+    "value_txt": "1,535억"
    },
    {
-    "name": "큐로셀",
-    "code": "372320",
-    "pct": 29.95,
-    "value": 16,
-    "value_txt": "16억"
+    "name": "한국피아이엠",
+    "code": "448900",
+    "pct": 29.87,
+    "value": 111,
+    "value_txt": "111억"
    },
    {
-    "name": "에이치브이엠",
-    "code": "295310",
-    "pct": 16.51,
-    "value": 112,
-    "value_txt": "112억"
+    "name": "에스피지",
+    "code": "058610",
+    "pct": 24.01,
+    "value": 857,
+    "value_txt": "857억"
    },
    {
-    "name": "SFA반도체",
-    "code": "036540",
-    "pct": 10.36,
-    "value": 763,
-    "value_txt": "763억"
+    "name": "유진로봇",
+    "code": "056080",
+    "pct": 20.63,
+    "value": 396,
+    "value_txt": "396억"
    },
    {
-    "name": "지투지바이오",
-    "code": "456160",
-    "pct": 10.18,
-    "value": 228,
-    "value_txt": "228억"
+    "name": "로보티즈",
+    "code": "108490",
+    "pct": 19.51,
+    "value": 2232,
+    "value_txt": "2,232억"
    }
   ],
   "losers": [
    {
-    "name": "에스티큐브",
-    "code": "052020",
-    "pct": -10.47,
-    "value": 8,
-    "value_txt": "8억"
+    "name": "큐리언트",
+    "code": "115180",
+    "pct": -9.52,
+    "value": 143,
+    "value_txt": "143억"
    },
    {
-    "name": "미래에셋벤처투자",
-    "code": "100790",
-    "pct": -9.36,
-    "value": 116,
-    "value_txt": "116억"
+    "name": "티에프이",
+    "code": "425420",
+    "pct": -7.11,
+    "value": 207,
+    "value_txt": "207억"
    },
    {
-    "name": "지엔씨에너지",
-    "code": "119850",
-    "pct": -8.85,
-    "value": 171,
-    "value_txt": "171억"
+    "name": "알테오젠",
+    "code": "196170",
+    "pct": -5.22,
+    "value": 1819,
+    "value_txt": "1,819억"
    },
    {
-    "name": "디어유",
-    "code": "376300",
-    "pct": -8.43,
-    "value": 38,
-    "value_txt": "38억"
+    "name": "큐로셀",
+    "code": "372320",
+    "pct": -3.99,
+    "value": 81,
+    "value_txt": "81억"
    },
    {
-    "name": "제이에스링크",
-    "code": "127120",
-    "pct": -7.97,
-    "value": 45,
-    "value_txt": "45억"
+    "name": "펩트론",
+    "code": "087010",
+    "pct": -3.91,
+    "value": 111,
+    "value_txt": "111억"
    }
   ],
   "value": [
    {
-    "name": "주성엔지니어링",
-    "code": "036930",
-    "pct": -2.34,
-    "value": 2379,
-    "value_txt": "2,379억"
-   },
-   {
     "name": "원익홀딩스",
     "code": "030530",
-    "pct": 2.89,
-    "value": 1515,
-    "value_txt": "1,515억"
+    "pct": -2.18,
+    "value": 3776,
+    "value_txt": "3,776억"
    },
    {
-    "name": "심텍",
-    "code": "222800",
-    "pct": 2.41,
-    "value": 1484,
-    "value_txt": "1,484억"
+    "name": "주성엔지니어링",
+    "code": "036930",
+    "pct": 5.72,
+    "value": 2312,
+    "value_txt": "2,312억"
    },
    {
-    "name": "에이엘로봇",
-    "code": "471800",
-    "pct": 7.2,
-    "value": 1447,
-    "value_txt": "1,447억"
+    "name": "로보티즈",
+    "code": "108490",
+    "pct": 19.51,
+    "value": 2232,
+    "value_txt": "2,232억"
    },
    {
-    "name": "빅웨이브로보틱스",
-    "code": "0035S0",
-    "pct": 20.28,
-    "value": 1412,
-    "value_txt": "1,412억"
+    "name": "알테오젠",
+    "code": "196170",
+    "pct": -5.22,
+    "value": 1819,
+    "value_txt": "1,819억"
+   },
+   {
+    "name": "휴림로봇",
+    "code": "090710",
+    "pct": 29.9,
+    "value": 1535,
+    "value_txt": "1,535억"
    }
   ]
  },
- "d": "2026-11-23"
+ "updated_at": "2026-11-25 09:09 KST"
 }

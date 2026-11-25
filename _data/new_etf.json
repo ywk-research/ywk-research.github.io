@@ -1898,9 +1898,31 @@
  },
  "kr": {
   "source": "한국거래소(KRX) Open API",
-  "updated": "2026-11-23",
-  "listed": 1190,
+  "updated": "2026-11-24",
+  "listed": 1192,
   "items": [
+   {
+    "d": "2026-11-24",
+    "name": "TIGER 글로벌LLM액티브",
+    "code": "0271B0",
+    "index": "Mirae Asset Global LLM Index (Price Return)",
+    "close": 10155.0,
+    "close_txt": "10,155",
+    "aum": 514,
+    "aum_txt": "514억",
+    "value": 49.7
+   },
+   {
+    "d": "2026-11-24",
+    "name": "PLUS 글로벌AI병목인프라액티브",
+    "code": "0270V0",
+    "index": "DeepSearch 글로벌 AI 병목 인프라 지수",
+    "close": 11005.0,
+    "close_txt": "11,005",
+    "aum": 132,
+    "aum_txt": "132억",
+    "value": 4.2
+   },
    {
     "d": "2026-11-17",
     "name": "RISE 27-11 회사채(AA-이상)액티브",

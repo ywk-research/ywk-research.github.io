@@ -1,20 +1,13 @@
 {
  "source": "한국거래소(KRX) Open API",
- "d": "2026-11-23",
+ "d": "2026-11-24",
  "window": 250,
  "stored": 310,
  "eligible": {
   "kospi": 798,
-  "kosdaq": 1624
+  "kosdaq": 1626
  },
  "series": [
-  {
-   "d": "2026-08-26",
-   "kospi_hi": 8,
-   "kospi_lo": 0,
-   "kosdaq_hi": 5,
-   "kosdaq_lo": 15
-  },
   {
    "d": "2026-08-27",
    "kospi_hi": 4,
@@ -95,30 +88,30 @@
   {
    "d": "2026-09-11",
    "kospi_hi": 2,
-   "kospi_lo": 7,
+   "kospi_lo": 6,
    "kosdaq_hi": 3,
-   "kosdaq_lo": 27
+   "kosdaq_lo": 26
   },
   {
    "d": "2026-09-14",
    "kospi_hi": 3,
-   "kospi_lo": 8,
+   "kospi_lo": 7,
    "kosdaq_hi": 7,
-   "kosdaq_lo": 41
+   "kosdaq_lo": 40
   },
   {
    "d": "2026-09-15",
    "kospi_hi": 1,
-   "kospi_lo": 15,
+   "kospi_lo": 14,
    "kosdaq_hi": 2,
-   "kosdaq_lo": 36
+   "kosdaq_lo": 34
   },
   {
    "d": "2026-09-16",
    "kospi_hi": 2,
    "kospi_lo": 20,
    "kosdaq_hi": 4,
-   "kosdaq_lo": 38
+   "kosdaq_lo": 36
   },
   {
    "d": "2026-09-17",
@@ -132,7 +125,7 @@
    "kospi_hi": 7,
    "kospi_lo": 20,
    "kosdaq_hi": 5,
-   "kosdaq_lo": 30
+   "kosdaq_lo": 29
   },
   {
    "d": "2026-09-21",
@@ -179,7 +172,7 @@
   {
    "d": "2026-10-01",
    "kospi_hi": 6,
-   "kospi_lo": 13,
+   "kospi_lo": 12,
    "kosdaq_hi": 13,
    "kosdaq_lo": 35
   },
@@ -214,9 +207,9 @@
   {
    "d": "2026-10-12",
    "kospi_hi": 3,
-   "kospi_lo": 55,
+   "kospi_lo": 54,
    "kosdaq_hi": 4,
-   "kosdaq_lo": 76
+   "kosdaq_lo": 75
   },
   {
    "d": "2026-10-13",
@@ -237,7 +230,7 @@
    "kospi_hi": 3,
    "kospi_lo": 101,
    "kosdaq_hi": 3,
-   "kosdaq_lo": 189
+   "kosdaq_lo": 187
   },
   {
    "d": "2026-10-16",
@@ -251,7 +244,7 @@
    "kospi_hi": 4,
    "kospi_lo": 9,
    "kosdaq_hi": 9,
-   "kosdaq_lo": 19
+   "kosdaq_lo": 18
   },
   {
    "d": "2026-10-20",
@@ -427,62 +420,110 @@
    "kospi_lo": 308,
    "kosdaq_hi": 0,
    "kosdaq_lo": 469
+  },
+  {
+   "d": "2026-11-24",
+   "kospi_hi": 1,
+   "kospi_lo": 32,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 83
   }
  ],
- "high": [],
- "high_total": 0,
+ "high": [
+  {
+   "name": "안랩",
+   "mkt": "kosdaq",
+   "code": "053800"
+  },
+  {
+   "name": "디케이티",
+   "mkt": "kosdaq",
+   "code": "290550"
+  },
+  {
+   "name": "케이씨",
+   "mkt": "kospi",
+   "code": "029460"
+  },
+  {
+   "name": "심텍홀딩스",
+   "mkt": "kosdaq",
+   "code": "036710"
+  },
+  {
+   "name": "바이오비쥬",
+   "mkt": "kosdaq",
+   "code": "489460"
+  },
+  {
+   "name": "나이스디앤비",
+   "mkt": "kosdaq",
+   "code": "130580"
+  },
+  {
+   "name": "디지캡",
+   "mkt": "kosdaq",
+   "code": "197140"
+  },
+  {
+   "name": "이씨에스",
+   "mkt": "kosdaq",
+   "code": "067010"
+  }
+ ],
+ "high_total": 8,
  "low": [
   {
-   "name": "LG에너지솔루션",
-   "mkt": "kospi",
-   "code": "373220"
+   "name": "알테오젠",
+   "mkt": "kosdaq",
+   "code": "196170"
   },
   {
-   "name": "현대차",
+   "name": "서울보증보험",
    "mkt": "kospi",
-   "code": "005380"
+   "code": "031210"
   },
   {
-   "name": "기아",
-   "mkt": "kospi",
-   "code": "000270"
+   "name": "펩트론",
+   "mkt": "kosdaq",
+   "code": "087010"
   },
   {
-   "name": "한화에어로스페이스",
-   "mkt": "kospi",
-   "code": "012450"
+   "name": "태광",
+   "mkt": "kosdaq",
+   "code": "023160"
   },
   {
-   "name": "두산에너빌리티",
-   "mkt": "kospi",
-   "code": "034020"
+   "name": "큐리언트",
+   "mkt": "kosdaq",
+   "code": "115180"
   },
   {
-   "name": "HD현대중공업",
+   "name": "녹십자홀딩스",
    "mkt": "kospi",
-   "code": "329180"
+   "code": "005250"
   },
   {
-   "name": "NAVER",
-   "mkt": "kospi",
-   "code": "035420"
+   "name": "SOOP",
+   "mkt": "kosdaq",
+   "code": "067160"
   },
   {
-   "name": "POSCO홀딩스",
-   "mkt": "kospi",
-   "code": "005490"
+   "name": "감성코퍼레이션",
+   "mkt": "kosdaq",
+   "code": "036620"
   },
   {
-   "name": "한국전력",
+   "name": "코람코라이프인프라리츠",
    "mkt": "kospi",
-   "code": "015760"
+   "code": "357120"
   },
   {
-   "name": "고려아연",
+   "name": "KG모빌리티플랫폼",
    "mkt": "kospi",
-   "code": "010130"
+   "code": "381970"
   }
  ],
- "low_total": 777,
- "updated_at": "2026-11-24 17:43 KST"
+ "low_total": 115,
+ "updated_at": "2026-11-25 09:09 KST"
 }
