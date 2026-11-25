@@ -303,6 +303,8 @@ def build(pub, now):
     else:
         L.append("오늘은 큰 발표 일정이 없어요.")
     L.append("")
+    if pub.isoformat() in US_HOLIDAYS:
+        L += [f"> 미국 증시는 {pub.day}일(현지) 휴장해요.", ""]
 
     srcs = "한국거래소(KRX) Open API, 한국은행 ECOS, Cboe, 미 재무부, SEC EDGAR" + (", Yahoo Finance(지수·종목 종가)" if yi else "")
     L.append(f'<p class="note">자료: {srcs} 및 각 거래소·언론 보도 종합. 정보 정리 목적이며 투자 권유가 아닙니다.</p>')
@@ -319,8 +321,8 @@ def build(pub, now):
     return text, missing, us_d, kr_d
 
 
-def prune(text):
-    """예약 작업 없이 올릴 때: 값이 없는("—") 표 줄과 빈 섹션을 빼고 안내 한 줄을 붙인다"""
+def prune(text, note=True):
+    """바로 올릴 때: 값이 없는("—") 표 줄과 빈 섹션을 뺀다. note면 안내 한 줄을 붙인다(뉴스 없이 올릴 때)"""
     out = []
     for line in text.split("\n"):
         cells = [c.strip() for c in line.strip().strip("|").split("|")] if line.startswith("| ") else []
@@ -331,6 +333,8 @@ def prune(text):
     text = "\n".join(out)
     text = re.sub(r"\| 지표 \|[^\n]*\n\|[-:| ]+\|\n(?=\n)", "", text)
     text = re.sub(r"## [^\n]+\n\n(<!-- [A-Z_]+ -->\n)?\n(?=## |<!--|<p)", "", text)
+    if not note:
+        return text
     note = ('<p class="note">※ 자동 정리 단계가 시간 안에 끝나지 않아 공식 자료로 받은 수치만 먼저 올렸어요. '
             '미국·아시아 지수와 뉴스는 확인되는 대로 추가해요.</p>\n\n')
     return text.replace("## 전 거래일 신규 상장 ETF", note + "## 전 거래일 신규 상장 ETF", 1)
@@ -342,12 +346,13 @@ def main():
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--prune", action="store_true", help="빈 항목을 빼고 바로 올릴 수 있는 형태로(예비 발간용)")
+    ap.add_argument("--no-note", action="store_true", help="--prune 때 '자동 정리 단계…' 안내를 붙이지 않음(Gemini가 뉴스를 채울 때)")
     a = ap.parse_args()
     now = dt.datetime.now(KST)
     pub = dt.date.fromisoformat(a.date) if a.date else now.date()
     text, missing, us_d, kr_d = build(pub, now)
     if a.prune:
-        text = prune(text)
+        text = prune(text, note=not a.no_note)
     path = os.path.join(ROOT, "_posts", f"{pub.isoformat()}-pre-market-briefing.md")
     print(f"발간일 {pub} · 미국 전 거래일 {us_d} · 국내 전 거래일 {kr_d}")
     print("채우지 못한 항목: " + (", ".join(missing) or "없음"))
