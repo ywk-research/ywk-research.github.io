@@ -1,8 +1,8 @@
 {
  "us": {
   "source": "SEC EDGAR Form 8-A12B",
-  "updated": "2026-11-25",
-  "prev_day": "2026-11-24",
+  "updated": "2026-11-26",
+  "prev_day": "2026-11-25",
   "days": [
    "2026-10-13",
    "2026-10-14",
@@ -194,7 +194,7 @@
     "key": "2043390:the sector rotation long/short etf",
     "d": "2026-11-19",
     "name": "The Sector Rotation Long/Short ETF",
-    "ticker": "",
+    "ticker": "DRFT",
     "cik": "2043390",
     "issuer": "Tidal Trust IV",
     "exchange": "NYSE Arca",
