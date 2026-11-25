@@ -1,6 +1,6 @@
 {
  "source": "Yahoo Finance",
- "updated_at": "2026-11-26 06:52 KST",
+ "updated_at": "2026-11-26 06:56 KST",
  "index": {
   "spx": {
    "symbol": "^GSPC",
@@ -115,21 +115,21 @@
   "wti": {
    "symbol": "CL=F",
    "d": "2026-11-25",
-   "close": 84.06,
+   "close": 84.12,
    "prev": 82.05,
    "prev_d": "2026-11-24",
-   "chg": 2.01,
-   "pct": 2.45,
+   "chg": 2.07,
+   "pct": 2.52,
    "name": "WTI"
   },
   "gold": {
    "symbol": "GC=F",
    "d": "2026-11-25",
-   "close": 3604.1,
+   "close": 3606.9,
    "prev": 3561.8999,
    "prev_d": "2026-11-24",
-   "chg": 42.2001,
-   "pct": 1.18,
+   "chg": 45.0001,
+   "pct": 1.26,
    "name": "금"
   }
  },
