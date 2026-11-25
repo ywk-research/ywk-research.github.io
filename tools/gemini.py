@@ -165,6 +165,19 @@ def ask(prompt, temperature=0.2, timeout=120):
                 last = f"{model} 빈 응답"
                 break
             return text, srcs
+    if last and "429" in last and not os.environ.get("_GEMINI_PROBED"):
+        # 진단: 검색 없이 호출하면 되는지(구글 검색 그라운딩만 할당량이 없는지) 한 번 확인
+        os.environ["_GEMINI_PROBED"] = "1"
+        req = urllib.request.Request(API.format(model=models()[-1]), method="POST",
+                                     data=json.dumps({"contents": [{"parts": [{"text": "Say OK"}]}]}).encode(),
+                                     headers={"Content-Type": "application/json", "x-goog-api-key": key})
+        try:
+            with urllib.request.urlopen(req, timeout=60):
+                print("  진단: 검색 없는 호출은 됨 → 구글 검색 그라운딩 할당량이 없음(유료 등급 필요할 수 있음)")
+        except urllib.error.HTTPError as e:
+            print(f"  진단: 검색 없는 호출도 HTTP {e.code} → 키(프로젝트) 자체에 무료 할당량이 없음")
+        except Exception as e:
+            print(f"  진단 실패: {type(e).__name__}")
     raise RuntimeError(f"Gemini 호출 실패: {last}")
 
 

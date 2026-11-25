@@ -82,12 +82,16 @@ jobs:
           if [ "$rc" = "0" ] && grep -q '^| S&P500 |' "$f"; then
             sed -i '0,/^auto: true$/s//auto: true\nfilled: true/' "$f"
             echo "완성(filled)"
+          elif [ "$rc" != "0" ] && [ "$(TZ=Asia/Seoul date +%H%M)" -lt 0638 ]; then
+            # 뉴스를 못 채웠으면 06:38 전에는 올리지 않는다(다음 실행이나 다른 작업이 채울 시간을 남김). 06:40·07:15 실행은 있는 것으로 올림
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "뉴스 미완성, 06:38 전이라 이번엔 올리지 않음"
           fi
           echo "------ 결과 ------"; cat "$f"
 
       - name: 커밋
         id: commit
-        if: steps.chk.outputs.run == 'true' && inputs.dry_run != true
+        if: steps.chk.outputs.run == 'true' && inputs.dry_run != true && steps.make.outputs.skip != 'true'
         run: |
           f="${{ steps.chk.outputs.file }}"
           git add "$f" _data/briefing_quotes.json
