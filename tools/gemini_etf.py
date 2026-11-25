@@ -182,8 +182,8 @@ def main():
         print(f"  ✗ {w}")
     if any("Gemini 오류" in w for w in why) or (not found and not disc_ok):
         # 확인을 끝까지 못 했는데 checked로 적으면 남은 후보가 숨겨지므로 기록하지 않는다(다음 실행이 다시 시도)
-        print("Gemini 호출 일부가 실패해 기록하지 않음")
-        return 1
+        print("::warning::Gemini 호출 일부가 실패해 기록하지 않음(다음 실행이 다시 시도)")
+        return 0
     block = to_yaml(d, found)
     if a.dry_run:
         print("--- 기록할 내용(dry-run) ---\n" + block)
