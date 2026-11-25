@@ -130,8 +130,20 @@ def ask(prompt, temperature=0.2, timeout=120):
                     res = json.load(r)
             except urllib.error.HTTPError as e:
                 last = f"{model} HTTP {e.code}"
-                print(f"  Gemini {last}")
-                if e.code in (429, 500, 503) and attempt < 2:
+                try:
+                    raw = e.read().decode("utf-8", "replace")
+                except Exception:
+                    raw = ""
+                try:
+                    j = json.loads(raw)
+                    j = j[0] if isinstance(j, list) and j else j
+                    msg = (j.get("error") or {}).get("message") or raw
+                except Exception:
+                    msg = raw
+                msg = re.sub(r"\s+", " ", str(msg)).replace(key, "***")[:300]
+                print(f"  Gemini {last}: {msg}")
+                # 할당량이 0(limit: 0)이면 기다려도 소용없으니 바로 다음 모델로
+                if e.code in (429, 500, 503) and attempt < 2 and "limit: 0" not in msg:
                     time.sleep(10 * (attempt + 1))
                     continue
                 break  # 다음 모델
