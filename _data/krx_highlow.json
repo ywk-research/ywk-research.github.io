@@ -1,20 +1,13 @@
 {
  "source": "한국거래소(KRX) Open API",
- "d": "2026-11-24",
+ "d": "2026-11-25",
  "window": 250,
  "stored": 310,
  "eligible": {
   "kospi": 798,
-  "kosdaq": 1626
+  "kosdaq": 1627
  },
  "series": [
-  {
-   "d": "2026-08-27",
-   "kospi_hi": 4,
-   "kospi_lo": 2,
-   "kosdaq_hi": 2,
-   "kosdaq_lo": 12
-  },
   {
    "d": "2026-08-28",
    "kospi_hi": 13,
@@ -90,35 +83,35 @@
    "kospi_hi": 2,
    "kospi_lo": 6,
    "kosdaq_hi": 3,
-   "kosdaq_lo": 26
+   "kosdaq_lo": 25
   },
   {
    "d": "2026-09-14",
    "kospi_hi": 3,
-   "kospi_lo": 7,
-   "kosdaq_hi": 7,
-   "kosdaq_lo": 40
+   "kospi_lo": 6,
+   "kosdaq_hi": 6,
+   "kosdaq_lo": 39
   },
   {
    "d": "2026-09-15",
    "kospi_hi": 1,
-   "kospi_lo": 14,
+   "kospi_lo": 13,
    "kosdaq_hi": 2,
-   "kosdaq_lo": 34
+   "kosdaq_lo": 32
   },
   {
    "d": "2026-09-16",
    "kospi_hi": 2,
-   "kospi_lo": 20,
+   "kospi_lo": 19,
    "kosdaq_hi": 4,
-   "kosdaq_lo": 36
+   "kosdaq_lo": 34
   },
   {
    "d": "2026-09-17",
    "kospi_hi": 2,
    "kospi_lo": 20,
    "kosdaq_hi": 4,
-   "kosdaq_lo": 27
+   "kosdaq_lo": 26
   },
   {
    "d": "2026-09-18",
@@ -132,11 +125,11 @@
    "kospi_hi": 2,
    "kospi_lo": 19,
    "kosdaq_hi": 7,
-   "kosdaq_lo": 38
+   "kosdaq_lo": 37
   },
   {
    "d": "2026-09-22",
-   "kospi_hi": 4,
+   "kospi_hi": 3,
    "kospi_lo": 22,
    "kosdaq_hi": 4,
    "kosdaq_lo": 43
@@ -167,7 +160,7 @@
    "kospi_hi": 2,
    "kospi_lo": 21,
    "kosdaq_hi": 6,
-   "kosdaq_lo": 50
+   "kosdaq_lo": 49
   },
   {
    "d": "2026-10-01",
@@ -214,7 +207,7 @@
   {
    "d": "2026-10-13",
    "kospi_hi": 3,
-   "kospi_lo": 63,
+   "kospi_lo": 62,
    "kosdaq_hi": 14,
    "kosdaq_lo": 96
   },
@@ -251,7 +244,7 @@
    "kospi_hi": 1,
    "kospi_lo": 38,
    "kosdaq_hi": 5,
-   "kosdaq_lo": 53
+   "kosdaq_lo": 52
   },
   {
    "d": "2026-10-21",
@@ -427,33 +420,45 @@
    "kospi_lo": 32,
    "kosdaq_hi": 7,
    "kosdaq_lo": 83
+  },
+  {
+   "d": "2026-11-25",
+   "kospi_hi": 3,
+   "kospi_lo": 97,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 222
   }
  ],
  "high": [
+  {
+   "name": "한진칼",
+   "mkt": "kospi",
+   "code": "180640"
+  },
+  {
+   "name": "코스맥스",
+   "mkt": "kospi",
+   "code": "192820"
+  },
   {
    "name": "안랩",
    "mkt": "kosdaq",
    "code": "053800"
   },
   {
-   "name": "디케이티",
+   "name": "지니언스",
    "mkt": "kosdaq",
-   "code": "290550"
+   "code": "263860"
   },
   {
-   "name": "케이씨",
-   "mkt": "kospi",
-   "code": "029460"
+   "name": "에스텍",
+   "mkt": "kosdaq",
+   "code": "069510"
   },
   {
-   "name": "심텍홀딩스",
+   "name": "지어소프트",
    "mkt": "kosdaq",
-   "code": "036710"
-  },
-  {
-   "name": "바이오비쥬",
-   "mkt": "kosdaq",
-   "code": "489460"
+   "code": "051160"
   },
   {
    "name": "나이스디앤비",
@@ -461,22 +466,52 @@
    "code": "130580"
   },
   {
-   "name": "디지캡",
+   "name": "파수AI",
    "mkt": "kosdaq",
-   "code": "197140"
+   "code": "150900"
   },
   {
-   "name": "이씨에스",
+   "name": "코스리거글로벌",
    "mkt": "kosdaq",
-   "code": "067010"
+   "code": "043710"
+  },
+  {
+   "name": "진양폴리",
+   "mkt": "kospi",
+   "code": "010640"
   }
  ],
- "high_total": 8,
+ "high_total": 10,
  "low": [
   {
-   "name": "알테오젠",
-   "mkt": "kosdaq",
-   "code": "196170"
+   "name": "삼성중공업",
+   "mkt": "kospi",
+   "code": "010140"
+  },
+  {
+   "name": "두산",
+   "mkt": "kospi",
+   "code": "000150"
+  },
+  {
+   "name": "LS",
+   "mkt": "kospi",
+   "code": "006260"
+  },
+  {
+   "name": "HD건설기계",
+   "mkt": "kospi",
+   "code": "267270"
+  },
+  {
+   "name": "대한전선",
+   "mkt": "kospi",
+   "code": "001440"
+  },
+  {
+   "name": "산일전기",
+   "mkt": "kospi",
+   "code": "062040"
   },
   {
    "name": "서울보증보험",
@@ -484,46 +519,21 @@
    "code": "031210"
   },
   {
-   "name": "펩트론",
-   "mkt": "kosdaq",
-   "code": "087010"
-  },
-  {
-   "name": "태광",
-   "mkt": "kosdaq",
-   "code": "023160"
-  },
-  {
-   "name": "큐리언트",
-   "mkt": "kosdaq",
-   "code": "115180"
-  },
-  {
-   "name": "녹십자홀딩스",
+   "name": "한화비전",
    "mkt": "kospi",
-   "code": "005250"
+   "code": "489790"
   },
   {
-   "name": "SOOP",
+   "name": "하나마이크론",
    "mkt": "kosdaq",
-   "code": "067160"
+   "code": "067310"
   },
   {
-   "name": "감성코퍼레이션",
+   "name": "LS마린솔루션",
    "mkt": "kosdaq",
-   "code": "036620"
-  },
-  {
-   "name": "코람코라이프인프라리츠",
-   "mkt": "kospi",
-   "code": "357120"
-  },
-  {
-   "name": "KG모빌리티플랫폼",
-   "mkt": "kospi",
-   "code": "381970"
+   "code": "060370"
   }
  ],
- "low_total": 115,
- "updated_at": "2026-11-25 09:09 KST"
+ "low_total": 319,
+ "updated_at": "2026-11-26 09:12 KST"
 }
