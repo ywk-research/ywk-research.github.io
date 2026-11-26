@@ -33,9 +33,76 @@
    "2026-11-19",
    "2026-11-20",
    "2026-11-23",
-   "2026-11-24"
+   "2026-11-24",
+   "2026-11-25"
   ],
   "items": [
+   {
+    "key": "799127:vanguard u.s. small-mid cap active etf",
+    "d": "2026-11-25",
+    "name": "Vanguard U.S. Small-Mid Cap Active ETF",
+    "ticker": "",
+    "cik": "799127",
+    "issuer": "Vanguard Quantitative Funds",
+    "exchange": "NYSE Arca",
+    "url": "https://www.sec.gov/Archives/edgar/data/799127/000079912726000096/0000799127-26-000096-index.htm",
+    "ld": "2026-11-27"
+   },
+   {
+    "key": "1722388:wermers quantitative u.s. large cap etf",
+    "d": "2026-11-25",
+    "name": "Wermers Quantitative U.S. Large Cap ETF",
+    "ticker": "WQLC",
+    "cik": "1722388",
+    "issuer": "Tidal Trust III",
+    "exchange": "NYSE Arca",
+    "url": "https://www.sec.gov/Archives/edgar/data/1722388/000199937126026250/0001999371-26-026250-index.htm",
+    "ld": "2026-11-27"
+   },
+   {
+    "key": "1131013:guidestone funds value equity index etf",
+    "d": "2026-11-25",
+    "name": "GuideStone Funds Value Equity Index ETF",
+    "ticker": "",
+    "cik": "1131013",
+    "issuer": "GuideStone Funds",
+    "exchange": "NYSE Arca",
+    "url": "https://www.sec.gov/Archives/edgar/data/1131013/000119312526477087/0001193125-26-477087-index.htm",
+    "ld": "2026-11-27"
+   },
+   {
+    "key": "1131013:guidestone funds international equity index etf",
+    "d": "2026-11-25",
+    "name": "GuideStone Funds International Equity Index ETF",
+    "ticker": "",
+    "cik": "1131013",
+    "issuer": "GuideStone Funds",
+    "exchange": "NYSE Arca",
+    "url": "https://www.sec.gov/Archives/edgar/data/1131013/000119312526477087/0001193125-26-477087-index.htm",
+    "ld": "2026-11-27"
+   },
+   {
+    "key": "1131013:guidestone funds growth equity index etf",
+    "d": "2026-11-25",
+    "name": "GuideStone Funds Growth Equity Index ETF",
+    "ticker": "",
+    "cik": "1131013",
+    "issuer": "GuideStone Funds",
+    "exchange": "NYSE Arca",
+    "url": "https://www.sec.gov/Archives/edgar/data/1131013/000119312526477087/0001193125-26-477087-index.htm",
+    "ld": "2026-11-27"
+   },
+   {
+    "key": "1131013:guidestone funds equity index etf",
+    "d": "2026-11-25",
+    "name": "GuideStone Funds Equity Index ETF",
+    "ticker": "",
+    "cik": "1131013",
+    "issuer": "GuideStone Funds",
+    "exchange": "NYSE Arca",
+    "url": "https://www.sec.gov/Archives/edgar/data/1131013/000119312526477087/0001193125-26-477087-index.htm",
+    "ld": "2026-11-27"
+   },
    {
     "key": "1100663:ishares msci usa select screened etf",
     "d": "2026-11-24",
