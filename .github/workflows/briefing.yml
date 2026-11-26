@@ -1,24 +1,14 @@
-name: 개장 전 브리핑 발간
+name: 개장 전 브리핑 예비 발간
 
-# 평일 아침 개장 전 브리핑 글을 만들어 main에 올린다.
-#  1) tools/make_briefing.py --prune --no-note: _data/의 공식 자료·전일 종가로 숫자 초안(값 없는 줄은 뺌)
-#  2) tools/gemini_brief.py: Gemini(구글 검색 그라운딩)로 전일 주요 뉴스·종목 이유 한 줄 채움(검색 출처로 확인 안 된 건 버림)
-# 뉴스까지 채우고 미국 지수가 들어가면 filled: true. 아니면 다음 예약 시각에 다시 만들어 덮어쓴다.
-# 사용자가 직접 쓴 글(auto: true 없음)이나 이미 filled: true인 글은 건드리지 않는다.
+# 평일 06:08(KST) Claude 예약 작업이 브리핑을 채워 main에 올린다(tools/briefing_task.md).
+# 이 워크플로는 그게 06:40까지 안 올라왔을 때만 공식 자료로 채운 초안(tools/make_briefing.py --prune)을 올린다.
+# 글이 이미 있으면 아무것도 하지 않는다. 예약 작업이 늦게 끝나면 이 초안을 덮어쓴다.
 on:
   schedule:
-    # 평일 한국시간 06:12, 06:25, 06:40, 07:15 = UTC 21:12·21:25·21:40·22:15 일~목
-    # GitHub 예약 실행은 수십 분 늦을 때가 있어 여러 번 걸어 두고, 이미 끝난 날은 바로 건너뛴다
-    - cron: "12 21 * * 0-4"
-    - cron: "25 21 * * 0-4"
+    # 평일 한국시간 06:40, 07:15(재시도) = UTC 21:40·22:15 일~목
     - cron: "40 21 * * 0-4"
     - cron: "15 22 * * 0-4"
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: "시험 실행(커밋하지 않고 결과만 로그에)"
-        type: boolean
-        default: true
 
 permissions:
   contents: write
@@ -29,76 +19,39 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  publish:
+  fallback:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
-      - name: 오늘 글 상태 확인
+      - name: 오늘 글이 있는지 확인
         id: chk
         run: |
           f="_posts/$(TZ=Asia/Seoul date +%F)-pre-market-briefing.md"
           echo "file=$f" >> "$GITHUB_OUTPUT"
-          run=true
-          if [ -f "$f" ]; then
-            if ! grep -q '^auto: true' "$f"; then echo "사용자가 쓴 글: $f"; run=false; fi
-            if grep -q '^filled: true' "$f"; then echo "이미 완성: $f"; run=false; fi
-          fi
-          [ "${{ inputs.dry_run }}" = "true" ] && run=true
-          echo "run=$run" >> "$GITHUB_OUTPUT"
+          if [ -f "$f" ]; then echo "exists=true" >> "$GITHUB_OUTPUT"; echo "이미 있음: $f"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
 
       - uses: actions/setup-python@v5
-        if: steps.chk.outputs.run == 'true'
+        if: steps.chk.outputs.exists == 'false'
         with:
           python-version: "3.12"
 
-      - name: 전일 종가(아직 없을 때만)
-        if: steps.chk.outputs.run == 'true'
+      - name: 초안 작성·커밋
+        id: commit
+        if: steps.chk.outputs.exists == 'false'
         env:
           DESK_PVT_URL: ${{ secrets.DESK_PVT_URL }}
           DESK_CLOSE_TOKEN: ${{ secrets.DESK_CLOSE_TOKEN }}
         run: |
-          u=$(python3 -c "import json;print(json.load(open('_data/briefing_quotes.json')).get('updated_at',''))" 2>/dev/null || true)
-          if [[ "$u" < "$(TZ=Asia/Seoul date +%F) 06:00" ]]; then
-            python tools/fetch_close.py || echo "전일 종가 못 받음(있는 자료로 진행)"
-          else
-            echo "오늘 받은 종가 있음 ($u)"
-          fi
-
-      - name: 숫자 초안 + Gemini 뉴스·종목 이유
-        id: make
-        if: steps.chk.outputs.run == 'true'
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          f="${{ steps.chk.outputs.file }}"
-          cp "$f" /tmp/before.md 2>/dev/null || true
-          python tools/make_briefing.py --force --prune --no-note | tee /tmp/make.log
-          rc=0
-          python tools/gemini_brief.py --note-if-empty || rc=$?
-          echo "gemini_brief 종료 코드 $rc"
-          # 뉴스 3개 이상(rc 0) + 미국 지수(S&P500) 줄이 있으면 완성
-          if [ "$rc" = "0" ] && grep -q '^| S&P500 |' "$f"; then
-            sed -i '0,/^auto: true$/s//auto: true\nfilled: true/' "$f"
-            echo "완성(filled)"
-          elif [ "$rc" != "0" ] && [ "$(TZ=Asia/Seoul date +%H%M)" -lt 0638 ]; then
-            # 뉴스를 못 채웠으면 06:38 전에는 올리지 않는다(다음 실행이나 다른 작업이 채울 시간을 남김). 06:40·07:15 실행은 있는 것으로 올림
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "뉴스 미완성, 06:38 전이라 이번엔 올리지 않음"
-          fi
-          echo "------ 결과 ------"; cat "$f"
-
-      - name: 커밋
-        id: commit
-        if: steps.chk.outputs.run == 'true' && inputs.dry_run != true && steps.make.outputs.skip != 'true'
-        run: |
-          f="${{ steps.chk.outputs.file }}"
-          git add "$f" _data/briefing_quotes.json
+          python tools/fetch_close.py || echo "전일 종가 못 받음(있는 자료로 진행)"
+          git add _data/briefing_quotes.json 2>/dev/null || true
+          python tools/make_briefing.py --prune
+          git add "${{ steps.chk.outputs.file }}" _data/briefing_quotes.json
           git diff --cached --quiet && exit 0
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "개장 전 브리핑 ($(TZ=Asia/Seoul date +%Y.%m.%d))"
+          git commit -m "개장 전 브리핑 예비 발간 ($(TZ=Asia/Seoul date +%Y.%m.%d))"
           for i in 1 2 3 4; do
             git pull --rebase && git push && { echo "changed=true" >> "$GITHUB_OUTPUT"; exit 0; }
             sleep $((i * 5))
