@@ -1,6 +1,6 @@
 {
  "source": "한국거래소(KRX) Open API",
- "d": "2026-11-25",
+ "d": "2026-11-26",
  "window": 250,
  "stored": 310,
  "eligible": {
@@ -8,13 +8,6 @@
   "kosdaq": 1627
  },
  "series": [
-  {
-   "d": "2026-08-28",
-   "kospi_hi": 13,
-   "kospi_lo": 1,
-   "kosdaq_hi": 10,
-   "kosdaq_lo": 9
-  },
   {
    "d": "2026-08-31",
    "kospi_hi": 6,
@@ -90,25 +83,25 @@
    "kospi_hi": 3,
    "kospi_lo": 6,
    "kosdaq_hi": 6,
-   "kosdaq_lo": 39
+   "kosdaq_lo": 38
   },
   {
    "d": "2026-09-15",
    "kospi_hi": 1,
-   "kospi_lo": 13,
+   "kospi_lo": 12,
    "kosdaq_hi": 2,
-   "kosdaq_lo": 32
+   "kosdaq_lo": 31
   },
   {
    "d": "2026-09-16",
    "kospi_hi": 2,
    "kospi_lo": 19,
    "kosdaq_hi": 4,
-   "kosdaq_lo": 34
+   "kosdaq_lo": 33
   },
   {
    "d": "2026-09-17",
-   "kospi_hi": 2,
+   "kospi_hi": 1,
    "kospi_lo": 20,
    "kosdaq_hi": 4,
    "kosdaq_lo": 26
@@ -118,26 +111,26 @@
    "kospi_hi": 7,
    "kospi_lo": 20,
    "kosdaq_hi": 5,
-   "kosdaq_lo": 29
+   "kosdaq_lo": 27
   },
   {
    "d": "2026-09-21",
    "kospi_hi": 2,
-   "kospi_lo": 19,
+   "kospi_lo": 18,
    "kosdaq_hi": 7,
-   "kosdaq_lo": 37
+   "kosdaq_lo": 36
   },
   {
    "d": "2026-09-22",
    "kospi_hi": 3,
    "kospi_lo": 22,
    "kosdaq_hi": 4,
-   "kosdaq_lo": 43
+   "kosdaq_lo": 42
   },
   {
    "d": "2026-09-23",
-   "kospi_hi": 5,
-   "kospi_lo": 26,
+   "kospi_hi": 4,
+   "kospi_lo": 25,
    "kosdaq_hi": 10,
    "kosdaq_lo": 39
   },
@@ -167,7 +160,7 @@
    "kospi_hi": 6,
    "kospi_lo": 12,
    "kosdaq_hi": 13,
-   "kosdaq_lo": 35
+   "kosdaq_lo": 34
   },
   {
    "d": "2026-10-02",
@@ -188,7 +181,7 @@
    "kospi_hi": 9,
    "kospi_lo": 17,
    "kosdaq_hi": 12,
-   "kosdaq_lo": 15
+   "kosdaq_lo": 14
   },
   {
    "d": "2026-10-08",
@@ -251,12 +244,12 @@
    "kospi_hi": 0,
    "kospi_lo": 31,
    "kosdaq_hi": 3,
-   "kosdaq_lo": 48
+   "kosdaq_lo": 47
   },
   {
    "d": "2026-10-22",
    "kospi_hi": 1,
-   "kospi_lo": 71,
+   "kospi_lo": 70,
    "kosdaq_hi": 1,
    "kosdaq_lo": 88
   },
@@ -412,7 +405,7 @@
    "kospi_hi": 0,
    "kospi_lo": 308,
    "kosdaq_hi": 0,
-   "kosdaq_lo": 469
+   "kosdaq_lo": 468
   },
   {
    "d": "2026-11-24",
@@ -427,14 +420,16 @@
    "kospi_lo": 97,
    "kosdaq_hi": 7,
    "kosdaq_lo": 222
+  },
+  {
+   "d": "2026-11-26",
+   "kospi_hi": 2,
+   "kospi_lo": 67,
+   "kosdaq_hi": 7,
+   "kosdaq_lo": 144
   }
  ],
  "high": [
-  {
-   "name": "한진칼",
-   "mkt": "kospi",
-   "code": "180640"
-  },
   {
    "name": "코스맥스",
    "mkt": "kospi",
@@ -446,9 +441,19 @@
    "code": "053800"
   },
   {
-   "name": "지니언스",
+   "name": "디케이티",
    "mkt": "kosdaq",
-   "code": "263860"
+   "code": "290550"
+  },
+  {
+   "name": "아이마켓코리아",
+   "mkt": "kospi",
+   "code": "122900"
+  },
+  {
+   "name": "디지털대성",
+   "mkt": "kosdaq",
+   "code": "068930"
   },
   {
    "name": "에스텍",
@@ -469,19 +474,9 @@
    "name": "파수AI",
    "mkt": "kosdaq",
    "code": "150900"
-  },
-  {
-   "name": "코스리거글로벌",
-   "mkt": "kosdaq",
-   "code": "043710"
-  },
-  {
-   "name": "진양폴리",
-   "mkt": "kospi",
-   "code": "010640"
   }
  ],
- "high_total": 10,
+ "high_total": 9,
  "low": [
   {
    "name": "삼성중공업",
@@ -489,19 +484,14 @@
    "code": "010140"
   },
   {
-   "name": "두산",
-   "mkt": "kospi",
-   "code": "000150"
-  },
-  {
    "name": "LS",
    "mkt": "kospi",
    "code": "006260"
   },
   {
-   "name": "HD건설기계",
+   "name": "삼성카드",
    "mkt": "kospi",
-   "code": "267270"
+   "code": "029780"
   },
   {
    "name": "대한전선",
@@ -519,9 +509,9 @@
    "code": "031210"
   },
   {
-   "name": "한화비전",
+   "name": "효성",
    "mkt": "kospi",
-   "code": "489790"
+   "code": "004800"
   },
   {
    "name": "하나마이크론",
@@ -529,11 +519,16 @@
    "code": "067310"
   },
   {
-   "name": "LS마린솔루션",
-   "mkt": "kosdaq",
-   "code": "060370"
+   "name": "LS에코에너지",
+   "mkt": "kospi",
+   "code": "229640"
+  },
+  {
+   "name": "종근당",
+   "mkt": "kospi",
+   "code": "185750"
   }
  ],
- "low_total": 319,
- "updated_at": "2026-11-26 09:12 KST"
+ "low_total": 211,
+ "updated_at": "2026-11-27 09:20 KST"
 }
